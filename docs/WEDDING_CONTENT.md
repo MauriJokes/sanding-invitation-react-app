@@ -32,7 +32,7 @@ This is the single source of truth for the Sanding invitation page and its RSVP 
 - Submission model: **One representative submits once for the whole family/group**
 - Attendee count: **One total number for the family/group**, not separate counts per event
 - RSVP deadline date: 2026-12-20 (**placeholder; owner to confirm with family**)
-- RSVP deadline time: 23:59 venue local time (**placeholder**)
+- RSVP deadline time: 23:59 venue local time, open through 23:59:59 (**placeholder**)
 - Guest type: **external** (default, clean link) or **internal** (link with the `invite` parameter)
 - Invite URL parameter: `invite`, whose value is one shared secret code (server env `INTERNAL_INVITE_CODE`; never commit the real value)
 - External family link: `https://<site-domain>/` (no parameter)

@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Allura";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/allura-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/cormorant-garamond-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/cormorant-garamond-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+  src: url("../assets/fonts/cormorant-garamond-latin-500-italic.woff2") format("woff2");
+}
+
+/* Approved tokens: docs/DESIGN_SYSTEM.md section 3. Do not add colours without owner approval. */
+@theme {
+  --color-*: initial;
+  --color-navy: #283368;
+  --color-navy-deep: #1b2352;
+  --color-periwinkle: #7e8fb8;
+  --color-slate: #4b5378;
+  --color-ivory: #e9e1d6;
+  --color-tile-ivory: #e7ddd7;
+  --color-gold: #b8a472;
+  --color-gold-bright: #cfac69;
+  --color-gold-ink: #645020;
+  --color-burgundy: #52222a;
+  --color-sage: #798776;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --font-script: "Allura", "Snell Roundhand", cursive;
+  --font-serif: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+
+  --ease-gate: cubic-bezier(0.65, 0.05, 0.25, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-navy);
+    color: var(--color-ivory);
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-gold-bright);
+    outline-offset: 3px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}

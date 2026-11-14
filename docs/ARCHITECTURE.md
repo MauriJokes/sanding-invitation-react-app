@@ -74,7 +74,7 @@ Private reporting mirror. It is not a second write authority.
 │   ├── services/
 │   ├── middleware/
 │   └── utils/
-├── scripts/           # index setup, Sheets backfill
+├── scripts/           # dev-only API plugin now; index setup and Sheets backfill later
 ├── tests/
 │   ├── unit/
 │   ├── integration/
@@ -130,6 +130,14 @@ Do not add a router, i18n library, date library, state-management library, ORM, 
 
 ## 6. Vercel Functions
 
+Implementation conventions (M2):
+- Handlers use the web-standard export: `export default { fetch(request: Request): Response | Promise<Response> }`, one file per route under `api/` (four routes, well under the Hobby function limit). Vercel recommends fewer, shared functions; consolidate behind one router only if cold starts or per-function connection pools become a problem.
+- Server modules, `shared/` and `api/` use explicit `.js` extensions in relative imports so they run under Node ESM (`"type": "module"`) however Vercel compiles them. `tsconfig.server.json` uses `NodeNext` so omissions fail `npm run typecheck`.
+- `api/` holds entry points only; shared helpers live in `server/` (Vercel turns every file in `api/` into a function).
+- `server/http/response.ts` provides the common `{ data, error }` response shape with `Cache-Control: no-store`.
+- `server/config/env.ts` validates configuration per feature group (database, Sheets, security) with Zod when the feature first needs it. Errors list variable names only.
+- `GET /api/health` returns `{ status, rsvpOpen }` and reads no secrets.
+
 Use the Vercel-supported function entry-point conventions for the selected project configuration. Confirm the current Vercel runtime and TypeScript conventions before implementation.
 
 Requirements:
@@ -167,9 +175,9 @@ No scheduled function, sync-state collection or internal sync route exists.
 - GitHub repository connected to Vercel (Hobby plan).
 - Preview deployments for branches/PRs; production from the designated branch.
 - Separate local, preview and production environment variables.
-- Pin an LTS Node version (`.nvmrc` and Vercel project setting).
-- Local development with `vercel dev` (plain `vite` does not serve `api/`).
-- Security headers in `vercel.json` (`Referrer-Policy: no-referrer`, `X-Content-Type-Options`, frame and permissions policies).
+- Node 24 LTS, pinned in `.nvmrc` and `package.json` `engines` (`24.x`), which Vercel honours over the project default.
+- Local development: `npm run dev` serves `api/**` through a small dev-only Vite plugin (`scripts/dev-api.ts`) using the same web-standard `fetch` handler convention as Vercel, and loads `.env.local`. `vercel dev` also works once the Vercel CLI is logged in. `vite preview` serves the static build only. The Vite dev server serves project source files (not `.env*`) on localhost; never expose it with `--host` on an untrusted network.
+- Security headers and a Content-Security-Policy in `vercel.json` (`Referrer-Policy: no-referrer`, `X-Content-Type-Options`, frame and permissions policies; scripts, styles, fonts, images, media and connections limited to `'self'`, with inline style attributes only). `vite preview` applies the same headers from `vercel.json`, so the CSP can be verified locally. Hashed `/assets/*` are cached immutably.
 - No cron jobs. Do not add `vercel.json` crons on Hobby (daily limit only).
 - No secrets committed to Git.
 

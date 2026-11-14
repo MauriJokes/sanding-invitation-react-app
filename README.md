@@ -12,7 +12,7 @@ This package gives an AI coding agent the product requirements, architecture bou
 - `.github/skills/`: nine specialised Agent Skills, each with supporting references.
 - `prompts/`: implementation kickoff and milestone prompts.
 - `.env.example`: names of expected server-side environment variables (no secrets).
-- `vercel.json.example`: example Vercel configuration to review before adopting.
+- `vercel.json`: security headers, CSP and asset caching (no cron on Hobby).
 
 ## Install into a repository
 

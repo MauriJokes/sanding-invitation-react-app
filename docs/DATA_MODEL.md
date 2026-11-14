@@ -94,7 +94,7 @@ interface WeddingEvent {
 }
 ```
 
-Configure the venue timezone (`Asia/Brunei`) and the RSVP deadline in the same file. The deadline is currently a placeholder (`2026-12-20T23:59:00+08:00`, marked `TODO(owner)`).
+Configure the venue timezone (`Asia/Brunei`) and the RSVP deadline in the same file. The deadline is currently a placeholder (`2026-12-20T23:59:59+08:00`, open through the end of 20 Dec; marked `TODO(owner)`).
 
 ## 5. Data integrity invariants
 
