@@ -5,5 +5,16 @@
     { "path": "./tsconfig.server.json" },
     { "path": "./tsconfig.tests.json" },
     { "path": "./tsconfig.tooling.json" }
-  ]
+  ],
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "types": ["node"],
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "strict": true,
+    "noEmit": true
+  }
 }
