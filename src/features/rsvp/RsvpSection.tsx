@@ -280,8 +280,12 @@ export function RsvpSection({ invite }: { invite?: string }) {
                         className="peer sr-only"
                       />
                       <span className="flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[2px] border border-slate px-2 py-1 text-center text-[0.95rem] uppercase tracking-[0.06em] peer-checked:border-navy peer-checked:bg-navy peer-checked:text-ivory peer-focus-visible:outline-2 peer-focus-visible:outline-offset-[3px] peer-focus-visible:outline-navy">
-                        {checked && <span aria-hidden="true">✓</span>}
-                        {value === "attending" ? t.statusAttending : t.statusDeclined}
+                        {/* Always rendered and only hidden with CSS, and the label has its own element: React must
+                            never insert or remove a node next to bare text, which page translators rewrite. */}
+                        <span aria-hidden="true" className={checked ? undefined : "hidden"}>
+                          ✓
+                        </span>
+                        <span>{value === "attending" ? t.statusAttending : t.statusDeclined}</span>
                       </span>
                     </label>
                   );

@@ -25,6 +25,7 @@ Implement a lean, typed and accessible React frontend.
 - Use local component state unless shared state is demonstrably needed.
 - Avoid unnecessary global state libraries.
 - Use semantic HTML and accessible form controls.
+- Never conditionally render an element next to bare text in the same parent (page translators and some extensions rewrite text nodes, then React throws and unmounts the page). Render it always and hide it with CSS, or give the text its own element.
 - Keep components focused; do not create abstractions for one-off markup without benefit.
 
 ## Implementation procedure

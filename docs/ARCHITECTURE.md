@@ -187,6 +187,7 @@ No scheduled function, sync-state collection or internal sync route exists.
 
 - `src/features/rsvp/`: `invite.ts` (reads and removes `?invite=`, `localStorage` with safe fallbacks), `api.ts` (typed `fetch` client that validates every response by hand and returns `ok`, a typed API error, or "no usable answer"), `useRsvpConfig.ts` (asks the server for the limit; stores an accepted invite and clears a rejected one), `RsvpSection.tsx` (form, states, confirmation).
 - `src/i18n/`: typed Malay/English strings and a small provider. The browser imports only `shared/rsvp/constants.ts`, never the Zod schemas, so Zod stays out of the browser bundle (about 74 kB gzipped JS in total).
+- **Hardened against page rewriting.** Chrome's translator (and some extensions) replace text nodes with `<font>` wrappers. React then fails with an `insertBefore`/`removeChild` `NotFoundError` when it adds or removes a node next to bare text, and unmounts the whole page, leaving only the navy body background (an M4 bug found on the Vercel preview). Rules: never conditionally render a node beside bare text (render it always and hide it with CSS, or give the text its own element); `index.html` sets `translate="no"`; `ErrorBoundary` + `CrashNotice` in `main.tsx` replace a crashed page with a reload message in both languages; `tests/unit/rsvp/RsvpSection.test.tsx` simulates a translator.
 - `main.tsx` resolves the invite exactly once before rendering (React StrictMode runs effects twice, and the first read removes it from the address bar).
 
 ### Local development and tests

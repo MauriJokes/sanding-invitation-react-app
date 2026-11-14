@@ -93,6 +93,9 @@ Source of truth: `src/i18n/strings.ts` (TypeScript enforces that both languages 
 | `summaryFamily` | Keluarga / kumpulan | Family / group | draft |
 | `summaryAttendance` | Kehadiran | Attendance | draft |
 | `summaryCount` | Jumlah | Total | draft |
+| `crashTitle` | Maaf, sesuatu tidak kena. | Sorry, something went wrong. | draft |
+| `crashBody` | Halaman ini tidak dapat dipaparkan. Sila muat semula halaman. | This page could not be shown. Please reload the page. | draft |
+| `crashReload` | Muat semula | Reload | draft |
 | `skipToContent` | Langkau ke kandungan | Skip to content | draft |
 | `switchLanguageLabel` | Switch language to English | Tukar bahasa ke Bahasa Melayu | draft |
 | `switchLanguageText` | EN | BM | draft |

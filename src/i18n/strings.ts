@@ -45,6 +45,9 @@ export interface Strings {
   summaryAttendance: string;
   summaryCount: string;
   // Shell
+  crashTitle: string;
+  crashBody: string;
+  crashReload: string;
   skipToContent: string;
   switchLanguageLabel: string;
   switchLanguageText: string;
@@ -91,6 +94,9 @@ export const strings: Record<Lang, Strings> = {
     summaryAttendance: "Kehadiran",
     summaryCount: "Jumlah",
 
+    crashTitle: "Maaf, sesuatu tidak kena.",
+    crashBody: "Halaman ini tidak dapat dipaparkan. Sila muat semula halaman.",
+    crashReload: "Muat semula",
     skipToContent: "Langkau ke kandungan",
     switchLanguageLabel: "Switch language to English",
     switchLanguageText: "EN",
@@ -135,6 +141,9 @@ export const strings: Record<Lang, Strings> = {
     summaryAttendance: "Attendance",
     summaryCount: "Total",
 
+    crashTitle: "Sorry, something went wrong.",
+    crashBody: "This page could not be shown. Please reload the page.",
+    crashReload: "Reload",
     skipToContent: "Skip to content",
     switchLanguageLabel: "Tukar bahasa ke Bahasa Melayu",
     switchLanguageText: "BM",

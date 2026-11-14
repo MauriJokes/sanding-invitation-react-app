@@ -201,7 +201,7 @@ describe("declining", () => {
     await formReady();
     typeName("Keluarga Lim");
     fireEvent.click(plus());
-    fireEvent.click(screen.getByLabelText("Tidak dapat hadir"));
+    fireEvent.click(screen.getByRole("radio", { name: "Tidak dapat hadir" }));
     expect(screen.queryByRole("group", { name: "Jumlah kehadiran" })).toBeNull();
     submit();
     await screen.findByText("Terima kasih");
@@ -411,6 +411,54 @@ describe("closed and unreachable", () => {
     show(VALID_INVITE);
     expect(await screen.findByRole("alert")).toBeTruthy();
     expect(screen.queryByLabelText("Nama keluarga / kumpulan")).toBeNull();
+  });
+});
+
+/** What Chrome's translator does: replaces every text node with <font><font>text</font></font>. */
+function simulateTranslator(root: HTMLElement) {
+  root.ownerDocument.documentElement.classList.add("translated-ltr");
+  const walker = root.ownerDocument.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes: Text[] = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode as Text);
+  for (const node of nodes) {
+    if (!node.nodeValue?.trim()) continue;
+    const outer = root.ownerDocument.createElement("font");
+    const inner = root.ownerDocument.createElement("font");
+    inner.textContent = node.nodeValue;
+    outer.appendChild(inner);
+    node.parentNode?.replaceChild(outer, node);
+  }
+}
+
+describe("when the browser machine-translates the page", () => {
+  afterEach(() => document.documentElement.classList.remove("translated-ltr"));
+
+  it("still lets the guest choose 'unable to attend', go back, change the count and see errors", async () => {
+    server(createdReply("declined", 0));
+    const { container } = show();
+    await formReady();
+    simulateTranslator(container);
+
+    fireEvent.click(screen.getByRole("radio", { name: "Tidak dapat hadir" }));
+    expect(container.querySelector("form")).not.toBeNull();
+    expect(screen.queryByRole("group", { name: "Jumlah kehadiran" })).toBeNull();
+    fireEvent.click(screen.getByRole("radio", { name: "Akan hadir" }));
+    fireEvent.click(plus());
+    submit();
+    expect(screen.getByText(/Sila masukkan nama keluarga/)).toBeTruthy();
+    expect(container.querySelector("form")).not.toBeNull();
+  });
+
+  it("still submits a declined RSVP and shows the confirmation", async () => {
+    server(createdReply("declined", 0));
+    const { container } = show();
+    await formReady();
+    simulateTranslator(container);
+
+    fireEvent.click(screen.getByRole("radio", { name: "Tidak dapat hadir" }));
+    typeName("Keluarga Lim");
+    submit();
+    expect(await screen.findByRole("heading", { name: "Terima kasih" })).toBeTruthy();
   });
 });
 

@@ -25,5 +25,6 @@
 | Abuse | Rate limit exceeded (TTL counters, hashed IP; no raw IP stored) |
 | Frontend | Mobile and desktop |
 | Accessibility | Keyboard and reduced motion |
+| Resilience | Page still works after a translator rewrites its text nodes; a render crash shows the reload message, not an empty page |
 | Security | No secret in client bundle |
 | Deployment | Production smoke test |
