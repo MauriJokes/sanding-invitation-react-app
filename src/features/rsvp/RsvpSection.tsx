@@ -82,6 +82,7 @@ export function RsvpSection({ invite }: { invite?: string }) {
   /** Payload of an attempt that got no usable answer, so a later "duplicate" can be explained honestly. */
   const unansweredRef = useRef<string | undefined>(undefined);
   const nameRef = useRef<HTMLInputElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const successRef = useRef<HTMLHeadingElement>(null);
 
   const headingId = useId();
@@ -91,7 +92,11 @@ export function RsvpSection({ invite }: { invite?: string }) {
   const countLabelId = useId();
 
   useEffect(() => {
-    if (done) successRef.current?.focus();
+    if (!done) return;
+    // The confirmation is shorter than the form, which would leave the navy hero filling the screen.
+    // Bring the section to the top of the view, then move focus without a second scroll.
+    sectionRef.current?.scrollIntoView({ block: "start" });
+    successRef.current?.focus({ preventScroll: true });
   }, [done]);
 
   const max = config.status === "ready" ? config.maxAttendees : 0;
@@ -334,11 +339,12 @@ export function RsvpSection({ invite }: { invite?: string }) {
 
   return (
     <section
+      ref={sectionRef}
       id="rsvp"
       aria-labelledby={headingId}
-      className="bg-ivory text-navy [&_:focus-visible]:outline-navy"
+      className="grid min-h-svh content-center bg-ivory text-navy [&_:focus-visible]:outline-navy"
     >
-      <div className="mx-auto max-w-[42rem] px-6 py-[4.5rem] text-center">
+      <div className="mx-auto w-full max-w-[42rem] px-6 py-[4.5rem] text-center">
         <p className="text-[0.9rem] font-semibold uppercase tracking-[0.28em] text-gold-ink">{EVENT.title}</p>
         {done ? null : (
           <h2 id={headingId} className="mb-2 mt-2 text-[clamp(1.9rem,6vw,2.6rem)] font-medium uppercase tracking-[0.12em]">

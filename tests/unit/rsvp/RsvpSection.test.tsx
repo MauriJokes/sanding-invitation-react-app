@@ -40,7 +40,13 @@ const alertText = () => screen.getByRole("alert").textContent;
 const stepper = () => screen.getByRole("group", { name: "Jumlah kehadiran" });
 const shownCount = () => stepper().querySelector("output")?.textContent;
 
-beforeEach(() => localStorage.clear());
+const scrollIntoView = vi.fn();
+
+beforeEach(() => {
+  localStorage.clear();
+  scrollIntoView.mockClear();
+  window.HTMLElement.prototype.scrollIntoView = scrollIntoView;
+});
 afterEach(() => {
   cleanup();
   vi.unstubAllGlobals();
@@ -224,6 +230,19 @@ describe("confirmation", () => {
     expect(screen.getByText(/RSVP ini muktamad\./)).toBeTruthy();
     expect(screen.queryByRole("button", { name: /Send RSVP/ })).toBeNull();
     expect(screen.queryByLabelText("Nama keluarga / kumpulan")).toBeNull();
+  });
+
+  it("scrolls the section to the top of the view so a shorter confirmation never leaves the page mostly empty", async () => {
+    server(createdReply("attending", 1));
+    show();
+    await formReady();
+    expect(scrollIntoView).not.toHaveBeenCalled();
+    typeName("The Ahmad Family");
+    submit();
+    await screen.findByText("Terima kasih");
+    expect(scrollIntoView).toHaveBeenCalledTimes(1);
+    expect(scrollIntoView).toHaveBeenCalledWith({ block: "start" });
+    expect(scrollIntoView.mock.contexts[0]).toBe(document.getElementById("rsvp"));
   });
 
   it("renders guest-typed text as plain text, never as markup", async () => {
