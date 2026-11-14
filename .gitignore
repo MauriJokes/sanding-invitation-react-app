@@ -22,3 +22,15 @@ test-results/
 # OS and editor
 .DS_Store
 *.log
+
+# Heavy botanical source artwork: raster images wrapped in SVG (~68 MB in total). Keep these on your machine
+# only; commit the optimised web versions generated from them instead (see design-assets/README.md).
+design-assets/textures/blue-flower.svg
+design-assets/textures/white-flower.svg
+design-assets/textures/branch-1.svg
+design-assets/textures/branch-2.svg
+design-assets/textures/fern.svg
+design-assets/textures/golden-leaf-1.svg
+design-assets/textures/golden-leaf-2.svg
+design-assets/textures/golden-leaf-3.svg
+design-assets/source/
