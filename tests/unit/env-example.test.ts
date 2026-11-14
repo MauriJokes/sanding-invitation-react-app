@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { databaseSchema, securitySchema, sheetsSchema } from "../../server/config/env";
+import { databaseSchema, inviteSchema, rateLimitSchema, sheetsSchema } from "../../server/config/env";
 
 const documented = new Set(
   readFileSync(new URL("../../.env.example", import.meta.url), "utf8")
@@ -11,7 +11,7 @@ const documented = new Set(
 
 describe(".env.example", () => {
   it("documents every server variable the schemas read", () => {
-    const required = [databaseSchema, sheetsSchema, securitySchema].flatMap((schema) =>
+    const required = [databaseSchema, sheetsSchema, inviteSchema, rateLimitSchema].flatMap((schema) =>
       Object.keys(schema.shape),
     );
     expect(required.filter((name) => !documented.has(name))).toEqual([]);

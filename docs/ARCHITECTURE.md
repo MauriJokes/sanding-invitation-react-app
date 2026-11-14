@@ -137,6 +137,8 @@ Implementation conventions (M2):
 - `server/http/response.ts` provides the common `{ data, error }` response shape with `Cache-Control: no-store`.
 - `server/config/env.ts` validates configuration per feature group (database, Sheets, security) with Zod when the feature first needs it. Errors list variable names only.
 - `GET /api/health` returns `{ status, rsvpOpen }` and reads no secrets.
+- `server/http/route.ts` (`jsonPostRoute`) is the shared pipeline for public JSON POST routes (method, bounded body, Zod, rate limit, handler, error mapping); see `API_CONTRACTS.md`. `api/rsvp/config.ts` and `api/rsvp/index.ts` are thin: they pick a schema, a rate-limit policy and call `server/rsvp/service.ts`.
+- RSVP rules live in `server/rsvp/` (`guest-type.ts` constant-time invite check that fails closed to external, `canonical.ts`, `repository.ts` insert-only with duplicate-key translation, `service.ts` deadline, limits and mapping). Services take a repository and `now` as arguments, so rules are unit-tested with a fake repository and the real database behaviour is integration-tested.
 
 Use the Vercel-supported function entry-point conventions for the selected project configuration. Confirm the current Vercel runtime and TypeScript conventions before implementation.
 
@@ -152,10 +154,10 @@ Requirements:
 
 ## 7. MongoDB connection handling
 
-- Reuse a cached MongoClient across warm function invocations.
+- Reuse a cached MongoClient across warm function invocations (`server/db/client.ts`: module-level promise, pool of up to 5, 5 s idle timeout so suspended instances release Atlas connections, 5 s connect and server-selection timeouts; a failed connect is not cached). If Atlas connection counts ever become a problem, add `attachDatabasePool` from `@vercel/functions`.
 - Do not connect and disconnect on every request.
 - Keep connection configuration server-side.
-- Create indexes through `scripts/` (explicit setup), never per request.
+- Create indexes with `npm run db:indexes` (`scripts/setup-indexes.ts` calling `server/db/indexes.ts`, the only place indexes are defined), never per request. It is idempotent; a changed definition under an existing name fails loudly. Run it once per database (dev, preview if separate, production) before first use.
 - Indexes: unique `rsvps.canonicalGroupKey`; `guestbookEntries { isPublic, createdAt, _id }`; TTL on `rateLimits.expiresAt`; partial `sheetStatus: "pending"` indexes. See `DATA_MODEL.md`.
 - Atlas network access: Vercel Functions have no static egress IPs on Hobby, so Atlas typically needs `0.0.0.0/0`. Compensate with a least-privilege database user, a long random password and separate dev/prod databases.
 
@@ -180,6 +182,12 @@ No scheduled function, sync-state collection or internal sync route exists.
 - Security headers and a Content-Security-Policy in `vercel.json` (`Referrer-Policy: no-referrer`, `X-Content-Type-Options`, frame and permissions policies; scripts, styles, fonts, images, media and connections limited to `'self'`, with inline style attributes only). `vite preview` applies the same headers from `vercel.json`, so the CSP can be verified locally. Hashed `/assets/*` are cached immutably.
 - No cron jobs. Do not add `vercel.json` crons on Hobby (daily limit only).
 - No secrets committed to Git.
+
+### Local development and tests
+
+- Copy `.env.example` to `.env.local` (git-ignored) and fill in a **development** database. `npm run dev` and `npm run db:indexes` read it.
+- `npm test` runs unit tests (no database). `npm run test:integration` runs the real route handlers against MongoDB and needs `MONGODB_URI` plus `MONGODB_TEST_DATABASE`; the name must contain "test" and differ from `MONGODB_DATABASE`, because the tests empty their collections. They fail loudly (never skip) when the variables are missing. `npm run test:all` runs both.
+- Atlas runs a TTL monitor about once a minute, so integration tests verify the TTL index definition and expiry timestamps, not actual deletion.
 
 ## 10. Architecture decision rule
 

@@ -29,9 +29,12 @@ export const sheetsSchema = z.object({
   GOOGLE_SHEETS_GUESTBOOK_WORKSHEET_NAME: z.string().min(1).default("Guestbook"),
 });
 
-export const securitySchema = z.object({
+export const inviteSchema = z.object({
   // At least 22 URL-safe characters (about 128 bits when random); it is used in a URL.
   INTERNAL_INVITE_CODE: z.string().min(22).max(128).regex(urlSafe),
+});
+
+export const rateLimitSchema = z.object({
   RATE_LIMIT_SALT: z.string().min(32),
 });
 
@@ -50,4 +53,5 @@ export function parseEnv<S extends z.ZodType>(
 /** Each feature validates only the configuration it needs, when it first needs it. */
 export const getDatabaseEnv = () => parseEnv(databaseSchema);
 export const getSheetsEnv = () => parseEnv(sheetsSchema);
-export const getSecurityEnv = () => parseEnv(securitySchema);
+export const getInviteEnv = () => parseEnv(inviteSchema);
+export const getRateLimitEnv = () => parseEnv(rateLimitSchema);

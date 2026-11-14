@@ -29,6 +29,7 @@ The product-access and RSVP decisions below are confirmed. Remaining rows concer
 | D-23 | Hosting plan | **Confirmed:** Vercel Hobby. No cron jobs. |
 | D-24 | Attendee count rule | **Confirmed:** `attending` is 1 to max (internal 10, external 2); `declined` is 0. |
 | D-25 | Invitation title | **Confirmed:** display "Walimatulurus". |
+| D-26 | Technical bounds (agent defaults, owner may override) | Family/group name 2 to 100 characters with no control or zero-width characters; request body up to 4 KB; rate limits per hashed IP per 10 minutes: RSVP 10, config 30. These are abuse and data-integrity guards, not business rules. |
 
 ## Duplicate RSVP implementation note
 

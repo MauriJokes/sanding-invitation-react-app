@@ -2,8 +2,9 @@ import { describe, expect, it } from "vitest";
 import {
   ConfigError,
   databaseSchema,
+  inviteSchema,
   parseEnv,
-  securitySchema,
+  rateLimitSchema,
   sheetsSchema,
 } from "../../server/config/env";
 
@@ -43,17 +44,15 @@ describe("parseEnv", () => {
     expect(env.GOOGLE_SHEETS_GUESTBOOK_WORKSHEET_NAME).toBe("Guestbook");
   });
 
-  it("requires a long URL-safe invite code and a long salt", () => {
-    expect(() =>
-      parseEnv(securitySchema, { INTERNAL_INVITE_CODE: validInvite, RATE_LIMIT_SALT: validSalt }),
-    ).not.toThrow();
-    for (const bad of ["short", `${"A".repeat(21)}`, `${"A".repeat(21)}!`, `${"A".repeat(21)} `]) {
-      expect(() =>
-        parseEnv(securitySchema, { INTERNAL_INVITE_CODE: bad, RATE_LIMIT_SALT: validSalt }),
-      ).toThrow(ConfigError);
+  it("requires a long URL-safe invite code", () => {
+    expect(() => parseEnv(inviteSchema, { INTERNAL_INVITE_CODE: validInvite })).not.toThrow();
+    for (const bad of ["short", "A".repeat(21), `${"A".repeat(21)}!`, `${"A".repeat(21)} `, "A".repeat(129)]) {
+      expect(() => parseEnv(inviteSchema, { INTERNAL_INVITE_CODE: bad })).toThrow(ConfigError);
     }
-    expect(() =>
-      parseEnv(securitySchema, { INTERNAL_INVITE_CODE: validInvite, RATE_LIMIT_SALT: "short" }),
-    ).toThrow(ConfigError);
+  });
+
+  it("requires a long rate-limit salt", () => {
+    expect(() => parseEnv(rateLimitSchema, { RATE_LIMIT_SALT: validSalt })).not.toThrow();
+    expect(() => parseEnv(rateLimitSchema, { RATE_LIMIT_SALT: "short" })).toThrow(ConfigError);
   });
 });

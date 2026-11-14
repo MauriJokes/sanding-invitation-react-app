@@ -71,7 +71,7 @@ interface RateLimit {
 }
 ```
 
-- `hashedIp` is a salted SHA-256 of the client IP (`RATE_LIMIT_SALT`, server-only). Raw IPs are never stored.
+- `hashedIp` is the first 32 hex characters of an HMAC-SHA-256 of the client IP keyed by `RATE_LIMIT_SALT` (server-only). Raw IPs are never stored. `windowStart` is the window index (`floor(now / windowMs)`), and `expiresAt` is the end of that window; Atlas removes expired documents within about a minute.
 - Fixed-window counter updated atomically with `findOneAndUpdate({ _id }, { $inc: { count: 1 }, $setOnInsert: { expiresAt } }, { upsert: true })`.
 - Rate limiting is best-effort abuse control, not authentication.
 

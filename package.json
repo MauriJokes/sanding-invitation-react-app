@@ -12,10 +12,14 @@
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "lint": "eslint .",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "vitest run tests/unit",
+    "test:watch": "vitest",
+    "test:integration": "vitest run tests/integration --no-file-parallelism",
+    "test:all": "npm run test && npm run test:integration",
+    "db:indexes": "node --env-file-if-exists=.env.local --import tsx scripts/setup-indexes.ts"
   },
   "dependencies": {
+    "mongodb": "^7.9.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "zod": "^4.6.7"
@@ -34,6 +38,7 @@
     "globals": "^17.14.0",
     "jsdom": "^31.0.1",
     "tailwindcss": "^4.3.5",
+    "tsx": "^4.23.15",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2",
     "vite": "^8.3.8",
