@@ -15,6 +15,7 @@
 | RSVP immutability | No public update/edit route |
 | RSVP privacy | No public RSVP list or lookup |
 | Idempotency | Retry after successful insert does not create duplicate |
+| Data integrity | Missing, partial or non-unique `canonicalGroupKey` index (or missing collection) makes both RSVP endpoints return 503 and store nothing; creating the index fixes it with no restart |
 | Deadline | Submission after cutoff |
 | Sheets | Each RSVP/guestbook entry appended once to the right worksheet |
 | Sheets | Google API failure leaves `pending`; backfill appends it once; repeated backfill is idempotent |

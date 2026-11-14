@@ -406,6 +406,15 @@ describe("closed and unreachable", () => {
     expect(configCalls(calls)).toHaveLength(2);
   });
 
+  it("shows the 'could not be loaded' state, not the form, when the service reports it is not ready", async () => {
+    mockFetch(() => errorReply(503, "SERVICE_NOT_READY"));
+    show();
+    expect(await screen.findByRole("alert")).toBeTruthy();
+    expect(alertText()).toMatch(/Borang RSVP tidak dapat dimuatkan/);
+    expect(screen.queryByLabelText("Nama keluarga / kumpulan")).toBeNull();
+    expect(screen.getByRole("button", { name: "Cuba lagi" })).toBeTruthy();
+  });
+
   it("treats a malformed config response as unreachable, never as permission", async () => {
     mockFetch(() => ({ status: 200, json: { data: { maxAttendees: "10", rsvpOpen: true }, error: null } }));
     show(VALID_INVITE);

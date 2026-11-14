@@ -31,7 +31,7 @@ Do not expose stack traces, database errors, tokens or internal implementation d
 
 ## Shared pipeline (public JSON POST routes)
 
-Order of checks, so cheap rejects never touch the database: method (`405` with `Allow: POST`, which also covers `OPTIONS`; no CORS headers are ever sent) → `Content-Type: application/json` (`415 UNSUPPORTED_MEDIA_TYPE`) → bounded body (`413 PAYLOAD_TOO_LARGE`; 4096 bytes, 512 for `/api/rsvp/config`; checked by declared length and again while streaming) → JSON parse (`400 BAD_REQUEST`) → Zod validation (`400 VALIDATION_ERROR`; unknown keys such as a client `guestType` are stripped, not trusted) → rate limit (`429 RATE_LIMITED` with `Retry-After`) → feature handler. Unexpected failures return a generic `500 INTERNAL_ERROR`; logs hold the failure class or the missing variable names only.
+Order of checks, so cheap rejects never touch the database: method (`405` with `Allow: POST`, which also covers `OPTIONS`; no CORS headers are ever sent) → `Content-Type: application/json` (`415 UNSUPPORTED_MEDIA_TYPE`) → bounded body (`413 PAYLOAD_TOO_LARGE`; 4096 bytes, 512 for `/api/rsvp/config`; checked by declared length and again while streaming) → JSON parse (`400 BAD_REQUEST`) → Zod validation (`400 VALIDATION_ERROR`; unknown keys such as a client `guestType` are stripped, not trusted) → rate limit (`429 RATE_LIMITED` with `Retry-After`) → feature handler. If the database has not been set up (the unique `canonicalGroupKey` index is missing), both `/api/rsvp` routes return `503 SERVICE_NOT_READY` with a generic message and write nothing; the form then shows its "could not be loaded" state. Unexpected failures return a generic `500 INTERNAL_ERROR`; logs hold the failure class or the missing variable names only.
 
 Rate limits (fixed 10-minute windows per hashed client IP, scoped per route): `/api/rsvp` 10, `/api/rsvp/config` 30.
 
@@ -113,6 +113,7 @@ Use:
 - `404` for unavailable resources where revealing existence is safe.
 - `409` for conflicting state: `RSVP_DUPLICATE` and `RSVP_CLOSED`.
 - `429` for rate limiting.
+- `503` (`SERVICE_NOT_READY`) when the database is not set up (missing unique index).
 - `500` for unexpected internal failures.
 
 Avoid leaking whether a token, group or individual guest exists when that would enable enumeration.
