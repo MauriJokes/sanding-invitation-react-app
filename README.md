@@ -40,3 +40,4 @@ The Google Sheets integration is one-way write-through (no cron on Vercel Hobby)
 - Confirm the Vercel plan supports the intended scheduled function frequency and execution duration.
 - Add approved visual references and final wedding copy.
 # sanding-invitation-react-app
+# sanding-invitation-react-app
