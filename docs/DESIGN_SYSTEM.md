@@ -131,6 +131,14 @@ Verified contrast ratios: ivory on navy 9.19; ivory on navy-deep 11.5; gold-brig
 
 Below 768 px: fixed bottom bar with four icon-and-label anchors (Butiran, RSVP, Lokasi, Ucapan), a divider, then icon-only BM/EN and music controls. Safe-area padding, current section marked by a gold line as well as colour, hidden while a text field has focus. From 768 px: sticky top bar with the monogram left, anchors centred and controls right.
 
+## 5c. Forms (built in M4)
+
+- The RSVP sits on an ivory reading surface with navy text; the focus outline is navy there (`gold-bright` stays for navy surfaces).
+- Inputs have a 1 px `slate` border and a transparent fill (the prototype's lighter field tint was not an approved token, so it was not carried over). An invalid field gets a 2 px `burgundy` border **and** a text message linked with `aria-describedby`; colour is never the only signal.
+- Choice buttons (attending / declined) are real radio inputs with a check mark on the selected one. The count is a stepper whose number is shown in lining, tabular numerals: Cormorant's default figures are old-style and make "1" look like a Roman "I".
+- Notices and errors use the 3 px `burgundy` left rule; one `role="alert"` region announces submit errors.
+- All controls are at least 48 px tall. The submit button shows "Menghantar…" and is disabled while a request is pending.
+
 ## 6. Accessibility
 
 - Semantic HTML.

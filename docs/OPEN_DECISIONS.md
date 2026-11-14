@@ -8,7 +8,7 @@ The product-access and RSVP decisions below are confirmed. Remaining rows concer
 | D-02 | RSVP identity/access | **Confirmed:** no personalised links, per-guest invitation codes, tokens, or guest login. Sole exception: one shared `invite` code that unlocks the internal attendee limit (see D-20). |
 | D-03 | RSVP granularity | **Confirmed:** one submission per family/group, submitted by one representative; record total attendee count, not individual guest responses. |
 | D-04 | Duplicate handling | **Confirmed:** do not support edits. Detect repeat submissions for the same family/group and reject/ignore them; do not overwrite the first accepted response. Define a reliable group identifier before implementation (recommended: family/group name normalised for case and whitespace, with a review process for ambiguous matches). |
-| D-05 | Maximum attendee count | **Confirmed:** internal 10 pax; external 2 pax (see D-20). Still open: whether the form shows a numeric selector or stepper. Do not allow unbounded counts. |
+| D-05 | Maximum attendee count | **Confirmed:** internal 10 pax; external 2 pax (see D-20), shown with a stepper (the prototype the owner approved). Counts are bounded in the UI and on the server. |
 | D-06 | Event-specific RSVP | **Confirmed:** one overall RSVP for the Sanding celebration only. No per-event data. |
 | D-07 | Event list and eligibility | **Confirmed:** single event, Walimatulurus, 2026-12-28, arrival 19:15 (end time intentionally not published; no parking/arrival text), The Rizqun International Hotel, Songket Ballroom. End time unknown (leave unset). All guests are invited. |
 | D-08 | RSVP deadline | **Placeholder:** 2026-12-20 23:59 `Asia/Brunei` in typed config, marked `TODO(owner)`. Owner to confirm with family. |
@@ -30,6 +30,7 @@ The product-access and RSVP decisions below are confirmed. Remaining rows concer
 | D-24 | Attendee count rule | **Confirmed:** `attending` is 1 to max (internal 10, external 2); `declined` is 0. |
 | D-25 | Invitation title | **Confirmed:** display "Walimatulurus". |
 | D-26 | Technical bounds (agent defaults, owner may override) | Family/group name 2 to 100 characters with no control or zero-width characters; request body up to 4 KB; rate limits per hashed IP per 10 minutes: RSVP 10, config 30. These are abuse and data-integrity guards, not business rules. |
+| D-27 | RSVP UI defaults (agent defaults, owner may override) | The count starts at 1. The language starts in Malay and is not remembered between visits. An invite in the link wins over a stored one, and a rejected one is forgotten with no message. The browser does not remember that a family already submitted (the server rejects duplicates). After a failed or unanswered submission the guest keeps their details and can retry; if the same submission then comes back as a duplicate, the message says the earlier attempt may have gone through. Drafted error and confirmation copy is in `docs/UI_COPY.md` and awaits proofreading. |
 
 ## Duplicate RSVP implementation note
 

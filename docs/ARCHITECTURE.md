@@ -157,7 +157,7 @@ Requirements:
 - Reuse a cached MongoClient across warm function invocations (`server/db/client.ts`: module-level promise, pool of up to 5, 5 s idle timeout so suspended instances release Atlas connections, 5 s connect and server-selection timeouts; a failed connect is not cached). If Atlas connection counts ever become a problem, add `attachDatabasePool` from `@vercel/functions`.
 - Do not connect and disconnect on every request.
 - Keep connection configuration server-side.
-- Create indexes with `npm run db:indexes` (`scripts/setup-indexes.ts` calling `server/db/indexes.ts`, the only place indexes are defined), never per request. It is idempotent; a changed definition under an existing name fails loudly. Run it once per database (dev, preview if separate, production) before first use.
+- **Run `npm run db:indexes` against every database before it takes RSVPs.** The unique `canonicalGroupKey` index is the only duplicate guard: without it the API silently accepts duplicate families (verified during M4 on a database that had never been set up). Create indexes with `npm run db:indexes` (`scripts/setup-indexes.ts` calling `server/db/indexes.ts`, the only place indexes are defined), never per request. It is idempotent; a changed definition under an existing name fails loudly. Run it once per database (dev, preview if separate, production) before first use.
 - Indexes: unique `rsvps.canonicalGroupKey`; `guestbookEntries { isPublic, createdAt, _id }`; TTL on `rateLimits.expiresAt`; partial `sheetStatus: "pending"` indexes. See `DATA_MODEL.md`.
 - Atlas network access: Vercel Functions have no static egress IPs on Hobby, so Atlas typically needs `0.0.0.0/0`. Compensate with a least-privilege database user, a long random password and separate dev/prod databases.
 
@@ -182,6 +182,12 @@ No scheduled function, sync-state collection or internal sync route exists.
 - Security headers and a Content-Security-Policy in `vercel.json` (`Referrer-Policy: no-referrer`, `X-Content-Type-Options`, frame and permissions policies; scripts, styles, fonts, images, media and connections limited to `'self'`, with inline style attributes only). `vite preview` applies the same headers from `vercel.json`, so the CSP can be verified locally. Hashed `/assets/*` are cached immutably.
 - No cron jobs. Do not add `vercel.json` crons on Hobby (daily limit only).
 - No secrets committed to Git.
+
+### Browser structure (M4)
+
+- `src/features/rsvp/`: `invite.ts` (reads and removes `?invite=`, `localStorage` with safe fallbacks), `api.ts` (typed `fetch` client that validates every response by hand and returns `ok`, a typed API error, or "no usable answer"), `useRsvpConfig.ts` (asks the server for the limit; stores an accepted invite and clears a rejected one), `RsvpSection.tsx` (form, states, confirmation).
+- `src/i18n/`: typed Malay/English strings and a small provider. The browser imports only `shared/rsvp/constants.ts`, never the Zod schemas, so Zod stays out of the browser bundle (about 74 kB gzipped JS in total).
+- `main.tsx` resolves the invite exactly once before rendering (React StrictMode runs effects twice, and the first read removes it from the address bar).
 
 ### Local development and tests
 

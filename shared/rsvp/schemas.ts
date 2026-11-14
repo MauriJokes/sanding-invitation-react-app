@@ -1,23 +1,15 @@
 import { z } from "zod";
 
-export const GUEST_TYPES = ["internal", "external"] as const;
-export type GuestType = (typeof GUEST_TYPES)[number];
+import {
+  FAMILY_NAME_MAX,
+  FAMILY_NAME_MIN,
+  INVITE_MAX_LENGTH,
+  RSVP_STATUSES,
+  hasDisallowedCharacters,
+  normalizeFamilyName,
+} from "./constants.js";
 
-export const RSVP_STATUSES = ["attending", "declined"] as const;
-export type RsvpStatus = (typeof RSVP_STATUSES)[number];
-
-/** Approved by the owner: internal (valid invite) 10, external 2. */
-export const MAX_ATTENDEES: Record<GuestType, number> = { internal: 10, external: 2 };
-
-// Technical bounds (not business rules): see docs/OPEN_DECISIONS.md D-26.
-export const FAMILY_NAME_MIN = 2;
-export const FAMILY_NAME_MAX = 100;
-export const INVITE_MAX_LENGTH = 128;
-
-/** Trim, collapse whitespace and compose Unicode (NFC). Case is preserved for display. */
-export function normalizeFamilyName(raw: string): string {
-  return raw.normalize("NFC").replace(/\s+/gu, " ").trim();
-}
+export * from "./constants.js";
 
 const familyGroupName = z
   .string()
@@ -28,8 +20,7 @@ const familyGroupName = z
       .string()
       .min(FAMILY_NAME_MIN)
       .max(FAMILY_NAME_MAX)
-      // Control, format (zero-width, bidi) and similar characters would defeat duplicate detection.
-      .refine((value) => !/\p{C}/u.test(value)),
+      .refine((value) => !hasDisallowedCharacters(value)),
   );
 
 /**
@@ -49,13 +40,3 @@ export const rsvpConfigRequestSchema = z.object({
   invite: z.string().max(INVITE_MAX_LENGTH).optional(),
 });
 export type RsvpConfigRequest = z.infer<typeof rsvpConfigRequestSchema>;
-
-export interface RsvpConfigResponse {
-  maxAttendees: number;
-  rsvpOpen: boolean;
-}
-
-export interface RsvpSubmittedResponse {
-  status: RsvpStatus;
-  attendeeCount: number;
-}

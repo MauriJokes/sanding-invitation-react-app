@@ -2,7 +2,7 @@
 
 Malay is the default language; English is the toggle. These strings were accepted by the owner during M1 ("translations seem fine"). `{n}` is the attendee limit. Invitation body copy (host names, dress code source) lives in `WEDDING_CONTENT.md` and `WEDDING_CONTENT_INFO/`.
 
-Not yet written (add and have the owner proofread before M4/M5): validation and error messages, duplicate/closed-RSVP messages, guestbook success and failure states, music button labels, and the sample guestbook list (which is placeholder text only).
+Not yet written (add and have the owner proofread before M5/M6): guestbook success and failure states, music button labels, navigation, gate, countdown, location and the sample guestbook list (placeholder text only). The RSVP strings are in the second table below.
 
 | Key | Bahasa Melayu | English |
 |---|---|---|
@@ -50,3 +50,49 @@ Not yet written (add and have the owner proofread before M4/M5): validation and 
 | `gSend` | Hantar Ucapan | Send Wishes |
 | `sample` | Contoh paparan (bukan ucapan sebenar) | Sample layout (not real wishes) |
 | `max` | Maksimum {n} orang. | Maximum {n} people. |
+
+## RSVP and shell strings (M4)
+
+Source of truth: `src/i18n/strings.ts` (TypeScript enforces that both languages define every key; this table mirrors it for proofreading). "approved (M1)" strings were accepted from the prototype; **drafts need the owner's proofreading**. `{n}`, `{max}` and `{date}` are filled in by the app. The deadline date is formatted from the configured deadline in venue time.
+
+| Key | Bahasa Melayu | English | Status |
+|---|---|---|---|
+| `rsvpHeading` | RSVP | RSVP | approved (M1) |
+| `rsvpLead` | Satu RSVP untuk seluruh keluarga / kumpulan anda. | One RSVP for your whole family / group. | approved (M1) |
+| `familyLabel` | Nama keluarga / kumpulan | Family / group name | approved (M1) |
+| `familyHint` | Gunakan nama yang sama untuk seluruh keluarga anda. | Please use the same name for your whole family. | approved (M1) |
+| `statusLabel` | Kehadiran | Attendance | approved (M1) |
+| `statusAttending` | Akan hadir | Attending | approved (M1) |
+| `statusDeclined` | Tidak dapat hadir | Unable to attend | approved (M1) |
+| `countLabel` | Jumlah kehadiran | Total attendees | approved (M1) |
+| `max` | Maksimum {n} orang. | Maximum {n} people. | approved (M1) |
+| `deadline` | RSVP ditutup pada {date}. | RSVP closes on {date}. | approved (M1) |
+| `send` | Send RSVP | Send RSVP | approved (M1) |
+| `scopeNote` | RSVP ini untuk majlis Walimatulurus sahaja. | This RSVP is for the Walimatulurus celebration only. | draft |
+| `checking` | Menyemak… | Checking… | draft |
+| `configFailed` | Borang RSVP tidak dapat dimuatkan. Sila semak sambungan anda. | The RSVP form could not be loaded. Please check your connection. | draft |
+| `retry` | Cuba lagi | Try again | draft |
+| `decrease` | Kurang | Decrease | draft |
+| `increase` | Tambah | Increase | draft |
+| `sending` | Menghantar… | Sending… | draft |
+| `nameRequired` | Sila masukkan nama keluarga / kumpulan (sekurang-kurangnya 2 aksara). | Please enter your family / group name (at least 2 characters). | draft |
+| `nameTooLong` | Nama terlalu panjang (maksimum {max} aksara). | The name is too long (maximum {max} characters). | draft |
+| `nameInvalid` | Nama mengandungi aksara yang tidak dibenarkan. | The name contains characters that are not allowed. | draft |
+| `errorDuplicate` | Satu RSVP untuk keluarga / kumpulan ini telah diterima. | An RSVP for this family/group has already been received. | draft |
+| `errorDuplicateAfterRetry` | Penghantaran anda sebelum ini mungkin telah berjaya. Satu RSVP untuk keluarga / kumpulan ini telah diterima. | Your earlier submission may have gone through. An RSVP for this family/group has already been received. | draft |
+| `errorLimitChanged` | Had telah dikemas kini kepada {n} orang. Sila semak jumlah anda. | The limit has been updated to {n} people. Please check your total. | draft |
+| `errorValidation` | Sila semak jawapan anda. | Please check your responses. | draft |
+| `errorRateLimited` | Terlalu banyak percubaan. Sila cuba lagi sebentar lagi. | Too many attempts. Please try again in a little while. | draft |
+| `errorFailed` | RSVP anda belum dihantar. Sila semak sambungan anda dan cuba lagi. Maklumat anda masih ada. | Your RSVP has not been sent. Please check your connection and try again. Your details are still here. | draft |
+| `closedTitle` | RSVP telah ditutup. | RSVP is now closed. | draft |
+| `closedBody` | Jika anda perlu membuat perubahan, sila hubungi pasangan secara terus. | If you need to make a change, please contact the couple directly. | draft |
+| `successTitle` | Terima kasih | Thank you | draft |
+| `successAttending` | RSVP anda untuk majlis Walimatulurus telah diterima. | Your RSVP for the Walimatulurus celebration has been received. | draft |
+| `successDeclined` | Terima kasih kerana memaklumkan kami. RSVP anda untuk majlis Walimatulurus telah diterima. | Thank you for letting us know. Your RSVP for the Walimatulurus celebration has been received. | draft |
+| `successFinal` | RSVP ini muktamad. Jika anda perlu membuat pembetulan, sila hubungi pasangan secara terus. | This RSVP is final. If you need to make a correction, please contact the couple directly. | draft |
+| `summaryFamily` | Keluarga / kumpulan | Family / group | draft |
+| `summaryAttendance` | Kehadiran | Attendance | draft |
+| `summaryCount` | Jumlah | Total | draft |
+| `skipToContent` | Langkau ke kandungan | Skip to content | draft |
+| `switchLanguageLabel` | Switch language to English | Tukar bahasa ke Bahasa Melayu | draft |
+| `switchLanguageText` | EN | BM | draft |

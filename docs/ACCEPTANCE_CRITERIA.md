@@ -70,6 +70,7 @@
 
 - [ ] Production environment variables are configured.
 - [ ] MongoDB Atlas access is configured.
+- [ ] `npm run db:indexes` has been run on every database that takes RSVPs, and the unique `canonicalGroupKey` index is present (without it duplicates are accepted).
 - [ ] Google API integration is configured and a test append succeeds.
 - [ ] Rate-limit TTL index exists in production.
 - [ ] No cron jobs are configured.
