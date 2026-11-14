@@ -40,7 +40,9 @@ async function postJson<T>(
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
-      credentials: "omit",
+      // Same-origin only: sends no cookie cross-site, but lets a protected Vercel preview recognise a signed-in
+      // team member. The app sets no cookies of its own, and the API never reads any.
+      credentials: "same-origin",
       signal: signal ? AbortSignal.any([signal, timeout]) : timeout,
     });
 

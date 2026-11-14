@@ -11,7 +11,7 @@ describe("fetchRsvpConfig", () => {
     expect(calls[0]).toEqual({ path: "/api/rsvp/config", body: { invite: VALID_INVITE } });
     const init = vi.mocked(fetch).mock.calls[0]?.[1];
     expect(init?.method).toBe("POST");
-    expect(init?.credentials).toBe("omit");
+    expect(init?.credentials).toBe("same-origin");
     expect(new Headers(init?.headers).get("content-type")).toBe("application/json");
   });
 
