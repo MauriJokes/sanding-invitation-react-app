@@ -1,5 +1,6 @@
 import { EVENT, VENUE_TIMEZONE } from "../shared/config/event";
 import { LanguageToggle } from "./components/LanguageToggle";
+import { GuestbookSection } from "./features/guestbook/GuestbookSection";
 import { RsvpSection } from "./features/rsvp/RsvpSection";
 import { useI18n } from "./i18n/I18nProvider";
 
@@ -35,6 +36,7 @@ export function App({ invite }: { invite?: string }) {
           </div>
         </div>
         <RsvpSection invite={invite} />
+        <GuestbookSection />
       </main>
     </>
   );

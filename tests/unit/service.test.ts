@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { describe, expect, it } from "vitest";
 import { RSVP_DEADLINE } from "../../shared/config/event";
 import type { RsvpDocument } from "../../server/db/collections";
@@ -11,12 +12,12 @@ const BEFORE_DEADLINE = new Date("2026-12-01T12:00:00+08:00");
 
 class FakeRepo implements RsvpRepository {
   readonly docs: Omit<RsvpDocument, "_id">[] = [];
-  insert(doc: Omit<RsvpDocument, "_id">): Promise<void> {
+  insert(doc: Omit<RsvpDocument, "_id">): Promise<ObjectId> {
     if (this.docs.some((d) => d.canonicalGroupKey === doc.canonicalGroupKey)) {
       return Promise.reject(new DuplicateRsvpError());
     }
     this.docs.push(doc);
-    return Promise.resolve();
+    return Promise.resolve(new ObjectId());
   }
 }
 

@@ -13,7 +13,9 @@ const renderApp = (invite?: string) =>
   );
 
 beforeEach(() => {
-  mockFetch(() => configReply(2));
+  mockFetch((call) =>
+    call.path === "/api/guestbook" ? { status: 200, json: { data: { entries: [], nextCursor: null }, error: null } } : configReply(2),
+  );
 });
 afterEach(() => {
   cleanup();

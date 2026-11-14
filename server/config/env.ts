@@ -13,6 +13,10 @@ export class ConfigError extends Error {
 
 const urlSafe = /^[A-Za-z0-9_-]+$/;
 
+/** A blank value (an empty line in .env.local) means "use the default" rather than "invalid". */
+const worksheetName = (fallback: string) =>
+  z.preprocess((value) => (typeof value === "string" && value.trim() === "" ? undefined : value), z.string().trim().min(1).max(100).default(fallback));
+
 export const databaseSchema = z.object({
   MONGODB_URI: z.string().regex(/^mongodb(\+srv)?:\/\//),
   MONGODB_DATABASE: z.string().min(1),
@@ -25,8 +29,8 @@ export const sheetsSchema = z.object({
     .min(1)
     .transform((key) => key.replace(/\\n/g, "\n")),
   GOOGLE_SHEETS_SPREADSHEET_ID: z.string().min(1),
-  GOOGLE_SHEETS_RSVP_WORKSHEET_NAME: z.string().min(1).default("Family RSVP"),
-  GOOGLE_SHEETS_GUESTBOOK_WORKSHEET_NAME: z.string().min(1).default("Guestbook"),
+  GOOGLE_SHEETS_RSVP_WORKSHEET_NAME: worksheetName("Family RSVP"),
+  GOOGLE_SHEETS_GUESTBOOK_WORKSHEET_NAME: worksheetName("Guestbook"),
 });
 
 export const inviteSchema = z.object({

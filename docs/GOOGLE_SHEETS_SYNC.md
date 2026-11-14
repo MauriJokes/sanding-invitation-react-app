@@ -16,7 +16,7 @@ There is no scheduled sync, sync-state collection or internal sync endpoint (Ver
 2. Await a Sheets `append` for the new row with a short timeout (about 5 s). Do not fire-and-forget; Hobby functions can be frozen after the response is sent.
 3. On success, set `sheetStatus: "synced"` and `sheetSyncedAt`.
 4. On failure or timeout, leave `sheetStatus: "pending"`, log a safe error code only, and still return success to the guest.
-5. `scripts/backfill-sheets.ts` (run manually by the owner/developer) appends all pending rows, skipping IDs already present in the sheet, then marks them synced. It supports a `--check` mode that prints pending counts without writing.
+5. `npm run sheets:backfill` (`scripts/backfill-sheets.ts`, run manually by the owner/developer) appends all pending rows oldest first, skipping IDs already present in the sheet, then marks them synced. `-- --check` prints pending counts from MongoDB without touching Sheets; `-- --setup` only creates missing tabs and header rows (and so verifies the Google credentials) without touching data. Output is counts and tab names only.
 
 ## 4. Worksheets
 
@@ -67,3 +67,21 @@ Never include the invite code, secrets, IP addresses or hashes.
 ## 8. Configuration
 
 Server-side: `GOOGLE_SERVICE_ACCOUNT_EMAIL`, `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY`, `GOOGLE_SHEETS_SPREADSHEET_ID`, `GOOGLE_SHEETS_RSVP_WORKSHEET_NAME`, `GOOGLE_SHEETS_GUESTBOOK_WORKSHEET_NAME`. Validate configuration before the first append and fail safely.
+
+## 9. Setup guide (owner, one time)
+
+1. **Create a Google Cloud project** (console.cloud.google.com) and **enable the Google Sheets API** for it. No billing is needed.
+2. **Create a service account** (IAM and Admin, Service Accounts). It needs no project roles.
+3. **Create a JSON key** for it (Keys, Add key, JSON). Treat the file like a password: never commit it, never paste it into chat, delete the downloaded copy once the values are stored.
+4. **Create the spreadsheet** (a new Google Sheet, owned by you). Copy its ID from the URL (`https://docs.google.com/spreadsheets/d/<ID>/edit`).
+5. **Share the spreadsheet with the service account's email** (the `client_email` in the key file) as **Editor**. Share it with nobody else except the couple.
+6. **Set the variables** in `.env.local` and in Vercel (Preview and Production): `GOOGLE_SERVICE_ACCOUNT_EMAIL` = `client_email`; `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY` = `private_key` (paste the value including the `-----BEGIN/END PRIVATE KEY-----` lines; literal `\n` sequences and real line breaks both work); `GOOGLE_SHEETS_SPREADSHEET_ID` = the ID. The two tab-name variables are optional (blank means `Family RSVP` / `Guestbook`).
+7. **Create the tabs and headers:** `npm run sheets:backfill -- --setup`. It prints `created`/`exists` and the header status for each tab, and never overwrites an existing header row (a different one is reported as `mismatch` and left alone).
+8. **Send already-stored rows** (anything submitted before Sheets was configured): `npm run sheets:backfill`.
+
+Keep the two tabs for the app only: no other content in them, and no rows inserted above the header. Sorting or filtering the sheet is safe; the app never reads edits back.
+
+## 10. Known limits
+
+- A row whose append succeeded but whose confirmation was lost is not duplicated by the backfill (it skips ids already present), but a **live** retry cannot be told apart from a new submission only for guestbook wishes: the guestbook has no duplicate guard, so a guest who resubmits after an unanswered attempt can create two wishes (the owner can delete one; see `OPERATIONS.md`).
+- The sheet holds guests' names and messages in clear text. If you export it to Excel or CSV, treat cell contents as untrusted (a cell starting with `=`, `+`, `-` or `@` can be run as a formula by Excel even though Google Sheets stores it as text).

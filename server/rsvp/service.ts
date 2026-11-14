@@ -1,3 +1,4 @@
+import type { ObjectId } from "mongodb";
 import { isRsvpOpen } from "../../shared/config/event.js";
 import {
   MAX_ATTENDEES,
@@ -6,6 +7,7 @@ import {
   type RsvpRequest,
   type RsvpSubmittedResponse,
 } from "../../shared/rsvp/schemas.js";
+import type { RsvpDocument } from "../db/collections.js";
 import { AppError } from "../http/errors.js";
 import { canonicalGroupKey } from "./canonical.js";
 import { deriveGuestType } from "./guest-type.js";
@@ -15,6 +17,8 @@ export interface RsvpDeps {
   repo: RsvpRepository;
   inviteCode: string;
   now: Date;
+  /** Runs after the insert succeeded (the Sheets write-through). Must not throw. */
+  afterInsert?: (id: ObjectId, doc: RsvpDocument) => Promise<unknown>;
 }
 
 /** Tells the form which limit applies. Never reveals more than the number. */
@@ -46,16 +50,18 @@ export async function submitRsvp(input: RsvpRequest, deps: RsvpDeps): Promise<Rs
     });
   }
 
+  const doc: RsvpDocument = {
+    familyGroupName: input.familyGroupName,
+    canonicalGroupKey: canonicalGroupKey(input.familyGroupName),
+    status: input.status,
+    attendeeCount: input.attendeeCount,
+    guestType,
+    createdAt: deps.now,
+    sheetStatus: "pending",
+  };
+  let id: ObjectId;
   try {
-    await deps.repo.insert({
-      familyGroupName: input.familyGroupName,
-      canonicalGroupKey: canonicalGroupKey(input.familyGroupName),
-      status: input.status,
-      attendeeCount: input.attendeeCount,
-      guestType,
-      createdAt: deps.now,
-      sheetStatus: "pending",
-    });
+    id = await deps.repo.insert(doc);
   } catch (error) {
     if (error instanceof DuplicateRsvpError) {
       throw new AppError("RSVP_DUPLICATE", 409, "An RSVP for this family/group has already been received.");
@@ -63,5 +69,6 @@ export async function submitRsvp(input: RsvpRequest, deps: RsvpDeps): Promise<Rs
     throw error;
   }
 
+  await deps.afterInsert?.(id, doc);
   return { status: input.status, attendeeCount: input.attendeeCount };
 }

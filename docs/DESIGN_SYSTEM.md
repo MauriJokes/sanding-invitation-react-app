@@ -137,6 +137,7 @@ Below 768 px: fixed bottom bar with four icon-and-label anchors (Butiran, RSVP, 
 - Inputs have a 1 px `slate` border and a transparent fill (the prototype's lighter field tint was not an approved token, so it was not carried over). An invalid field gets a 2 px `burgundy` border **and** a text message linked with `aria-describedby`; colour is never the only signal.
 - Choice buttons (attending / declined) are real radio inputs with a check mark on the selected one. The count is a stepper whose number is shown in lining, tabular numerals: Cormorant's default figures are old-style and make "1" look like a Roman "I".
 - Notices and errors use the 3 px `burgundy` left rule; one `role="alert"` region announces submit errors.
+- The guestbook uses the same fields on the ivory surface, plus a 24 px checkbox with a 48 px tap row, a text-only character counter (lining numerals) and a list of wishes: plain text, a gold hairline between entries, the name in small gold-ink capitals. Hidden spam-trap field: positioned off-screen, `aria-hidden`, `tabindex=-1`.
 - All controls are at least 48 px tall. The submit button shows "Menghantar…" and is disabled while a request is pending.
 
 ## 6. Accessibility

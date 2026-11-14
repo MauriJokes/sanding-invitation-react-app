@@ -75,3 +75,11 @@ export interface ApiBody {
   data: Record<string, unknown> | null;
   error: { code: string; message: string; fields?: string[] } | null;
 }
+
+export function getJson(
+  route: { fetch(request: Request): Promise<Response> },
+  path: string,
+  ip: string = freshIp(),
+): Promise<Response> {
+  return route.fetch(new Request(`https://example.test${path}`, { method: "GET", headers: { "x-real-ip": ip } }));
+}

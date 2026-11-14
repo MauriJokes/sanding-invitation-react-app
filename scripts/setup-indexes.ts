@@ -6,7 +6,7 @@ import { ensureIndexes } from "../server/db/indexes.js";
 async function main() {
   const db = await getDb();
   await ensureIndexes(db);
-  for (const name of ["rsvps", "rateLimits"]) {
+  for (const name of ["rsvps", "guestbookEntries", "rateLimits"]) {
     const indexes = await db.collection(name).indexes();
     console.log(`${db.databaseName}.${name}: ${indexes.map((index) => index.name).join(", ")}`);
   }

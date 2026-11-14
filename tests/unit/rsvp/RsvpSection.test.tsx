@@ -16,6 +16,7 @@ import {
   mockFetch,
   rsvpCalls,
   serverConfig,
+  simulateTranslator,
   type Call,
   type Reply,
 } from "./helpers";
@@ -264,8 +265,11 @@ describe("pending state", () => {
     show();
     await formReady();
     typeName("The Ahmad Family");
+    const form = sendButton().closest("form") as HTMLFormElement;
     submit();
-    submit();
+    // Enter in a field submits the form without going through the (now disabled) button.
+    fireEvent.submit(form);
+    fireEvent.submit(form);
     await waitFor(() => expect((sendButton() as HTMLButtonElement).disabled).toBe(true));
     expect(sendButton().textContent).toBe("Menghantar…");
     expect(sendButton().getAttribute("aria-busy")).toBe("true");
@@ -422,22 +426,6 @@ describe("closed and unreachable", () => {
     expect(screen.queryByLabelText("Nama keluarga / kumpulan")).toBeNull();
   });
 });
-
-/** What Chrome's translator does: replaces every text node with <font><font>text</font></font>. */
-function simulateTranslator(root: HTMLElement) {
-  root.ownerDocument.documentElement.classList.add("translated-ltr");
-  const walker = root.ownerDocument.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-  const nodes: Text[] = [];
-  while (walker.nextNode()) nodes.push(walker.currentNode as Text);
-  for (const node of nodes) {
-    if (!node.nodeValue?.trim()) continue;
-    const outer = root.ownerDocument.createElement("font");
-    const inner = root.ownerDocument.createElement("font");
-    inner.textContent = node.nodeValue;
-    outer.appendChild(inner);
-    node.parentNode?.replaceChild(outer, node);
-  }
-}
 
 describe("when the browser machine-translates the page", () => {
   afterEach(() => document.documentElement.classList.remove("translated-ltr"));

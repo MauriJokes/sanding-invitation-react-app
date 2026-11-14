@@ -1,4 +1,4 @@
-import { MongoServerError, type Db } from "mongodb";
+import { MongoServerError, type Db, type ObjectId } from "mongodb";
 import { rsvpsCollection, type RsvpDocument } from "../db/collections.js";
 
 export class DuplicateRsvpError extends Error {
@@ -10,7 +10,7 @@ export class DuplicateRsvpError extends Error {
 
 export interface RsvpRepository {
   /** Insert-only. Throws DuplicateRsvpError when the canonical family/group already exists. */
-  insert(doc: Omit<RsvpDocument, "_id">): Promise<void>;
+  insert(doc: Omit<RsvpDocument, "_id">): Promise<ObjectId>;
 }
 
 const hitsCanonicalKey = (error: MongoServerError) =>
@@ -20,7 +20,8 @@ export function createRsvpRepository(db: Db): RsvpRepository {
   return {
     async insert(doc) {
       try {
-        await rsvpsCollection(db).insertOne({ ...doc });
+        const { insertedId } = await rsvpsCollection(db).insertOne({ ...doc });
+        return insertedId;
       } catch (error) {
         if (error instanceof MongoServerError && error.code === 11000 && hitsCanonicalKey(error)) {
           throw new DuplicateRsvpError();

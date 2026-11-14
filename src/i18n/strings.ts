@@ -44,6 +44,26 @@ export interface Strings {
   summaryFamily: string;
   summaryAttendance: string;
   summaryCount: string;
+  // Guestbook: approved in M1
+  guestbookHeading: string;
+  guestbookNameLabel: string;
+  guestbookAnonymous: string;
+  guestbookMessageLabel: string;
+  guestbookAnonymousHint: string;
+  guestbookSend: string;
+  // Guestbook: drafts
+  guestbookNameHint: string;
+  guestbookPublished: string;
+  guestbookPrivate: string;
+  guestbookMessageRequired: string;
+  guestbookMessageTooLong: (max: number) => string;
+  guestbookMessageInvalid: string;
+  guestbookErrorFailed: string;
+  guestbookListLabel: string;
+  guestbookLoading: string;
+  guestbookEmpty: string;
+  guestbookLoadFailed: string;
+  guestbookLoadMore: string;
   // Shell
   crashTitle: string;
   crashBody: string;
@@ -94,6 +114,24 @@ export const strings: Record<Lang, Strings> = {
     summaryAttendance: "Kehadiran",
     summaryCount: "Jumlah",
 
+    guestbookHeading: "Ucapan",
+    guestbookNameLabel: "Nama (pilihan)",
+    guestbookAnonymous: "Hantar tanpa nama",
+    guestbookMessageLabel: "Ucapan anda",
+    guestbookAnonymousHint: "Ucapan tanpa nama hanya dilihat oleh pasangan dan tidak dipaparkan di sini.",
+    guestbookSend: "Hantar Ucapan",
+    guestbookNameHint: "Jika dikosongkan, ucapan anda tidak akan dipaparkan.",
+    guestbookPublished: "Terima kasih! Ucapan anda telah dipaparkan.",
+    guestbookPrivate: "Terima kasih! Ucapan anda telah diterima dan hanya dilihat oleh pasangan.",
+    guestbookMessageRequired: "Sila tulis ucapan anda.",
+    guestbookMessageTooLong: (max) => `Ucapan terlalu panjang (maksimum ${max} aksara).`,
+    guestbookMessageInvalid: "Ucapan mengandungi aksara yang tidak dibenarkan.",
+    guestbookErrorFailed: "Ucapan anda belum dihantar. Sila semak sambungan anda dan cuba lagi. Ucapan anda masih ada.",
+    guestbookListLabel: "Ucapan daripada tetamu",
+    guestbookLoading: "Memuatkan ucapan…",
+    guestbookEmpty: "Belum ada ucapan. Jadilah yang pertama!",
+    guestbookLoadFailed: "Ucapan tidak dapat dimuatkan.",
+    guestbookLoadMore: "Muat lagi",
     crashTitle: "Maaf, sesuatu tidak kena.",
     crashBody: "Halaman ini tidak dapat dipaparkan. Sila muat semula halaman.",
     crashReload: "Muat semula",
@@ -141,6 +179,24 @@ export const strings: Record<Lang, Strings> = {
     summaryAttendance: "Attendance",
     summaryCount: "Total",
 
+    guestbookHeading: "Wishes",
+    guestbookNameLabel: "Name (optional)",
+    guestbookAnonymous: "Send anonymously",
+    guestbookMessageLabel: "Your wishes",
+    guestbookAnonymousHint: "Anonymous wishes are seen only by the couple and are not displayed here.",
+    guestbookSend: "Send Wishes",
+    guestbookNameHint: "If left blank, your wish will not be displayed.",
+    guestbookPublished: "Thank you! Your wish is now displayed.",
+    guestbookPrivate: "Thank you! Your wish has been received and will be seen only by the couple.",
+    guestbookMessageRequired: "Please write your wish.",
+    guestbookMessageTooLong: (max) => `Your message is too long (maximum ${max} characters).`,
+    guestbookMessageInvalid: "Your message contains characters that are not allowed.",
+    guestbookErrorFailed: "Your wish has not been sent. Please check your connection and try again. Your message is still here.",
+    guestbookListLabel: "Wishes from guests",
+    guestbookLoading: "Loading wishes…",
+    guestbookEmpty: "No wishes yet. Be the first!",
+    guestbookLoadFailed: "Wishes could not be loaded.",
+    guestbookLoadMore: "Load more",
     crashTitle: "Sorry, something went wrong.",
     crashBody: "This page could not be shown. Please reload the page.",
     crashReload: "Reload",

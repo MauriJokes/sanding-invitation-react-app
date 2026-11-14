@@ -13,6 +13,7 @@ This package gives an AI coding agent the product requirements, architecture bou
 - `prompts/`: implementation kickoff and milestone prompts.
 - `.env.example`: names of expected server-side environment variables (no secrets).
 - `vercel.json`: security headers, CSP and asset caching (no cron on Hobby).
+- `docs/OPERATIONS.md`: commands, the pending-rows procedure and how to remove a guestbook entry.
 
 ## Install into a repository
 

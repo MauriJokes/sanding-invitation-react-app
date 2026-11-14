@@ -113,7 +113,7 @@ Runtime candidates:
 - `react-dom`
 - `zod`
 - `mongodb`
-- `@googleapis/sheets` (narrow client; verify compatibility at install time)
+- `google-auth-library` (service-account authentication only; the three Sheets REST calls use `fetch`, so requests are fully testable and no large Google client is bundled)
 - `motion` only if the approved design needs it; start with CSS/Web Animations
 
 Development candidates:
@@ -183,9 +183,17 @@ No scheduled function, sync-state collection or internal sync route exists.
 - No cron jobs. Do not add `vercel.json` crons on Hobby (daily limit only).
 - No secrets committed to Git.
 
+### Sheets mirror and guestbook (M5)
+
+- `server/sheets/client.ts`: `createSheetsApi` (append / list ids / ensure tab+headers over plain `fetch`, one 5 s deadline per operation including the token, errors carry only a status or reason) and `getSheetsApi()` (one authenticated client per warm instance). `rows.ts` builds rows (RAW input, so formulas stay text). `write-through.ts` runs after the MongoDB insert and **never throws**: a failure logs only a class/status and leaves the document `pending`. `mirror.ts` ties documents to worksheets. `backfill.ts` and `scripts/backfill-sheets.ts` recover pending rows idempotently.
+- `server/guestbook/` (repository: insert and index-backed cursor reads; service: privacy rules, honeypot, pagination) and `api/guestbook/index.ts` (GET and POST in one function). `publicGetRoute` in `server/http/route.ts` is the read-only sibling of `jsonPostRoute`.
+- Handlers pass the write-through in as `afterInsert`, so the services stay free of Google code and are unit-tested with a fake repository.
+- Tests can never reach Google: `tests/setup-sheets.ts` replaces the real client with an in-memory `FakeSheets` for every test file.
+
 ### Browser structure (M4)
 
 - `src/features/rsvp/`: `invite.ts` (reads and removes `?invite=`, `localStorage` with safe fallbacks), `api.ts` (typed `fetch` client that validates every response by hand and returns `ok`, a typed API error, or "no usable answer"), `useRsvpConfig.ts` (asks the server for the limit; stores an accepted invite and clears a rejected one), `RsvpSection.tsx` (form, states, confirmation).
+- `src/features/guestbook/` (same shape as the RSVP feature: `api.ts`, `useGuestbookList.ts`, `GuestbookSection.tsx`). `src/lib/http.ts` is the shared same-origin JSON transport with by-hand response validation; `src/components/formStyles.ts` holds the shared form classes.
 - `src/i18n/`: typed Malay/English strings and a small provider. The browser imports only `shared/rsvp/constants.ts`, never the Zod schemas, so Zod stays out of the browser bundle (about 74 kB gzipped JS in total).
 - **Hardened against page rewriting.** Chrome's translator (and some extensions) replace text nodes with `<font>` wrappers. React then fails with an `insertBefore`/`removeChild` `NotFoundError` when it adds or removes a node next to bare text, and unmounts the whole page, leaving only the navy body background (an M4 bug found on the Vercel preview). Rules: never conditionally render a node beside bare text (render it always and hide it with CSS, or give the text its own element); `index.html` sets `translate="no"`; `ErrorBoundary` + `CrashNotice` in `main.tsx` replace a crashed page with a reload message in both languages; `tests/unit/rsvp/RsvpSection.test.tsx` simulates a translator.
 - `main.tsx` resolves the invite exactly once before rendering (React StrictMode runs effects twice, and the first read removes it from the address bar).

@@ -4,6 +4,7 @@ export const VALID_INVITE = "k7Qm2-xV9pLr4TnB8wZc_Hd3";
 export const STALE_INVITE = "an-older-invite-code-12345";
 
 export interface Call {
+  method: string;
   path: string;
   body: Record<string, unknown>;
 }
@@ -21,7 +22,7 @@ export function mockFetch(responder: Responder): Call[] {
     "fetch",
     vi.fn(async (input: string, init?: RequestInit) => {
       const raw = typeof init?.body === "string" ? init.body : "{}";
-      const call: Call = { path: input, body: JSON.parse(raw) as Record<string, unknown> };
+      const call: Call = { method: init?.method ?? "GET", path: input, body: JSON.parse(raw) as Record<string, unknown> };
       calls.push(call);
       const reply = await responder(call, calls.length - 1);
       if (reply instanceof Error) throw reply;
@@ -73,5 +74,21 @@ export class MemoryStorage implements Storage {
   }
   setItem(key: string, value: string) {
     this.map.set(key, value);
+  }
+}
+
+/** What Chrome's translator does: replaces every text node with <font><font>text</font></font>. */
+export function simulateTranslator(root: HTMLElement) {
+  root.ownerDocument.documentElement.classList.add("translated-ltr");
+  const walker = root.ownerDocument.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes: Text[] = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode as Text);
+  for (const node of nodes) {
+    if (!node.nodeValue?.trim()) continue;
+    const outer = root.ownerDocument.createElement("font");
+    const inner = root.ownerDocument.createElement("font");
+    inner.textContent = node.nodeValue;
+    outer.appendChild(inner);
+    node.parentNode?.replaceChild(outer, node);
   }
 }

@@ -5,10 +5,10 @@ import { configReply, createdReply, errorReply, mockFetch, VALID_INVITE } from "
 afterEach(() => vi.unstubAllGlobals());
 
 describe("fetchRsvpConfig", () => {
-  it("posts the invite in the JSON body, never in the URL, without credentials", async () => {
+  it("posts the invite in the JSON body, never in the URL, with same-origin credentials only", async () => {
     const calls = mockFetch(() => configReply(10));
     await fetchRsvpConfig(VALID_INVITE);
-    expect(calls[0]).toEqual({ path: "/api/rsvp/config", body: { invite: VALID_INVITE } });
+    expect(calls[0]).toEqual({ method: "POST", path: "/api/rsvp/config", body: { invite: VALID_INVITE } });
     const init = vi.mocked(fetch).mock.calls[0]?.[1];
     expect(init?.method).toBe("POST");
     expect(init?.credentials).toBe("same-origin");

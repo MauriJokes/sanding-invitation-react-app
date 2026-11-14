@@ -5,6 +5,7 @@ import { ok } from "../../server/http/response.js";
 import { requireRsvpIndexes } from "../../server/rsvp/index-guard.js";
 import { createRsvpRepository } from "../../server/rsvp/repository.js";
 import { submitRsvp } from "../../server/rsvp/service.js";
+import { mirrorRsvp } from "../../server/sheets/mirror.js";
 
 export default jsonPostRoute({
   schema: rsvpRequestSchema,
@@ -16,6 +17,7 @@ export default jsonPostRoute({
       repo: createRsvpRepository(db),
       inviteCode: INTERNAL_INVITE_CODE,
       now,
+      afterInsert: (id, doc) => mirrorRsvp(db, id, doc),
     });
     return ok(result, 201);
   },

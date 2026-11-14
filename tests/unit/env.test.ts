@@ -44,6 +44,18 @@ describe("parseEnv", () => {
     expect(env.GOOGLE_SHEETS_GUESTBOOK_WORKSHEET_NAME).toBe("Guestbook");
   });
 
+  it("uses the default tab names for blank values and trims custom ones", () => {
+    const base = {
+      GOOGLE_SERVICE_ACCOUNT_EMAIL: "svc@project.iam.gserviceaccount.com",
+      GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: "k",
+      GOOGLE_SHEETS_SPREADSHEET_ID: "sheet-id",
+    };
+    const blank = parseEnv(sheetsSchema, { ...base, GOOGLE_SHEETS_RSVP_WORKSHEET_NAME: "", GOOGLE_SHEETS_GUESTBOOK_WORKSHEET_NAME: "   " });
+    expect([blank.GOOGLE_SHEETS_RSVP_WORKSHEET_NAME, blank.GOOGLE_SHEETS_GUESTBOOK_WORKSHEET_NAME]).toEqual(["Family RSVP", "Guestbook"]);
+    const custom = parseEnv(sheetsSchema, { ...base, GOOGLE_SHEETS_RSVP_WORKSHEET_NAME: " Tetamu " });
+    expect(custom.GOOGLE_SHEETS_RSVP_WORKSHEET_NAME).toBe("Tetamu");
+  });
+
   it("requires a long URL-safe invite code", () => {
     expect(() => parseEnv(inviteSchema, { INTERNAL_INVITE_CODE: validInvite })).not.toThrow();
     for (const bad of ["short", "A".repeat(21), `${"A".repeat(21)}!`, `${"A".repeat(21)} `, "A".repeat(129)]) {

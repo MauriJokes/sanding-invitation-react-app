@@ -19,7 +19,10 @@
 | Deadline | Submission after cutoff |
 | Sheets | Each RSVP/guestbook entry appended once to the right worksheet |
 | Sheets | Google API failure leaves `pending`; backfill appends it once; repeated backfill is idempotent |
-| Sheets | Formula-like values stay as text |
+| Sheets | Formula-like values stay as text (request uses `RAW`) |
+| Sheets | Google client: exact request shape, tab-name quoting, 5 s timeout, error bodies never kept |
+| Guestbook | Cursor pagination: empty, exactly one page, several pages, identical timestamps, invalid cursor/limit |
+| Guestbook | Honeypot rejected generically; anonymous and blank-name entries never public and mirrored as anonymous |
 | Guestbook | Named entry published immediately; anonymous entry stored but never public |
 | Guestbook | Oversized/empty payload |
 | Guestbook | Markup rendered as text |

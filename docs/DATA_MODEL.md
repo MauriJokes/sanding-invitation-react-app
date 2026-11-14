@@ -52,7 +52,7 @@ interface GuestbookEntry {
 ```
 
 Indexes:
-- `{ isPublic: 1, createdAt: -1, _id: -1 }` for cursor-paginated public reads.
+- `isPublic_createdAt_id`: `{ isPublic: 1, createdAt: -1, _id: -1 }` for cursor-paginated public reads (verified to be an index scan, not a collection scan).
 - Partial index `{ sheetStatus: 1 }` where `sheetStatus = "pending"`.
 
 Rules:

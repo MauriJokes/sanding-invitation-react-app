@@ -2,7 +2,7 @@
 
 Malay is the default language; English is the toggle. These strings were accepted by the owner during M1 ("translations seem fine"). `{n}` is the attendee limit. Invitation body copy (host names, dress code source) lives in `WEDDING_CONTENT.md` and `WEDDING_CONTENT_INFO/`.
 
-Not yet written (add and have the owner proofread before M5/M6): guestbook success and failure states, music button labels, navigation, gate, countdown, location and the sample guestbook list (placeholder text only). The RSVP strings are in the second table below.
+Not yet written (add and have the owner proofread in M6): music button labels, navigation, gate, countdown and location. The RSVP and guestbook strings are in the second table below.
 
 | Key | Bahasa Melayu | English |
 |---|---|---|
@@ -51,7 +51,7 @@ Not yet written (add and have the owner proofread before M5/M6): guestbook succe
 | `sample` | Contoh paparan (bukan ucapan sebenar) | Sample layout (not real wishes) |
 | `max` | Maksimum {n} orang. | Maximum {n} people. |
 
-## RSVP and shell strings (M4)
+## RSVP, guestbook and shell strings (M4, M5)
 
 Source of truth: `src/i18n/strings.ts` (TypeScript enforces that both languages define every key; this table mirrors it for proofreading). "approved (M1)" strings were accepted from the prototype; **drafts need the owner's proofreading**. `{n}`, `{max}` and `{date}` are filled in by the app. The deadline date is formatted from the configured deadline in venue time.
 
@@ -93,6 +93,24 @@ Source of truth: `src/i18n/strings.ts` (TypeScript enforces that both languages 
 | `summaryFamily` | Keluarga / kumpulan | Family / group | draft |
 | `summaryAttendance` | Kehadiran | Attendance | draft |
 | `summaryCount` | Jumlah | Total | draft |
+| `guestbookHeading` | Ucapan | Wishes | approved (M1) |
+| `guestbookNameLabel` | Nama (pilihan) | Name (optional) | approved (M1) |
+| `guestbookAnonymous` | Hantar tanpa nama | Send anonymously | approved (M1) |
+| `guestbookMessageLabel` | Ucapan anda | Your wishes | approved (M1) |
+| `guestbookAnonymousHint` | Ucapan tanpa nama hanya dilihat oleh pasangan dan tidak dipaparkan di sini. | Anonymous wishes are seen only by the couple and are not displayed here. | approved (M1) |
+| `guestbookSend` | Hantar Ucapan | Send Wishes | approved (M1) |
+| `guestbookNameHint` | Jika dikosongkan, ucapan anda tidak akan dipaparkan. | If left blank, your wish will not be displayed. | draft |
+| `guestbookPublished` | Terima kasih! Ucapan anda telah dipaparkan. | Thank you! Your wish is now displayed. | draft |
+| `guestbookPrivate` | Terima kasih! Ucapan anda telah diterima dan hanya dilihat oleh pasangan. | Thank you! Your wish has been received and will be seen only by the couple. | draft |
+| `guestbookMessageRequired` | Sila tulis ucapan anda. | Please write your wish. | draft |
+| `guestbookMessageTooLong` | Ucapan terlalu panjang (maksimum {max} aksara). | Your message is too long (maximum {max} characters). | draft |
+| `guestbookMessageInvalid` | Ucapan mengandungi aksara yang tidak dibenarkan. | Your message contains characters that are not allowed. | draft |
+| `guestbookErrorFailed` | Ucapan anda belum dihantar. Sila semak sambungan anda dan cuba lagi. Ucapan anda masih ada. | Your wish has not been sent. Please check your connection and try again. Your message is still here. | draft |
+| `guestbookListLabel` | Ucapan daripada tetamu | Wishes from guests | draft |
+| `guestbookLoading` | Memuatkan ucapan… | Loading wishes… | draft |
+| `guestbookEmpty` | Belum ada ucapan. Jadilah yang pertama! | No wishes yet. Be the first! | draft |
+| `guestbookLoadFailed` | Ucapan tidak dapat dimuatkan. | Wishes could not be loaded. | draft |
+| `guestbookLoadMore` | Muat lagi | Load more | draft |
 | `crashTitle` | Maaf, sesuatu tidak kena. | Sorry, something went wrong. | draft |
 | `crashBody` | Halaman ini tidak dapat dipaparkan. Sila muat semula halaman. | This page could not be shown. Please reload the page. | draft |
 | `crashReload` | Muat semula | Reload | draft |

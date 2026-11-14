@@ -7,6 +7,7 @@ import {
   normalizeFamilyName,
   type RsvpStatus,
 } from "../../../shared/rsvp/constants";
+import { buttonClass, hintClass, labelClass, noticeClass } from "../../components/formStyles";
 import { useI18n } from "../../i18n/I18nProvider";
 import type { Strings } from "../../i18n/strings";
 import { submitRsvp, type RsvpPayload } from "./api";
@@ -54,11 +55,6 @@ function formErrorText(t: Strings, error: FormError, max: number): string {
   }
 }
 
-const labelClass = "text-[0.85rem] font-semibold uppercase tracking-[0.1em]";
-const hintClass = "mt-1 block text-base font-medium italic text-slate";
-const noticeClass = "border-l-[3px] border-burgundy pl-4 text-left";
-const buttonClass =
-  "min-h-12 border border-navy bg-navy px-8 text-[0.95rem] font-semibold uppercase tracking-[0.22em] text-ivory hover:bg-navy-deep disabled:cursor-not-allowed disabled:opacity-60";
 const stepButtonClass = "min-h-12 w-[3.25rem] text-[1.6rem] text-navy disabled:cursor-not-allowed disabled:opacity-35";
 
 /**

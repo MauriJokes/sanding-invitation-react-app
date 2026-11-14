@@ -34,6 +34,9 @@ MongoDB is the only source of truth. Google Sheets is a one-way mirror. Never im
 ## Recommended strategy
 Two application-owned worksheets (`Family RSVP`, `Guestbook`). Append one row per accepted submission. Do not add a cron, sync-state collection or internal sync route. Recovery is a manual `scripts/backfill-sheets.ts` that appends pending rows and skips IDs already present.
 
+- Use `google-auth-library` for authentication and plain `fetch` for the REST calls; never log a Sheets response body, a row or a URL.
+- Tests never reach Google: use `tests/fake-sheets.ts` (installed for every test by `tests/setup-sheets.ts`).
+
 ## Failure handling
 - A committed RSVP remains committed if Google API is unavailable.
 - Leave `sheetStatus: "pending"` after failure and still return success to the guest.

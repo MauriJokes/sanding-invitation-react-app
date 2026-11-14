@@ -60,3 +60,31 @@ export function jsonPostRoute<S extends z.ZodType>(options: PostRouteOptions<S>)
     },
   };
 }
+
+interface GetRouteOptions<T> {
+  /** Parses and validates the query string. May throw a ZodError (becomes 400). */
+  parse: (url: URL) => T;
+  rateLimit: RateLimitPolicy;
+  handle: (input: T, context: RouteContext) => Promise<Response>;
+}
+
+/** Public read-only JSON route: method, query validation, rate limit, then the feature handler. */
+export function publicGetRoute<T>(options: GetRouteOptions<T>) {
+  return {
+    async fetch(request: Request): Promise<Response> {
+      try {
+        if (request.method !== "GET") {
+          throw new AppError("METHOD_NOT_ALLOWED", 405, "Method not allowed.", { headers: { Allow: "GET" } });
+        }
+        const input = options.parse(new URL(request.url));
+        const now = new Date();
+        const { RATE_LIMIT_SALT } = getRateLimitEnv();
+        const db = await getDb();
+        await enforceRateLimit(db, options.rateLimit, getClientIp(request), RATE_LIMIT_SALT, now);
+        return await options.handle(input, { db, now });
+      } catch (error) {
+        return toErrorResponse(error);
+      }
+    },
+  };
+}

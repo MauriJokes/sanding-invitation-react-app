@@ -33,7 +33,7 @@ Do not expose stack traces, database errors, tokens or internal implementation d
 
 Order of checks, so cheap rejects never touch the database: method (`405` with `Allow: POST`, which also covers `OPTIONS`; no CORS headers are ever sent) → `Content-Type: application/json` (`415 UNSUPPORTED_MEDIA_TYPE`) → bounded body (`413 PAYLOAD_TOO_LARGE`; 4096 bytes, 512 for `/api/rsvp/config`; checked by declared length and again while streaming) → JSON parse (`400 BAD_REQUEST`) → Zod validation (`400 VALIDATION_ERROR`; unknown keys such as a client `guestType` are stripped, not trusted) → rate limit (`429 RATE_LIMITED` with `Retry-After`) → feature handler. If the database has not been set up (the unique `canonicalGroupKey` index is missing), both `/api/rsvp` routes return `503 SERVICE_NOT_READY` with a generic message and write nothing; the form then shows its "could not be loaded" state. Unexpected failures return a generic `500 INTERNAL_ERROR`; logs hold the failure class or the missing variable names only.
 
-Rate limits (fixed 10-minute windows per hashed client IP, scoped per route): `/api/rsvp` 10, `/api/rsvp/config` 30.
+Rate limits (fixed 10-minute windows per hashed client IP, scoped per route): `/api/rsvp` 10, `/api/rsvp/config` 30, `/api/guestbook` GET 120 and POST 20.
 
 ## Event information
 
@@ -85,23 +85,33 @@ A valid invite returns `10`. A missing, wrong or rotated invite returns `2` with
 
 ## GET /api/guestbook
 
-Public, rate-limited, cursor-paginated (default and maximum page size bounded; newest first).
+Public, rate-limited (120 per 10 minutes per hashed IP), cursor-paginated, never cached.
 
-Returns only entries with `isPublic: true`, and only `displayName`, `message`, `createdAt`. Anonymous entries are never returned.
+Query: `limit` (integer 1 to 50, default 20) and `cursor` (opaque value from a previous response). Anything else, or an invalid value, returns `400 VALIDATION_ERROR`.
+
+```json
+{ "data": { "entries": [ { "displayName": "Aisyah", "message": "Selamat!", "createdAt": "2026-12-01T10:00:00.000Z" } ], "nextCursor": "1781000000000_<24 hex>" }, "error": null }
+```
+
+Newest first, ordered by `(createdAt, id)` descending, so entries with the same timestamp are neither skipped nor repeated. `nextCursor` is `null` on the last page (also when the last page is exactly full). Only entries with `isPublic: true` are ever returned, and only these three fields: never ids, flags, sheet status or anonymous entries. Served from the `{ isPublic, createdAt, _id }` index.
 
 ## POST /api/guestbook
 
-Public, rate-limited, insert-only.
+Public, rate-limited (20 per 10 minutes per hashed IP; deliberately generous because guests at the venue may share one Wi-Fi address), insert-only, body up to 8 KB.
 
 ```json
-{ "displayName": "A guest", "message": "Wishing you both a wonderful life together.", "anonymous": false }
+{ "displayName": "A guest", "message": "Wishing you both a wonderful life together.", "anonymous": false, "homepage": "" }
 ```
 
-- `displayName` is optional. A blank name or `anonymous: true` makes the entry anonymous (stored and mirrored to Sheets, never shown publicly). If a name is supplied with `anonymous: true` it is still stored for the couple.
-- Validate maximum lengths; reject empty messages and a filled honeypot field.
-- Respond `201` with `{ "published": true | false }` so the UI can show the right confirmation (anonymous entries are not displayed).
+- `displayName` is optional, 60 characters at most. A blank or missing name, or `anonymous: true`, makes the entry anonymous: stored and mirrored to Sheets, never shown publicly. A name given with `anonymous: true` is still stored for the couple.
+- `message` is required, 1 to 500 characters after normalisation (Unicode NFC, whitespace collapsed, line breaks kept with at most one blank line in a row, trimmed). Control, zero-width and bidi characters are rejected.
+- `homepage` is the hidden spam trap: a real browser sends it empty. Any non-blank value returns `400 VALIDATION_ERROR` with the generic message and **no field names**, and stores and mirrors nothing.
+- Unknown keys (for example `isPublic`) are ignored.
+- Respond `201` with `{ "published": true | false }` so the UI can show the right confirmation.
 - After the insert, await the Sheets append to the `Guestbook` worksheet; failure leaves `sheetStatus: "pending"` and does not affect the response.
 - Render stored content as text.
+
+`PUT`, `PATCH`, `DELETE` and `OPTIONS` return `405` with `Allow: GET, POST`. There is no public edit or delete.
 
 ## HTTP semantics
 

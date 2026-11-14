@@ -58,9 +58,10 @@ describe("POST /api/rsvp: accepted submissions", () => {
       status: "attending",
       attendeeCount: 2,
       guestType: "external",
-      sheetStatus: "pending",
+      sheetStatus: "synced",
     });
     expect(docs[0]?.createdAt).toBeInstanceOf(Date);
+    expect(docs[0]?.sheetSyncedAt).toBeInstanceOf(Date);
   });
 
   it("accepts 10 attendees with a valid invite, stores guestType internal and never stores the invite", async () => {

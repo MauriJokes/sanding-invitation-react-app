@@ -14,6 +14,14 @@ export async function ensureIndexes(db: Db): Promise<void> {
       partialFilterExpression: { sheetStatus: "pending" },
     },
   ]);
+  await db.collection(COLLECTIONS.guestbookEntries).createIndexes([
+    { key: { isPublic: 1, createdAt: -1, _id: -1 }, name: "isPublic_createdAt_id" },
+    {
+      key: { sheetStatus: 1 },
+      name: "sheetStatus_pending",
+      partialFilterExpression: { sheetStatus: "pending" },
+    },
+  ]);
   await db
     .collection(COLLECTIONS.rateLimits)
     .createIndex({ expiresAt: 1 }, { name: "expiresAt_ttl", expireAfterSeconds: 0 });
