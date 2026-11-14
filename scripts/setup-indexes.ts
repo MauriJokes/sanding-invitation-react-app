@@ -1,3 +1,4 @@
+import { ConfigError } from "../server/config/env.js";
 import { closeDb, getDb } from "../server/db/client.js";
 import { ensureIndexes } from "../server/db/indexes.js";
 
@@ -13,7 +14,11 @@ async function main() {
 
 main()
   .catch((error: unknown) => {
-    console.error(`Index setup failed: ${error instanceof Error ? error.name : "unknown error"}`);
+    if (error instanceof ConfigError) {
+      console.error(`Index setup failed: missing or invalid in .env.local: ${error.variables.join(", ")}`);
+    } else {
+      console.error(`Index setup failed: ${error instanceof Error ? error.name : "unknown error"}`);
+    }
     process.exitCode = 1;
   })
   .finally(() => closeDb());
