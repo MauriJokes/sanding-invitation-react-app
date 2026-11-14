@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Walimatulurus — Izyan &amp; Adam (design prototype)</title>
+<!--
+  THROWAWAY DESIGN PROTOTYPE. Not part of the application.
+  Params: ?theme=ivory (Direction B)  ?open=1 (skip cover)
+  Copy: supplied wedding content only. UI strings are drafts awaiting owner proofreading.
+-->
+<style>
+@font-face{font-family:"Cormorant Garamond";font-weight:400;font-style:normal;font-display:swap;src:url(fonts/cormorant-garamond-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-weight:500;font-style:normal;font-display:swap;src:url(fonts/cormorant-garamond-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-weight:600;font-style:normal;font-display:swap;src:url(fonts/cormorant-garamond-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-weight:400;font-style:italic;font-display:swap;src:url(fonts/cormorant-garamond-latin-400-italic.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-weight:500;font-style:italic;font-display:swap;src:url(fonts/cormorant-garamond-latin-500-italic.woff2) format("woff2")}
+@font-face{font-family:"Allura";font-weight:400;font-style:normal;font-display:swap;src:url(fonts/allura-latin-400-normal.woff2) format("woff2")}
+
+:root{
+  /* sampled from design-assets/moodboard/theme */
+  --navy:#283368;        /* artwork field */
+  --navy-deep:#1b2352;   /* derived: navy darkened ~30% for depth */
+  --slate:#4b5378;       /* artwork */
+  --periwinkle:#7e8fb8;  /* artwork tile blue */
+  --ivory:#e9e1d6;      /* photo swatch */
+  --ivory-2:#ddd3c3;     /* derived: ivory darkened ~5% */
+  --gold:#b8a472;        /* artwork gold */
+  --gold-bright:#cfac69; /* photo swatch gold */
+  --gold-ink:#645020;    /* derived: darkened gold, text-safe on ivory */
+  --burgundy:#52222a;    /* photo swatch */
+  --sage:#798776;        /* photo swatch (decoration only) */
+
+  --font-script:"Allura","Snell Roundhand",cursive;
+  --font-serif:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
+
+  /* Direction A: Navy Gate */
+  --dk-bg:var(--navy); --dk-fg:var(--ivory); --dk-acc:var(--gold-bright);
+  --lt-bg:var(--ivory); --lt-fg:var(--navy); --lt-acc:var(--gold-ink);
+  --tassel:var(--gold-bright);
+  --m:clamp(112px,30vw,210px);
+  --ease:cubic-bezier(.65,.05,.25,1);
+}
+body.theme-ivory{
+  /* Direction B: Ivory Paper */
+  --dk-bg:var(--ivory-2); --dk-fg:var(--navy); --dk-acc:var(--gold-ink);
+  --tassel:var(--navy);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:56px}
+body{margin:0;background:var(--navy);color:var(--ivory);font-family:var(--font-serif);font-weight:500;font-size:1.25rem;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.theme-ivory{background:var(--ivory)}
+h1,h2,h3,p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold-bright);outline-offset:3px}
+.s-light :focus-visible,.theme-ivory :focus-visible{outline-color:var(--navy)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* tile motif (inline data URI so the prototype is a single file) */
+.tile-band{height:34px;background:var(--tile) repeat-x center/34px 34px;border-block:1px solid var(--gold);box-shadow:inset 0 0 0 3px var(--navy-deep)}
+.theme-ivory .tile-band{box-shadow:inset 0 0 0 3px var(--ivory)}
+
+section{position:relative;z-index:1}
+.s-dark{background:transparent;color:var(--dk-fg)}
+.theme-ivory .s-dark{background:var(--dk-bg)}
+.s-light{background:var(--lt-bg);color:var(--lt-fg)}
+.wrap{max-width:42rem;margin-inline:auto;padding:4.5rem 1.5rem}
+.center{text-align:center}
+.eyebrow{font-weight:600;letter-spacing:.28em;text-transform:uppercase;font-size:.9rem}
+.s-dark .eyebrow{color:var(--dk-acc)} .s-light .eyebrow{color:var(--lt-acc)}
+h2{font-weight:500;font-size:clamp(1.9rem,6vw,2.6rem);letter-spacing:.12em;text-transform:uppercase;line-height:1.15;margin:.5rem 0 1.5rem}
+.rule{display:flex;align-items:center;gap:.9rem;justify-content:center;margin:1.4rem auto;max-width:18rem;color:var(--gold)}
+.rule::before,.rule::after{content:"";height:1px;flex:1;background:currentColor}
+.rule i{width:9px;height:9px;transform:rotate(45deg);border:1px solid currentColor;display:block}
+
+/* ---------- cover / gate ---------- */
+#cover{position:fixed;inset:0;z-index:50;overflow:hidden}
+.door{position:absolute;top:0;bottom:0;width:50%;transition:transform .9s var(--ease) .25s;will-change:transform}
+.door.l{left:0;transform-origin:left}.door.r{right:0}
+.door{overflow:hidden;background:var(--tile) 0 0/84px 84px}
+.door .ros{z-index:0}
+.door::after{content:"";position:absolute;inset:0;z-index:1;background:var(--navy-deep)}
+.door.l::after{clip-path:polygon(0 34%,100% 8.8%,100% 91.2%,0 66%)}
+.door.r::after{clip-path:polygon(0 8.8%,100% 34%,100% 66%,0 91.2%)}
+.door .edge{z-index:2}
+.door .edge{position:absolute;top:0;bottom:0;width:2px;background:var(--gold)}
+.door.l .edge{right:0}.door.r .edge{left:0}
+.plaque{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;text-align:center;padding:1.5rem;transition:opacity .35s ease;color:var(--ivory);z-index:2}
+.plaque .inner{background:var(--navy-deep);padding:2rem 2.2rem 2.4rem;border:1px solid var(--gold);outline:1px solid var(--gold);outline-offset:5px;max-width:20rem}
+.monogram{font-family:var(--font-serif);font-weight:500;font-size:2.6rem;line-height:1;letter-spacing:.04em;color:var(--ivory);display:flex;align-items:baseline;justify-content:center;gap:.05em}
+.monogram .a{font-size:3.1rem}.monogram .i{font-size:2.1rem;margin-left:-.12em;color:var(--gold-bright)}
+.cover-title{font-weight:600;letter-spacing:.3em;font-size:.85rem;text-transform:uppercase;color:var(--gold-bright);margin:1rem 0 .4rem}
+.script{font-family:var(--font-script);font-weight:400;line-height:1.05}
+.cover-names{font-size:clamp(3.4rem,15vw,4.8rem);color:var(--ivory)}
+.cover-date{letter-spacing:.2em;text-transform:uppercase;font-size:.95rem;margin:.6rem 0 1.6rem}
+.btn{font:inherit;font-weight:600;letter-spacing:.22em;text-transform:uppercase;font-size:.95rem;min-height:48px;padding:.75rem 2rem;border:1px solid var(--gold-bright);background:transparent;color:var(--ivory);cursor:pointer;border-radius:2px;transition:background .25s,color .25s}
+.btn:hover{background:var(--gold-bright);color:var(--navy-deep)}
+.btn.solid{background:var(--navy);color:var(--ivory);border-color:var(--navy)}
+.btn.solid:hover{background:var(--navy-deep)}
+body.open #cover .plaque{opacity:0;pointer-events:none}
+body.open .door.l{transform:translateX(-101%)}
+body.open .door.r{transform:translateX(101%)}
+body.open #cover{visibility:hidden;transition:visibility 0s 1.3s}
+body.opened #cover{display:none}
+.reduced #cover .door{transition:opacity .4s ease}
+.reduced.open .door.l,.reduced.open .door.r{transform:none;opacity:0}
+.reduced #cover .plaque{transition:opacity .2s}
+.reduced.open #cover{transition:visibility 0s .45s}
+
+/* ---------- nav ---------- */
+nav.top{position:sticky;top:0;z-index:20;height:56px;display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:0 .75rem;background:var(--navy-deep);color:var(--ivory);border-bottom:1px solid var(--gold)}
+.theme-ivory nav.top{background:var(--ivory);color:var(--navy);border-bottom-color:var(--gold-ink)}
+nav.top .links{display:flex;gap:.15rem;flex:1;justify-content:center}
+nav.top a{text-decoration:none;font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:.78rem;min-height:44px;display:inline-flex;align-items:center;padding:0 .45rem}
+nav.top a:hover{color:var(--gold-bright)} .theme-ivory nav.top a:hover{color:var(--gold-ink)}
+.ctl{display:flex;gap:.25rem;align-items:center}
+.icon-btn{min-width:44px;min-height:44px;display:grid;place-items:center;background:none;border:0;color:inherit;cursor:pointer;font:inherit;font-weight:600;font-size:.78rem;letter-spacing:.1em}
+.icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6}
+.icon-btn[aria-pressed=true]{color:var(--gold-bright)} .theme-ivory .icon-btn[aria-pressed=true]{color:var(--gold-ink)}
+nav.top .links a svg{display:none;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+nav.top .links a[aria-current=true]{color:var(--gold-bright)}
+.theme-ivory nav.top .links a[aria-current=true]{color:var(--gold-ink)}
+
+/* ---------- hero ---------- */
+#hero{min-height:calc(100svh - 56px);display:grid;place-items:center;overflow:hidden;padding-top:calc(var(--m)*1.3);padding-bottom:176px}
+.theme-ivory #hero{background:var(--ivory)}
+.hero-in{position:relative;z-index:2;text-align:center;padding:1rem 1.25rem;max-width:34rem}
+.hero-in h1{font-weight:600;letter-spacing:.34em;text-transform:uppercase;font-size:1rem;color:var(--dk-acc);margin-bottom:1.2rem}
+.hero-names{font-size:clamp(4.6rem,22vw,8.5rem)}
+.hero-names .amp{display:block;font-size:.5em;line-height:.9;color:var(--dk-acc)}
+.hero-meta{margin-top:1.8rem;letter-spacing:.2em;text-transform:uppercase;font-size:1rem}
+.hero-meta span{display:block;margin-top:.35rem;letter-spacing:.14em;font-size:.9rem}
+.hero-band{position:absolute;left:0;right:0;bottom:0;height:168px;z-index:1;pointer-events:none;overflow:hidden;background:var(--tile) 0 0/84px 84px;border-top:1px solid var(--gold);box-shadow:inset 0 16px 18px -12px var(--navy-deep)}
+.theme-ivory .hero-band{border-top-color:var(--gold-ink);box-shadow:none}
+.ros{position:absolute;width:50.4px;height:50.4px;background:var(--rosette) center/contain no-repeat;animation:spin var(--d,60s) linear infinite var(--dir,normal);will-change:transform}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.play-intro .hero-in>*{animation:rise .9s var(--ease) both;animation-delay:calc(var(--i,0)*.16s + 1.05s)}
+.play-intro .hero-band{animation:rise 1.1s var(--ease) both;animation-delay:.95s}
+.reduced .ros,.reduced .play-intro .hero-in>*,.reduced.play-intro .hero-in>*,.reduced.play-intro .hero-band{animation:none}
+.paused .ros{animation-play-state:paused}
+.reduced .door .ros{animation:none}
+.scroll-cue{display:inline-block;margin-top:2.2rem;text-decoration:none;letter-spacing:.24em;text-transform:uppercase;font-size:.8rem;color:var(--dk-acc);min-height:44px}
+
+/* corner medallion + tassel */
+.corner{position:absolute;top:0;width:var(--m);height:var(--m);z-index:1;pointer-events:none}
+.corner.tl{left:0}.corner.tr{right:0;transform:scaleX(-1)}
+.corner .sway{position:absolute;inset:0;transform-origin:0 0;animation:sway 7s ease-in-out infinite alternate}
+.corner.tr .sway{animation-delay:-3.5s}
+.corner svg.med{width:100%;height:100%;display:block}
+.tassel{position:absolute;left:calc(var(--m)*.69);top:calc(var(--m)*.66);width:calc(var(--m)*.17);transform-origin:50% 0;animation:swing 5.2s ease-in-out infinite alternate;color:var(--tassel)}
+.corner.tr .tassel{animation-delay:-2.6s}
+.tassel svg{width:100%;display:block;overflow:visible}
+@keyframes sway{from{transform:rotate(-1.5deg)}to{transform:rotate(1.5deg)}}
+@keyframes swing{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
+@media (max-width:359px){.tassel{display:none}}
+
+/* particles */
+#particles{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.p{position:absolute;top:-24px;opacity:0;animation:fall linear infinite;will-change:transform,opacity}
+.p i{display:block;animation:drift ease-in-out infinite alternate}
+@keyframes fall{0%{transform:translateY(-6vh);opacity:0}8%{opacity:var(--o)}92%{opacity:var(--o)}100%{transform:translateY(112vh);opacity:0}}
+@keyframes drift{from{transform:translateX(-14px) rotate(-20deg)}to{transform:translateX(14px) rotate(20deg)}}
+.paused .p,.paused .p i,.paused .corner .sway,.paused .tassel{animation-play-state:paused}
+.reduced #particles{display:none}
+.reduced .corner .sway,.reduced .tassel{animation:none}
+
+/* ---------- invitation details ---------- */
+.hosts{display:grid;gap:1.5rem;margin:1.8rem 0}
+.host{line-height:1.3}
+.host small{display:block;font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;color:var(--lt-acc);font-weight:600}
+.host b{font-weight:600;display:block}
+.amp-sm{font-family:var(--font-script);font-size:2.6rem;color:var(--lt-acc);line-height:1}
+.invite-copy{font-size:1.3rem;line-height:1.55;margin:2rem 0}
+.couple{margin-top:1.2rem}
+.couple b{font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:1.15rem;display:block;line-height:1.4}
+dl.facts{margin:2.2rem 0 0;display:grid;gap:1.3rem}
+dl.facts dt{font-weight:600;letter-spacing:.24em;text-transform:uppercase;font-size:.85rem;color:var(--lt-acc)}
+dl.facts dd{margin:.2rem 0 0;font-size:1.3rem}
+.dress{margin-top:2rem;border-top:1px solid var(--gold);padding-top:1.2rem}
+.dress ul{list-style:none;padding:0;margin:.6rem 0 0;display:grid;gap:.5rem}
+.dress li{display:flex;gap:.7rem;justify-content:center;align-items:center}
+.sw{width:14px;height:14px;border-radius:50%;border:1px solid currentColor;flex:none}
+
+/* ---------- countdown ---------- */
+.count{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;max-width:30rem;margin:1.6rem auto 0}
+.count div{border-top:1px solid var(--gold);padding-top:.7rem}
+.count strong{display:block;font-weight:500;font-size:clamp(2.6rem,12vw,4rem);line-height:1;font-variant-numeric:tabular-nums lining-nums;color:var(--dk-fg)}
+.count span{display:block;margin-top:.4rem;letter-spacing:.2em;text-transform:uppercase;font-size:.8rem;font-weight:600;color:var(--dk-acc)}
+
+/* ---------- forms ---------- */
+form{display:grid;gap:1.4rem;text-align:left;margin-top:1.6rem}
+label,legend{font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:.85rem}
+.hint{font-size:1rem;font-weight:500;letter-spacing:0;text-transform:none;opacity:.85;display:block;margin-top:.25rem;font-style:italic}
+input[type=text],textarea{width:100%;font:inherit;font-size:1.15rem;min-height:48px;padding:.65rem .8rem;border:1px solid var(--slate);border-radius:2px;background:#f4efe7;color:var(--navy);margin-top:.4rem}
+textarea{min-height:7.5rem;resize:vertical}
+fieldset{border:0;padding:0;margin:0}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.5rem}
+.seg label{position:relative;display:block;letter-spacing:.06em}
+.seg input{position:absolute;opacity:0}
+.seg span{display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:48px;border:1px solid var(--slate);border-radius:2px;padding:.4rem .6rem;text-align:center;cursor:pointer;font-size:.95rem}
+.seg input:checked+span{background:var(--navy);color:var(--ivory);border-color:var(--navy)}
+.seg input:checked+span::before{content:"✓"}
+.seg input:focus-visible+span{outline:2px solid var(--navy);outline-offset:3px}
+.stepper{display:inline-flex;align-items:stretch;margin-top:.5rem;border:1px solid var(--slate);border-radius:2px}
+.stepper button{width:52px;min-height:48px;border:0;background:transparent;font:inherit;font-size:1.6rem;color:var(--navy);cursor:pointer}
+.stepper button:disabled{opacity:.35;cursor:not-allowed}
+.stepper output{min-width:3.2rem;display:grid;place-items:center;font-size:1.5rem;border-inline:1px solid var(--slate);font-variant-numeric:lining-nums}
+.chk{display:flex;gap:.7rem;align-items:center;letter-spacing:.04em;text-transform:none;font-size:1.05rem}
+.chk input{width:22px;height:22px;accent-color:var(--navy)}
+.notice{border-left:3px solid var(--burgundy);padding:.5rem .9rem;background:#efe6d9;font-size:1.05rem}
+.ok{display:none;border:1px solid var(--navy);padding:1rem;text-align:center}
+.sent .ok{display:block}.sent form>*:not(.ok){display:none}
+
+/* location + guestbook */
+.actions{display:flex;flex-wrap:wrap;gap:.8rem;justify-content:center;margin-top:1.6rem}
+.s-dark .actions .btn{color:var(--dk-fg);border-color:var(--dk-acc)}
+.theme-ivory .s-dark .btn:hover{background:var(--navy);color:var(--ivory)}
+.wish{border-top:1px solid var(--gold);padding:1.1rem 0;text-align:left}
+.wish p{font-size:1.2rem}.wish cite{display:block;margin-top:.3rem;font-style:normal;font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:.8rem;color:var(--lt-acc)}
+.sample-tag{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;opacity:.8}
+footer{padding:2.2rem 1rem 3.5rem;text-align:center;position:relative;z-index:1;background:var(--navy-deep);color:var(--ivory);font-size:1rem}
+.theme-ivory footer{background:var(--ivory-2);color:var(--navy)}
+.proto{position:relative;z-index:5;padding:1rem;background:#111;color:#ddd;font:14px system-ui;display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.proto button{font:inherit;padding:.5rem .8rem;border:1px dashed #888;background:#222;color:#eee;cursor:pointer;min-height:44px}
+/* ---- responsive overrides (kept last so they win the cascade) ---- */
+/* tablet/desktop: top bar, single-line names sized by width and height */
+@media (min-width:768px){
+  #hero{padding-top:0}
+  .hero-names{font-size:clamp(4.5rem,min(10vw,17vh),9rem);white-space:nowrap}
+  .hero-names .amp{display:inline;font-size:.55em;margin:0 .22em;vertical-align:.05em}
+}
+/* mobile: bottom bar */
+@media (max-width:767px){
+  html{scroll-padding-top:12px;scroll-padding-bottom:84px}
+  body{padding-bottom:calc(60px + env(safe-area-inset-bottom))}
+  nav.top{position:fixed;top:auto;bottom:0;left:0;right:0;height:calc(60px + env(safe-area-inset-bottom));padding:0 0 env(safe-area-inset-bottom);gap:0;border-bottom:0;border-top:1px solid var(--gold)}
+  .theme-ivory nav.top{border-top-color:var(--gold-ink)}
+  .mono-nav{display:none}
+  nav.top .links{flex:1;justify-content:space-around;gap:0}
+  nav.top .links a{flex:1;flex-direction:column;justify-content:center;gap:3px;min-height:56px;padding:0;font-size:.7rem;letter-spacing:.06em;position:relative}
+  nav.top .links a svg{display:block}
+  nav.top .links a[aria-current=true]::before{content:"";position:absolute;top:-1px;left:22%;right:22%;height:2px;background:currentColor}
+  nav.top .ctl{border-left:1px solid color-mix(in srgb,var(--gold) 55%,transparent);padding-left:.15rem;gap:0}
+  nav.top .icon-btn{min-width:46px}
+  body.kb nav.top{display:none}
+  #hero{min-height:100svh}
+}
+</style>
+</head>
+<body>
+
+<div id="particles" aria-hidden="true"></div>
+
+<!-- COVER / GATE -->
+<div id="cover" role="region" aria-label="Cover">
+  <div class="door l"><span class="edge"></span></div>
+  <div class="door r"><span class="edge"></span></div>
+  <div class="plaque">
+    <div class="inner">
+      <div class="monogram" aria-hidden="true"><span class="i">I</span><span class="a">A</span></div>
+      <p class="cover-title" data-i18n="event">Walimatulurus</p>
+      <p class="script cover-names">Izyan <span style="font-size:.6em">&amp;</span> Adam</p>
+      <p class="cover-date" data-i18n="coverDate">28 Disember 2026</p>
+      <button class="btn" id="openBtn" data-i18n="open">Buka</button>
+    </div>
+  </div>
+</div>
+
+<div id="app" inert>
+  <nav class="top" aria-label="Primary">
+    <span class="monogram mono-nav" aria-hidden="true" style="font-size:1.4rem"><span class="i" style="font-size:1.1rem">I</span><span class="a" style="font-size:1.5rem">A</span></span>
+    <div class="links">
+      <a href="#details"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 12h6M9 16h6"/></svg><span data-i18n="nDetails">Butiran</span></a>
+      <a href="#rsvp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg><span>RSVP</span></a>
+      <a href="#location"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2"/></svg><span data-i18n="nLocation">Lokasi</span></a>
+      <a href="#guestbook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/></svg><span data-i18n="nWishes">Ucapan</span></a>
+    </div>
+    <div class="ctl">
+      <button class="icon-btn" id="lang" aria-label="Switch language to English"><span id="langTxt">EN</span></button>
+      <button class="icon-btn" id="music" aria-pressed="false" aria-label="Play music">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- HERO -->
+    <section id="hero" class="s-dark" aria-labelledby="h1">
+      <div class="corner tl" aria-hidden="true"><div class="sway">
+        <svg class="med" viewBox="0 0 200 200"><use href="#medallion"/></svg>
+        <div class="tassel"><svg viewBox="0 0 40 130"><use href="#tasselsvg"/></svg></div>
+      </div></div>
+      <div class="corner tr" aria-hidden="true"><div class="sway">
+        <svg class="med" viewBox="0 0 200 200"><use href="#medallion"/></svg>
+        <div class="tassel"><svg viewBox="0 0 40 130"><use href="#tasselsvg"/></svg></div>
+      </div></div>
+      <div class="hero-in">
+        <h1 id="h1" tabindex="-1" style="--i:0" data-i18n="event">Walimatulurus</h1>
+        <p class="script hero-names" style="--i:1">Izyan<span class="amp">&amp;</span>Adam</p>
+        <p class="hero-meta" style="--i:2"><span style="margin:0;letter-spacing:.2em;font-size:1rem" data-i18n="heroDate">Isnin, 28 Disember 2026</span><span>The Rizqun International Hotel</span></p>
+        <a class="scroll-cue" style="--i:3" href="#details" data-i18n="scroll">Lihat butiran</a>
+      </div>
+      <div class="hero-band" id="heroBand" aria-hidden="true"></div>
+    </section>
+
+    <div class="tile-band" aria-hidden="true"></div>
+
+    <!-- INVITATION + EVENT FACTS -->
+    <section id="details" class="s-light">
+      <div class="wrap center">
+        <p class="eyebrow" data-i18n="greet">Assalamualaikum WBT &amp; Salam Sejahtera</p>
+        <p class="invite-copy" style="margin-top:1.2rem;margin-bottom:0">Bismillah</p>
+        <div class="rule" aria-hidden="true"><i></i></div>
+        <div class="hosts">
+          <div class="host"><small>Yang Mulia</small><b>Pengiran Haji Mohamad Jaludin</b>bin Pengiran Haji Puteh<small style="margin-top:.7rem">Yang Mulia</small><b>Dayang Masdiah</b>binti Awang Haji Tuah</div>
+          <div class="host"><small>Yang Mulia</small><b>Awangku Mohamad Izzan Naqiuddin</b>bin Pengiran Haji Mohamad Jaludin<small style="margin-top:.7rem">Yang Mulia</small><b>Awangku Mohamad Izzan Qayyum</b>bin Pengiran Haji Mohamad Jaludin</div>
+          <div class="amp-sm" aria-hidden="true">&amp;</div>
+          <div class="host"><small>Yang Mulia</small><b>Nik Joharris</b>bin Nik Ahmad<small style="margin-top:.7rem">Yang Mulia</small><b>Nerisa</b>binti Nawi</div>
+          <div class="host"><small>Yang Mulia</small><b>Nik Arman Danish</b>bin Nik Joharris<small style="margin-top:.7rem">Yang Mulia</small><b>Nik Azlan</b>bin Nik Joharris</div>
+        </div>
+        <p class="invite-copy" data-i18n="inviteText">Dengan segala hormat dan takzim sukacita menjunjung Pengiran berangkat / mempersilakan Pehin / Tan Sri / Puan Sri / Dato / Datin / Awang / Dayang / Tuan / Puan / Encik dan Cik untuk hadir ke Majlis Walimatulurus anakanda kami:</p>
+        <div class="couple">
+          <b>Dk Izyan Naqiyah binti Pengiran Haji Mohd. Jaludin</b>
+          <span class="amp-sm" aria-hidden="true">&amp;</span>
+          <b>Nik Adam Danish bin Nik Joharris</b>
+        </div>
+        <div class="rule" aria-hidden="true"><i></i></div>
+        <dl class="facts">
+          <div><dt data-i18n="fDate">Tarikh</dt><dd data-i18n="heroDate">Isnin, 28 Disember 2026</dd></div>
+          <div><dt data-i18n="fTime">Ketibaan Tetamu</dt><dd data-i18n="fTimeV">7.15 malam</dd></div>
+          <div><dt data-i18n="fPlace">Tempat</dt><dd>The Rizqun International Hotel<br>Songket Ballroom</dd></div>
+        </dl>
+        <div class="dress">
+          <p class="eyebrow" data-i18n="dressT">Pakaian</p>
+          <ul>
+            <li><span class="sw" style="background:var(--burgundy);color:var(--burgundy)"></span><span data-i18n="dress1">Baju Melayu for gentlemen and Baju Kurung for ladies in burgundy.</span></li>
+            <li><span class="sw" style="background:var(--navy);color:var(--navy)"></span><span data-i18n="dress2">Baju Melayu for gentlemen and Baju Kurung for ladies in navy blue.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="tile-band" aria-hidden="true"></div>
+
+    <!-- COUNTDOWN -->
+    <section id="countdown" class="s-dark" aria-labelledby="cdh">
+      <div class="wrap center">
+        <h2 id="cdh" data-i18n="cdT">Menanti Hari</h2>
+        <div class="count" role="timer" aria-live="off" aria-label="Countdown to 28 December 2026, 7:15 PM">
+          <div><strong id="cd-d">00</strong><span data-i18n="cdD">Hari</span></div>
+          <div><strong id="cd-h">00</strong><span data-i18n="cdH">Jam</span></div>
+          <div><strong id="cd-m">00</strong><span data-i18n="cdM">Minit</span></div>
+          <div><strong id="cd-s">00</strong><span data-i18n="cdS">Saat</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="tile-band" aria-hidden="true"></div>
+
+    <!-- RSVP -->
+    <section id="rsvp" class="s-light" aria-labelledby="rsvph">
+      <div class="wrap center" id="rsvpbox">
+        <p class="eyebrow">Walimatulurus</p>
+        <h2 id="rsvph">RSVP</h2>
+        <p data-i18n="rsvpLead">Satu RSVP untuk seluruh keluarga / kumpulan anda.</p>
+        <form id="rsvpForm" novalidate>
+          <div>
+            <label for="fam" data-i18n="famL">Nama keluarga / kumpulan</label>
+            <input id="fam" type="text" autocomplete="off" aria-describedby="famH">
+            <span class="hint" id="famH" data-i18n="famH">Gunakan nama yang sama untuk seluruh keluarga anda.</span>
+          </div>
+          <fieldset>
+            <legend data-i18n="statL">Kehadiran</legend>
+            <div class="seg">
+              <label><input type="radio" name="st" value="attending" checked><span data-i18n="stYes">Akan hadir</span></label>
+              <label><input type="radio" name="st" value="declined"><span data-i18n="stNo">Tidak dapat hadir</span></label>
+            </div>
+          </fieldset>
+          <div id="cntWrap">
+            <span id="cntL" style="font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:.85rem" data-i18n="cntL">Jumlah kehadiran</span>
+            <div class="stepper" role="group" aria-labelledby="cntL">
+              <button type="button" id="minus" aria-label="Kurang">−</button>
+              <output id="cnt" aria-live="polite">1</output>
+              <button type="button" id="plus" aria-label="Tambah">+</button>
+            </div>
+            <span class="hint" id="maxH">Maksimum 2 orang.</span>
+          </div>
+          <p class="notice" id="dl"><span data-i18n="dlT">RSVP ditutup pada 20 Disember 2026.</span> <span class="sample-tag">(placeholder)</span></p>
+          <button class="btn solid" type="submit" data-i18n="send">Send RSVP</button>
+          <div class="ok" role="status" data-i18n="rsvpOk">Terima kasih. RSVP anda telah diterima.</div>
+        </form>
+      </div>
+    </section>
+
+    <div class="tile-band" aria-hidden="true"></div>
+
+    <!-- LOCATION -->
+    <section id="location" class="s-dark" aria-labelledby="loch">
+      <div class="wrap center">
+        <h2 id="loch" data-i18n="locT">Lokasi</h2>
+        <p style="font-size:1.5rem;font-weight:600">The Rizqun International Hotel</p>
+        <p>Songket Ballroom</p>
+        <p id="addr" style="margin-top:.8rem">Abdul Razak Complex, Jln Gadong,<br>Bandar Seri Begawan BE3519, Brunei Darussalam</p>
+        <div class="actions">
+          <a class="btn" href="https://share.google/1Q23UIJpJpyXhl9l9" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;text-decoration:none" data-i18n="map">Buka di Peta</a>
+          <button class="btn" id="copy" data-i18n="copy">Salin alamat</button>
+        </div>
+        <p id="copied" role="status" style="min-height:1.6rem;margin-top:.8rem;font-style:italic"></p>
+      </div>
+    </section>
+
+    <div class="tile-band" aria-hidden="true"></div>
+
+    <!-- GUESTBOOK -->
+    <section id="guestbook" class="s-light" aria-labelledby="gbh">
+      <div class="wrap center">
+        <h2 id="gbh" data-i18n="gbT">Ucapan</h2>
+        <form id="gbForm" novalidate>
+          <div>
+            <label for="gname" data-i18n="gName">Nama (pilihan)</label>
+            <input id="gname" type="text" autocomplete="off">
+          </div>
+          <label class="chk"><input type="checkbox" id="anon"> <span data-i18n="anon">Hantar tanpa nama</span></label>
+          <div>
+            <label for="gmsg" data-i18n="gMsg">Ucapan anda</label>
+            <textarea id="gmsg" maxlength="500"></textarea>
+          </div>
+          <p class="hint" id="anonH" style="margin:0" data-i18n="anonH">Ucapan tanpa nama hanya dilihat oleh pasangan dan tidak dipaparkan di sini.</p>
+          <button class="btn solid" type="submit" data-i18n="gSend">Hantar Ucapan</button>
+        </form>
+        <div style="margin-top:2.4rem">
+          <p class="sample-tag" data-i18n="sample">Contoh paparan (bukan ucapan sebenar)</p>
+          <div class="wish"><p>[Sample wish text appears here, shown as plain text.]</p><cite>Sample Name</cite></div>
+          <div class="wish"><p>[Another sample wish, newest first.]</p><cite>Sample Name</cite></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="tile-band" aria-hidden="true"></div>
+  <footer>
+    <div class="monogram" aria-hidden="true" style="margin-bottom:.6rem"><span class="i">I</span><span class="a">A</span></div>
+    <p class="script" style="font-size:2.4rem">Izyan &amp; Adam</p>
+    <p style="letter-spacing:.2em;text-transform:uppercase;font-size:.85rem;margin-top:.4rem">28 · 12 · 2026</p>
+  </footer>
+  <div class="proto" role="group" aria-label="Prototype controls">
+    <button id="replay">Replay cover</button>
+    <button id="themeBtn">Switch Direction A/B</button>
+    <button id="maxBtn">Toggle limit 2 / 10</button>
+    <button id="rmBtn">Toggle reduced motion</button>
+  </div>
+</div>
+
+<!-- shared SVG symbols: medallion (quarter tile) and tassel -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="medallion" viewBox="0 0 200 200">
+      <clipPath id="q"><path d="M0 0H196A196 196 0 0 1 0 196Z"/></clipPath>
+      <path d="M0 0H196A196 196 0 0 1 0 196Z" fill="#1b2352"/>
+      <g clip-path="url(#q)"><rect width="200" height="200" fill="url(#tilepat2)"/></g>
+      <path d="M0 0H196A196 196 0 0 1 0 196Z" fill="none" stroke="#b8a472" stroke-width="2"/>
+      <path d="M0 0H186A186 186 0 0 1 0 186Z" fill="none" stroke="#b8a472" stroke-width=".8" opacity=".8"/>
+    </symbol>
+    <symbol id="tasselsvg" viewBox="0 0 40 130">
+      <g fill="none" stroke="currentColor" stroke-linecap="round">
+        <path d="M20 0V22" stroke-width="2"/>
+        <circle cx="20" cy="27" r="5.5" fill="currentColor" stroke="none"/>
+        <path d="M14 36h12M15 40h10" stroke-width="1.6"/>
+        <path d="M20 31V38" stroke-width="2"/>
+        <rect x="13" y="38" width="14" height="14" rx="3" fill="currentColor" stroke="none"/>
+        <path d="M13 44h14M13 48h14" stroke="#1b2352" stroke-width=".9" opacity=".55"/>
+        <path d="M14 52L8 124M16 52L14 126M18 52L18 128M20 52V130M22 52L22 128M24 52L26 126M26 52L32 124" stroke-width="1.4"/>
+        <path d="M11 88h18" stroke-width="1.2"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<script>
+(function(){
+  "use strict";
+  var $=function(s,r){return (r||document).querySelector(s)};
+  var body=document.body;
+  var params=new URLSearchParams(location.search);
+
+  /* ---- tile motif (shared by CSS background and SVG pattern) ---- */
+  var tileSvg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">'
+   +'<rect width="120" height="120" fill="#e7ddd7"/>'
+   +'<rect x=".75" y=".75" width="118.5" height="118.5" fill="none" stroke="#7e8fb8" stroke-width="1.5"/>'
+   +'<g id="c"><circle r="36" fill="#283368"/><circle r="30" fill="none" stroke="#b8a472" stroke-width="1.4"/>'
+   +'<g fill="#7e8fb8"><ellipse cx="0" cy="-19" rx="5" ry="9"/><ellipse cx="0" cy="19" rx="5" ry="9"/><ellipse cx="-19" cy="0" rx="9" ry="5"/><ellipse cx="19" cy="0" rx="9" ry="5"/></g>'
+   +'<g fill="#e7ddd7"><ellipse cx="13.5" cy="13.5" rx="3" ry="7" transform="rotate(-45 13.5 13.5)"/><ellipse cx="-13.5" cy="13.5" rx="3" ry="7" transform="rotate(45 -13.5 13.5)"/><ellipse cx="13.5" cy="-13.5" rx="3" ry="7" transform="rotate(45 13.5 -13.5)"/><ellipse cx="-13.5" cy="-13.5" rx="3" ry="7" transform="rotate(-45 -13.5 -13.5)"/></g>'
+   +'<circle r="6" fill="#b8a472"/><circle r="2.4" fill="#283368"/></g>'
+   +'<use href="#c" x="120"/><use href="#c" y="120"/><use href="#c" x="120" y="120"/>'
+   +'<g><path d="M60 38 82 60 60 82 38 60Z" fill="#e7ddd7" stroke="#283368" stroke-width="2.2"/>'
+   +'<path d="M60 46 74 60 60 74 46 60Z" fill="#7e8fb8"/><circle cx="60" cy="60" r="7" fill="#283368"/><circle cx="60" cy="60" r="3" fill="#b8a472"/>'
+   +'<g fill="#283368"><circle cx="60" cy="30" r="3"/><circle cx="60" cy="90" r="3"/><circle cx="30" cy="60" r="3"/><circle cx="90" cy="60" r="3"/></g>'
+   +'<g fill="#b8a472"><circle cx="60" cy="19" r="2"/><circle cx="60" cy="101" r="2"/><circle cx="19" cy="60" r="2"/><circle cx="101" cy="60" r="2"/></g></g>'
+   +'</svg>';
+  var tileUrl='url("data:image/svg+xml,'+encodeURIComponent(tileSvg)+'")';
+  document.documentElement.style.setProperty('--tile',tileUrl);
+  /* SVG pattern for the medallion */
+  var NS='http://www.w3.org/2000/svg';
+  var pat=document.createElementNS(NS,'pattern');
+  pat.setAttribute('id','tilepat2');pat.setAttribute('width','84');pat.setAttribute('height','84');pat.setAttribute('patternUnits','userSpaceOnUse');
+  var img=document.createElementNS(NS,'image');img.setAttribute('width','84');img.setAttribute('height','84');
+  img.setAttribute('href','data:image/svg+xml,'+encodeURIComponent(tileSvg));pat.appendChild(img);
+  document.querySelector('svg defs').appendChild(pat);
+
+  /* ---- theme / reduced motion ---- */
+  if(params.get('theme')==='ivory')body.classList.add('theme-ivory');
+  var mq=window.matchMedia('(prefers-reduced-motion: reduce)');
+  function setReduced(v){body.classList.toggle('reduced',v)}
+  setReduced(mq.matches);mq.addEventListener&&mq.addEventListener('change',function(e){setReduced(e.matches)});
+
+  /* ---- cover ---- */
+  var app=$('#app');
+  function open(){
+    body.classList.add('open','play-intro');
+    var ms=body.classList.contains('reduced')?450:1300;
+    setTimeout(function(){body.classList.add('opened');app.removeAttribute('inert');var h=$('#h1');h&&h.focus({preventScroll:true})},ms);
+  }
+  $('#openBtn').addEventListener('click',open);
+  if(params.get('open')==='1'){body.classList.add('open','opened');app.removeAttribute('inert')}
+  $('#replay').addEventListener('click',function(){window.scrollTo(0,0);body.classList.remove('open','opened','play-intro');buildDoors();app.setAttribute('inert','')});
+  $('#themeBtn').addEventListener('click',function(){body.classList.toggle('theme-ivory')});
+  $('#rmBtn').addEventListener('click',function(){body.classList.toggle('reduced')});
+
+  /* ---- particles ---- */
+  var layer=$('#particles');
+  var n=window.innerWidth<640?14:24;
+  var shapes=[
+    function(){return '<i style="width:5px;height:5px;border-radius:50%;background:#cfac69"></i>'},
+    function(){return '<i style="width:3px;height:3px;border-radius:50%;background:#e9e1d6"></i>'},
+    function(){return '<i style="width:12px;height:12px;background:radial-gradient(circle,#b8a472 0 2px,transparent 2.5px),radial-gradient(circle at 50% 0,#7e8fb8 0 3px,transparent 3.5px),radial-gradient(circle at 50% 100%,#7e8fb8 0 3px,transparent 3.5px),radial-gradient(circle at 0 50%,#7e8fb8 0 3px,transparent 3.5px),radial-gradient(circle at 100% 50%,#7e8fb8 0 3px,transparent 3.5px)"></i>'}
+  ];
+  for(var i=0;i<n;i++){
+    var d=document.createElement('div');d.className='p';
+    d.style.left=(Math.random()*100)+'%';
+    d.style.setProperty('--o',(0.35+Math.random()*0.45).toFixed(2));
+    d.style.animationDuration=(14+Math.random()*14).toFixed(1)+'s';
+    d.style.animationDelay=(-Math.random()*26).toFixed(1)+'s';
+    d.innerHTML=shapes[i%3]();
+    d.firstChild.style.animationDuration=(3+Math.random()*3).toFixed(1)+'s';
+    layer.appendChild(d);
+  }
+  document.addEventListener('visibilitychange',function(){body.classList.toggle('paused',document.hidden)});
+
+  /* ---- hero tile band: rosettes rotate slowly, alternating/mixed directions ---- */
+  var rosSvg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="-36 -36 72 72"><circle r="36" fill="#283368"/><circle r="30" fill="none" stroke="#b8a472" stroke-width="1.4"/>'
+   +'<g fill="#7e8fb8"><ellipse cx="0" cy="-19" rx="5" ry="9"/><ellipse cx="0" cy="19" rx="5" ry="9"/><ellipse cx="-19" cy="0" rx="9" ry="5"/><ellipse cx="19" cy="0" rx="9" ry="5"/></g>'
+   +'<g fill="#e7ddd7"><ellipse cx="13.5" cy="13.5" rx="3" ry="7" transform="rotate(-45 13.5 13.5)"/><ellipse cx="-13.5" cy="13.5" rx="3" ry="7" transform="rotate(45 -13.5 13.5)"/><ellipse cx="13.5" cy="-13.5" rx="3" ry="7" transform="rotate(45 13.5 -13.5)"/><ellipse cx="-13.5" cy="-13.5" rx="3" ry="7" transform="rotate(-45 -13.5 -13.5)"/></g>'
+   +'<circle r="6" fill="#b8a472"/><circle r="2.4" fill="#283368"/></svg>';
+  document.documentElement.style.setProperty('--rosette','url("data:image/svg+xml,'+encodeURIComponent(rosSvg)+'")');
+  var band=$('#heroBand');
+  var seq=0;
+  function addRos(parent,x,y){
+    var e=document.createElement('i');e.className='ros';
+    e.style.left=(x-25.2)+'px';e.style.top=(y-25.2)+'px';
+    e.style.setProperty('--d',(36+((seq*13)%7)*8)+'s');
+    e.style.setProperty('--dir',((seq*7+3)%5<2)?'reverse':'normal');
+    seq++;parent.appendChild(e);
+  }
+  function buildBand(){
+    band.textContent='';seq=0;
+    var cols=Math.ceil(band.clientWidth/84)+1;
+    for(var r=0;r<3;r++)for(var c=0;c<cols;c++)addRos(band,c*84,r*84);
+  }
+  /* cover doors: same rosettes on the same 84px grid as the tile; skip those hidden under the navy wedge */
+  function buildDoors(){
+    var w=Math.ceil(window.innerWidth/2),h=window.innerHeight;
+    [['l',1],['r',-1]].forEach(function(d){
+      var el=document.querySelector('.door.'+d[0]);
+      el.querySelectorAll('.ros').forEach(function(n){n.remove()});
+      var cols=Math.ceil(w/84)+1,rows=Math.ceil(h/84)+1;
+      for(var r=0;r<rows;r++)for(var c=0;c<cols;c++){
+        var x=c*84,y=r*84;
+        var fx=d[0]==='l'?x/w:1-(x/w);
+        var half=0.16+0.252*Math.min(1,Math.max(0,fx));
+        var inWedge=Math.abs(y/h-0.5)<half-30/h;
+        if(!inWedge)addRos(el,x,y);
+      }
+    });
+  }
+  buildBand();buildDoors();var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){buildBand();if(!body.classList.contains('opened'))buildDoors()},150)});
+
+  /* ---- nav: current section + hide bottom bar while typing (mobile keyboard) ---- */
+  var links=document.querySelectorAll('nav.top .links a');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){links.forEach(function(a){a.toggleAttribute('aria-current',a.getAttribute('href')==='#'+en.target.id);if(a.hasAttribute('aria-current'))a.setAttribute('aria-current','true')})}})},{rootMargin:'-45% 0px -45% 0px'});
+    ['details','rsvp','location','guestbook'].forEach(function(id){io.observe(document.getElementById(id))});
+  }
+  document.addEventListener('focusin',function(e){if(e.target.matches('input[type=text],textarea'))body.classList.add('kb')});
+  document.addEventListener('focusout',function(e){if(e.target.matches('input[type=text],textarea'))body.classList.remove('kb')});
+
+  /* ---- i18n (draft strings; Malay to be proofread by owner) ---- */
+  var T={
+   ms:{event:'Walimatulurus',coverDate:'28 Disember 2026',open:'Buka',nDetails:'Butiran',nLocation:'Lokasi',nWishes:'Ucapan',heroDate:'Isnin, 28 Disember 2026',scroll:'Lihat butiran',greet:'Assalamualaikum WBT & Salam Sejahtera',
+     inviteText:'Dengan segala hormat dan takzim sukacita menjunjung Pengiran berangkat / mempersilakan Pehin / Tan Sri / Puan Sri / Dato / Datin / Awang / Dayang / Tuan / Puan / Encik dan Cik untuk hadir ke Majlis Walimatulurus anakanda kami:',
+     fDate:'Tarikh',fTime:'Ketibaan Tetamu',fTimeV:'7.15 malam',fPlace:'Tempat',dressT:'Pakaian',dress1:'Baju Melayu untuk lelaki dan Baju Kurung untuk wanita dalam warna burgundy.',dress2:'Baju Melayu untuk lelaki dan Baju Kurung untuk wanita dalam warna biru navy.',
+     cdT:'Menanti Hari',cdD:'Hari',cdH:'Jam',cdM:'Minit',cdS:'Saat',
+     rsvpLead:'Satu RSVP untuk seluruh keluarga / kumpulan anda.',famL:'Nama keluarga / kumpulan',famH:'Gunakan nama yang sama untuk seluruh keluarga anda.',statL:'Kehadiran',stYes:'Akan hadir',stNo:'Tidak dapat hadir',cntL:'Jumlah kehadiran',dlT:'RSVP ditutup pada 20 Disember 2026.',send:'Send RSVP',rsvpOk:'Terima kasih. RSVP anda telah diterima.',
+     locT:'Lokasi',map:'Buka di Peta',copy:'Salin alamat',copiedMsg:'Alamat disalin.',
+     gbT:'Ucapan',gName:'Nama (pilihan)',anon:'Hantar tanpa nama',gMsg:'Ucapan anda',anonH:'Ucapan tanpa nama hanya dilihat oleh pasangan dan tidak dipaparkan di sini.',gSend:'Hantar Ucapan',sample:'Contoh paparan (bukan ucapan sebenar)',max:function(n){return 'Maksimum '+n+' orang.'}},
+   en:{event:'Walimatulurus',coverDate:'28 December 2026',open:'Open',nDetails:'Details',nLocation:'Location',nWishes:'Wishes',heroDate:'Monday, 28 December 2026',scroll:'View details',greet:'Assalamualaikum WBT & Salam Sejahtera',
+     inviteText:'With utmost respect and honor, we humbly invite Pengiran / Pehin / Tan Sri / Puan Sri / Dato / Datin / Sir / Madam / Mr / Ms to attend the walimatulurus of our beloved children:',
+     fDate:'Date',fTime:'Guest Arrival',fTimeV:'7:15 PM',fPlace:'Venue',dressT:'Dress Code',dress1:'Baju Melayu for gentlemen and Baju Kurung for ladies in burgundy.',dress2:'Baju Melayu for gentlemen and Baju Kurung for ladies in navy blue.',
+     cdT:'Counting Down',cdD:'Days',cdH:'Hours',cdM:'Minutes',cdS:'Seconds',
+     rsvpLead:'One RSVP for your whole family / group.',famL:'Family / group name',famH:'Please use the same name for your whole family.',statL:'Attendance',stYes:'Attending',stNo:'Unable to attend',cntL:'Total attendees',dlT:'RSVP closes on 20 December 2026.',send:'Send RSVP',rsvpOk:'Thank you. Your RSVP has been received.',
+     locT:'Location',map:'Open in Maps',copy:'Copy address',copiedMsg:'Address copied.',
+     gbT:'Wishes',gName:'Name (optional)',anon:'Send anonymously',gMsg:'Your wishes',anonH:'Anonymous wishes are seen only by the couple and are not displayed here.',gSend:'Send Wishes',sample:'Sample layout (not real wishes)',max:function(n){return 'Maximum '+n+' people.'}}
+  };
+  var lang='ms',max=2;
+  function applyLang(){
+    var t=T[lang];document.documentElement.lang=lang;
+    document.querySelectorAll('[data-i18n]').forEach(function(el){var k=el.getAttribute('data-i18n');if(t[k]!=null)el.textContent=t[k]});
+    $('#langTxt').textContent=lang==='ms'?'EN':'BM';
+    $('#lang').setAttribute('aria-label',lang==='ms'?'Switch language to English':'Tukar bahasa ke Bahasa Melayu');
+    $('#maxH').textContent=t.max(max);
+    $('#minus').setAttribute('aria-label',lang==='ms'?'Kurang':'Decrease');$('#plus').setAttribute('aria-label',lang==='ms'?'Tambah':'Increase');
+    $('#music').setAttribute('aria-label',($('#music').getAttribute('aria-pressed')==='true')?(lang==='ms'?'Jeda muzik':'Pause music'):(lang==='ms'?'Main muzik':'Play music'));
+  }
+  $('#lang').addEventListener('click',function(){lang=lang==='ms'?'en':'ms';applyLang()});
+  $('#music').addEventListener('click',function(){var b=this,p=b.getAttribute('aria-pressed')==='true';b.setAttribute('aria-pressed',String(!p));applyLang()});
+
+  /* ---- RSVP stepper ---- */
+  var cnt=1;
+  function renderCnt(){
+    var declined=document.querySelector('input[name=st]:checked').value==='declined';
+    $('#cntWrap').style.display=declined?'none':'';
+    $('#cnt').textContent=cnt;
+    $('#minus').disabled=cnt<=1;$('#plus').disabled=cnt>=max;
+    $('#maxH').textContent=T[lang].max(max);
+  }
+  $('#minus').addEventListener('click',function(){if(cnt>1){cnt--;renderCnt()}});
+  $('#plus').addEventListener('click',function(){if(cnt<max){cnt++;renderCnt()}});
+  document.querySelectorAll('input[name=st]').forEach(function(r){r.addEventListener('change',renderCnt)});
+  $('#maxBtn').addEventListener('click',function(){max=max===2?10:2;if(cnt>max)cnt=max;renderCnt()});
+  $('#rsvpForm').addEventListener('submit',function(e){e.preventDefault();$('#rsvpbox').classList.add('sent')});
+  $('#gbForm').addEventListener('submit',function(e){e.preventDefault()});
+
+  /* ---- copy address ---- */
+  $('#copy').addEventListener('click',function(){
+    var txt=$('#addr').innerText.replace(/\n/g,' ');
+    (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).catch(function(){}).then(function(){$('#copied').textContent=T[lang].copiedMsg;setTimeout(function(){$('#copied').textContent=''},2500)});
+  });
+
+  /* ---- countdown to 2026-12-28 19:15 Asia/Brunei (UTC+8, no DST) ---- */
+  var target=new Date('2026-12-28T19:15:00+08:00').getTime();
+  function pad(n){return n<10?'0'+n:String(n)}
+  function tick(){
+    var s=Math.max(0,Math.floor((target-Date.now())/1000));
+    $('#cd-d').textContent=pad(Math.floor(s/86400));$('#cd-h').textContent=pad(Math.floor(s%86400/3600));
+    $('#cd-m').textContent=pad(Math.floor(s%3600/60));$('#cd-s').textContent=pad(s%60);
+  }
+  tick();setInterval(tick,1000);
+  applyLang();renderCnt();
+})();
+</script>
+</body>
+</html>

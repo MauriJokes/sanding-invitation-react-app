@@ -1,0 +1,74 @@
+# Wedding Content — Owner Input
+
+This is the single source of truth for the Sanding invitation page and its RSVP configuration. This website is exclusively for the **Sanding celebration**. Do not include the other wedding events as events guests can RSVP to through this website.
+
+## Couple and invitation copy
+
+- Couple names: Izyan and Adam
+- Couple full names: Dk Izyan Naqiyah binti Pengiran Haji Mohd. Jaludin and Nik Adam Danish bin Nik Joharris
+- Invitation headline: ASSALAMUALAIKUM WBT & SALAM SEJAHTERA (followed by full name)
+- Malay invitation text: Refer to `docs/WEDDING_CONTENT_INFO/invitation-text-malay.md`
+- English invitation text: Refer to `docs/WEDDING_CONTENT_INFO/invitation-text-english.md`
+- RSVP button label: Send RSVP
+
+## Sanding celebration
+- Displayed invitation title: Walimatulurus (not "Majlis Perkahwinan" as on the artwork)
+- Event name (Malay): Walimatulurus
+- Event name (English): Walimatulurus
+- Date (YYYY-MM-DD): 2026-12-28
+- Guest arrival time (24h): 1915
+- Event end time: **intentionally not published**. Show the guest arrival time only.
+- Venue name: The Rizqun International Hotel
+- Venue room: Songket Ballroom
+- Full public venue address: Abdul Razak Complex, Jln Gadong, Bandar Seri Begawan BE3519, Brunei Darussalam
+- Google Maps / directions URL: https://share.google/1Q23UIJpJpyXhl9l9
+- Venue timezone: `Asia/Brunei`
+- Dress code: Refer to `docs/WEDDING_CONTENT_INFO/dresscode.md`
+- Additional guest guidance: None else so far but open to suggestions if you have any
+
+## RSVP configuration
+
+- RSVP scope: **One RSVP for the Sanding celebration only**
+- Submission model: **One representative submits once for the whole family/group**
+- Attendee count: **One total number for the family/group**, not separate counts per event
+- RSVP deadline date: 2026-12-20 (**placeholder; owner to confirm with family**)
+- RSVP deadline time: 23:59 venue local time (**placeholder**)
+- Guest type: **external** (default, clean link) or **internal** (link with the `invite` parameter)
+- Invite URL parameter: `invite`, whose value is one shared secret code (server env `INTERNAL_INVITE_CODE`; never commit the real value)
+- External family link: `https://<site-domain>/` (no parameter)
+- Internal family link: `https://<site-domain>/?invite=<INTERNAL_INVITE_CODE value>`
+- Missing, wrong or expired `invite`: treated as external (the stricter limit)
+- Internal guests' browsers remember the invite value in `localStorage` so later visits without the parameter stay internal
+- Maximum attendees per internal family/group: 10 pax
+- Maximum attendees per external family/group: 2 pax
+- Can a family submit a declined response?: YES
+- Duplicate matching convention: family/group name, canonicalised by the server
+- Correction policy: no public edits; contact the couple directly if a correction is needed
+
+## Invitation body copy (single event)
+
+The supplied texts in `docs/WEDDING_CONTENT_INFO/` are adjusted for the one Sanding event (owner decision). Proposed final closing lines (owner to proofread the Malay):
+
+- Malay: "...untuk hadir ke Majlis Walimatulurus anakanda kami:"
+- English: "...to attend the walimatulurus of our beloved children:"
+
+Then show the couple's names: headline, then full names from the section above. The supplied files' opening ("Bismillah / ASSALAMU'ALAIKUM WR. WB.") and the headline "ASSALAMUALAIKUM WBT & SALAM SEJAHTERA" overlap. **Confirmed:** keep "Bismillah", use the headline once, and omit the duplicate "ASSALAMU'ALAIKUM WR. WB." line. The source files are left unedited.
+
+## Venue / event copy
+
+- Parking instructions: not needed (well-known venue).
+- Arrival guidance: not needed.
+- Contact/help wording: not needed.
+
+## Publishing checklist
+
+- [ ] The page presents only the Sanding celebration.
+- [ ] The Sanding date and arrival time are confirmed (no end time is published).
+- [ ] Event names are consistent across Malay and English.
+- [ ] Venue address and map URL are tested.
+- [ ] RSVP deadline placeholder (2026-12-20 23:59) is replaced with the confirmed value.
+- [x] Maximum attendee count is agreed (internal 10 pax, external 2 pax).
+- [ ] `INTERNAL_INVITE_CODE` is generated (long, random) and the internal link is shared only with internal family; the external link is the clean URL.
+- [ ] RSVP form clearly says the response covers the whole family/group for Sanding only.
+- [ ] The form collects one total attendee count, not per-event attendance.
+- [ ] The form shows the correct maximum (10 with a valid invite, otherwise 2).

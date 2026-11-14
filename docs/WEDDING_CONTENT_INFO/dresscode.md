@@ -1,0 +1,2 @@
+- Baju Melayu for gentlemen and Baju Kurung for ladies in burgundy.
+- Baju Melayu for gentlemen and Baju Kurung for ladies in navy blue.
