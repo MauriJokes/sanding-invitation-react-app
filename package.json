@@ -16,8 +16,10 @@
     "test:watch": "vitest",
     "test:integration": "vitest run tests/integration --no-file-parallelism",
     "test:all": "npm run test && npm run test:integration",
-    "db:indexes": "node --env-file-if-exists=.env.local --import tsx scripts/setup-indexes.ts",
-    "sheets:backfill": "node --env-file-if-exists=.env.local --import tsx scripts/backfill-sheets.ts"
+    "db:indexes:dev": "node --env-file-if-exists=.env.local --import tsx scripts/setup-indexes.ts",
+    "sheets:backfill:dev": "node --env-file-if-exists=.env.local --import tsx scripts/backfill-sheets.ts",
+    "db:indexes:prod": "node --env-file-if-exists=.env --import tsx scripts/setup-indexes.ts",
+    "sheets:backfill:prod": "node --env-file-if-exists=.env --import tsx scripts/backfill-sheets.ts"
   },
   "dependencies": {
     "google-auth-library": "^11.3.4",
