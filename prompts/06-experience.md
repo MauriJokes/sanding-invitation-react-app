@@ -33,9 +33,9 @@ Invitation text (adjusted for one event, duplicate greeting removed), hosts, cou
 
 Venue block, copyable address, directions link (open in the maps app), no embedded map unless approved.
 
-## Step 6e — Music — built (pending licence decision, D-16)
+## Step 6e — Music — built (licence still to be sorted by the owner, D-16)
 
-One looping track from `public/audio/music.mp3`, started by the guest pressing Buka (D-35) or the music button, never on load (nothing is requested before then), failure shows "Muzik tidak tersedia" and never blocks the page. The track file is git-ignored until its licence is confirmed.
+One looping track from `public/audio/music.mp3`, started by the guest pressing Buka (D-35) or the music button, never on load (nothing is requested before then), failure shows "Muzik tidak tersedia" and never blocks the page. The owner committed the track and accepted the licensing risk (D-16); before launch it should be licensed or replaced.
 
 ## Step 6f — Assembly, desktop layout and hardening
 
