@@ -241,7 +241,8 @@ describe("confirmation", () => {
     typeName("The Ahmad Family");
     submit();
     await screen.findByText("Terima kasih");
-    expect(scrollIntoView).toHaveBeenCalledTimes(1);
+    // The scroll happens in an effect after the confirmation renders, so wait for it rather than race it.
+    await waitFor(() => expect(scrollIntoView).toHaveBeenCalledTimes(1));
     expect(scrollIntoView).toHaveBeenCalledWith({ block: "start" });
     expect(scrollIntoView.mock.contexts[0]).toBe(document.getElementById("rsvp"));
   });

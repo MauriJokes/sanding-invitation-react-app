@@ -25,22 +25,25 @@ export function DetailsSection() {
   const arrival = formatArrivalTime(new Date(EVENT.startsAt), lang);
   const [bride, groom] = [HOST_GROUPS.slice(0, 2), HOST_GROUPS.slice(2)];
 
-  const family = (groups: typeof bride) =>
-    groups.map((group, i) => (
-      <div key={i} className="grid gap-2 leading-[1.3]">
-        {group.map((person) => (
-          <p key={person.name} className="text-[0.85rem]">
-            <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-gold-ink">{HOST_TITLE}</span>
-            <span className="block font-semibold">{person.name}</span>
-            <span className="block">{person.lineage}</span>
-          </p>
-        ))}
-      </div>
-    ));
+  const family = (groups: typeof bride) => (
+    <div className="grid gap-4">
+      {groups.map((group, i) => (
+        <div key={i} className="grid gap-2 leading-[1.3]">
+          {group.map((person) => (
+            <p key={person.name} className="text-[0.85rem]">
+              <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-gold-ink">{HOST_TITLE}</span>
+              <span className="block font-semibold">{person.name}</span>
+              <span className="block">{person.lineage}</span>
+            </p>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <section id="details" aria-labelledby="details-heading" className="bg-ivory text-navy [&_:focus-visible]:outline-navy">
-      <div className="mx-auto w-full max-w-[42rem] px-6 py-[4.5rem] text-center">
+      <div className="mx-auto w-full max-w-[42rem] px-6 py-[4.5rem] text-center md:max-w-[56rem]">
         <h2 id="details-heading" className="sr-only">
           {t.navDetails}
         </h2>
@@ -49,13 +52,13 @@ export function DetailsSection() {
         <Rule />
         <p className={body}>{t.detailsIntro}</p>
 
-        <div className="my-6 grid gap-2">
+        <div className="my-6 grid gap-2 md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-8">
           {family(bride)}
           <Ampersand />
           {family(groom)}
         </div>
 
-        <p className={`my-8 text-balance ${body}`}>{t.detailsInvite}</p>
+        <p className={`mx-auto my-8 max-w-[42rem] text-balance ${body}`}>{t.detailsInvite}</p>
 
         <div className="mt-6 grid gap-3">
           <p className={coupleName}>{COUPLE[0]}</p>
@@ -65,7 +68,7 @@ export function DetailsSection() {
 
         <Rule />
 
-        <dl className="mt-9 grid gap-5">
+        <dl className="mt-9 grid gap-5 md:grid-cols-3 md:gap-8">
           <div>
             <dt className={eyebrow}>{t.factDate}</dt>
             <dd className={`mt-1 ${body} lining-nums`}>{formatEventDate(locale)}</dd>

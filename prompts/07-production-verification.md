@@ -1,4 +1,4 @@
-# Milestone 6 — Production Verification
+# Milestone 7 — Production Verification
 
 Activate `quality-assurance`, `vercel-serverless`, `mongodb-data` and `google-sheets-sync`.
 

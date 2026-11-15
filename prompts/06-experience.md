@@ -29,7 +29,7 @@ The botanical cover idea (new flower and leaf art around the diamond) is **parke
 
 Invitation text (adjusted for one event, duplicate greeting removed), hosts, couple, event facts (date, arrival 19:15, venue, no end time; no dress code, by owner decision), countdown to 2026-12-28 19:15 `Asia/Brunei` with a clear state after the date.
 
-## Step 6d — Location and directions — built, awaiting owner review
+## Step 6d — Location and directions — approved
 
 Venue, room and full address as plain text; "Buka di Peta" opens the owner's map link in a new tab (`noopener noreferrer`); "Salin alamat" copies the venue and address and says whether it worked; no embedded map. Placed between the RSVP and the guestbook, in the navigation bar as Lokasi.
 
@@ -37,9 +37,13 @@ Venue, room and full address as plain text; "Buka di Peta" opens the owner's map
 
 One looping track from `public/audio/music.mp3`, started by the guest pressing Buka (D-35) or the music button, never on load (nothing is requested before then), failure shows "Muzik tidak tersedia" and never blocks the page. The owner committed the track and accepted the licensing risk (D-16); before launch it should be licensed or replaced.
 
-## Step 6f — Assembly, desktop layout and hardening
+## Step 6f — Assembly, desktop layout and hardening — built, awaiting owner review
 
-Section order from the approved flow; two-column details and wider tile borders on desktop; static tile dividers. Cross-browser checks in WebKit and Firefox (install Playwright browsers locally), keyboard and focus review, reduced motion, translator regression, performance pass, Lighthouse and axe.
+- Section order: hero, details, countdown, RSVP, location, guestbook, with static tile dividers (wider from 768 px).
+- Desktop: the details section widens to two family columns (bride's family, "&", groom's family) and three event facts in a row; the RSVP, location and guestbook stay in a single narrow column.
+- Verified in Chromium, **WebKit (Safari engine) and Firefox** at phone and desktop sizes with a mocked API: gate, hero, countdown, navigation, RSVP submit, location copy, guestbook, language switch, translator simulation, reduced motion. Not verified: real iPhone/Android devices, real screen readers.
+- Keyboard: only Buka is reachable while the gate is closed; focus moves to the heading after it opens; every tab stop has a visible 2 px ring; the fixed bottom bar never covers a focused field.
+- Lighthouse (production build, local): performance 100, accessibility 100, best practices 96 (the local API 404), SEO 54 because the site is deliberately `noindex`.
 
 ## Step 6g — Owner review rounds
 
