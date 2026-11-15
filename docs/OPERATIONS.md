@@ -31,7 +31,7 @@ To remove a mistaken RSVP, delete its document in `rsvps` and its row in the `Fa
 
 ## Changing the music
 
-The site plays one looping track from `public/audio/music.mp3`, only after a guest presses the music button (never automatically). To change it, replace that file (keep the name, MP3, ideally under 4 MB) and redeploy; browsers may keep the old one for up to a day. If the file is missing or cannot play, the button reads "Muzik tidak tersedia" and the rest of the page is unaffected. The file is git-ignored until its licence is confirmed (D-16); remove the two `.mp3` lines in `.gitignore` to commit and deploy it.
+The site plays one looping track from `public/audio/music.mp3`, only after a guest presses the music button (never automatically). To change it, replace that file (keep the name, MP3, ideally under 4 MB) and redeploy; browsers may keep the old one for up to a day. If the file is missing or cannot play, the button reads "Muzik tidak tersedia" and the rest of the page is unaffected. The track is git-ignored and is not deployed until a track the owner owns or has licensed is in place (D-16); at that point remove the two `.mp3` lines in `.gitignore` and commit the file.
 
 ## If a secret is exposed
 
