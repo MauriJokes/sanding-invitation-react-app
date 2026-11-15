@@ -1,0 +1,196 @@
+/* Gate cover (docs/DESIGN_SYSTEM.md 5a). Animates transform and opacity only. */
+html.cover-open {
+  overflow: hidden;
+}
+
+.cover {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.cover-door {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  overflow: hidden;
+  background: url("../../assets/motif/tile.svg") 0 0 / 84px 84px;
+  transition: transform 0.9s var(--ease-gate) 0.25s;
+  will-change: transform;
+}
+.cover-door-left {
+  left: 0;
+}
+.cover-door-right {
+  right: 0;
+}
+
+/* Navy wedge behind the plaque; the two halves meet at the seam to form one hexagon. */
+.cover-door::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--color-navy-deep);
+}
+.cover-door-left::after {
+  clip-path: polygon(0 34%, 100% 8.8%, 100% 91.2%, 0 66%);
+}
+.cover-door-right::after {
+  clip-path: polygon(0 8.8%, 100% 34%, 100% 66%, 0 91.2%);
+}
+
+.cover-edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 2px;
+  background: var(--color-gold);
+}
+.cover-door-left .cover-edge {
+  right: 0;
+}
+.cover-door-right .cover-edge {
+  left: 0;
+}
+
+.cover-ros {
+  position: absolute;
+  z-index: 0;
+  width: 50.4px;
+  height: 50.4px;
+  background: url("../../assets/motif/rosette.svg") center / contain no-repeat;
+  animation: cover-spin var(--d, 60s) linear infinite var(--dir, normal);
+  will-change: transform;
+}
+@keyframes cover-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cover[data-paused="true"] .cover-ros {
+  animation-play-state: paused;
+}
+
+.cover-plaque {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--color-ivory);
+  transition: opacity 0.35s ease;
+}
+.cover-card {
+  max-width: 20rem;
+  padding: 2rem 2.2rem 2.4rem;
+  background: var(--color-navy-deep);
+  border: 1px solid var(--color-gold);
+  outline: 1px solid var(--color-gold);
+  outline-offset: 5px;
+}
+
+/* Placeholder monogram until the designer's original is supplied. */
+.cover-monogram {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.05em;
+  margin: 0;
+  font-size: 2.6rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+.cover-mono-a {
+  font-size: 3.1rem;
+}
+.cover-mono-i {
+  margin-left: -0.12em;
+  font-size: 2.1rem;
+  color: var(--color-gold-bright);
+}
+
+.cover-title {
+  margin: 1rem 0 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-gold-bright);
+}
+.cover-names {
+  margin: 0;
+  font-size: clamp(2.8rem, 14vw, 3.5rem);
+  line-height: 1.05;
+}
+.cover-name-first {
+  white-space: nowrap;
+}
+.cover-name-second {
+  display: block;
+}
+.cover-amp {
+  font-size: 0.6em;
+}
+.cover-date {
+  margin: 0.6rem 0 1.6rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.cover-button {
+  min-height: 48px;
+  padding: 0.75rem 2rem;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-ivory);
+  background: transparent;
+  border: 1px solid var(--color-gold-bright);
+  border-radius: 2px;
+  cursor: pointer;
+  transition:
+    background-color 0.25s,
+    color 0.25s;
+}
+.cover-button:hover:not(:disabled) {
+  background: var(--color-gold-bright);
+  color: var(--color-navy-deep);
+}
+
+.cover[data-state="opening"] .cover-plaque {
+  opacity: 0;
+  pointer-events: none;
+}
+.cover[data-state="opening"] .cover-door-left {
+  transform: translateX(-101%);
+}
+.cover[data-state="opening"] .cover-door-right {
+  transform: translateX(101%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cover-ros {
+    animation: none;
+  }
+  .cover-door {
+    transition: opacity 0.4s ease;
+  }
+  .cover-plaque {
+    transition: opacity 0.2s;
+  }
+  .cover[data-state="opening"] .cover-door-left,
+  .cover[data-state="opening"] .cover-door-right {
+    transform: none;
+    opacity: 0;
+  }
+}

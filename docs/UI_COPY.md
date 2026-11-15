@@ -9,6 +9,7 @@ Not yet written (add and have the owner proofread in M6): music button labels, n
 | `event` | Walimatulurus | Walimatulurus |
 | `coverDate` | 28 Disember 2026 | 28 December 2026 |
 | `open` | Buka | Open |
+| `coverLabel` | Muka depan jemputan | Invitation cover |
 | `nDetails` | Butiran | Details |
 | `nLocation` | Lokasi | Location |
 | `nWishes` | Ucapan | Wishes |

@@ -6,7 +6,7 @@ UX is the heart of this site, so M6 is delivered in **reviewable steps with an o
 
 Already built and approved: RSVP, guestbook, Sheets mirror, tokens, fonts, tile/rosette/tassel assets, and the cover, hero, corner and particle design (M1). M6 replaces the temporary hero and language toggle with the real experience.
 
-## Step 6a — Cover and gate (first gate)
+## Step 6a — Cover and gate (first gate) — built, awaiting owner review
 
 Build the **approved** cover from `docs/DESIGN_SYSTEM.md` §5a, ported from the archived prototype (`design-assets/archive/m1-prototype/index.html`):
 

@@ -69,6 +69,8 @@ export interface Strings {
   crashBody: string;
   crashReload: string;
   skipToContent: string;
+  coverLabel: string;
+  coverOpen: string;
   switchLanguageLabel: string;
   switchLanguageText: string;
 }
@@ -136,6 +138,8 @@ export const strings: Record<Lang, Strings> = {
     crashBody: "Halaman ini tidak dapat dipaparkan. Sila muat semula halaman.",
     crashReload: "Muat semula",
     skipToContent: "Langkau ke kandungan",
+    coverLabel: "Muka depan jemputan",
+    coverOpen: "Buka",
     switchLanguageLabel: "Switch language to English",
     switchLanguageText: "EN",
   },
@@ -201,6 +205,8 @@ export const strings: Record<Lang, Strings> = {
     crashBody: "This page could not be shown. Please reload the page.",
     crashReload: "Reload",
     skipToContent: "Skip to content",
+    coverLabel: "Invitation cover",
+    coverOpen: "Open",
     switchLanguageLabel: "Tukar bahasa ke Bahasa Melayu",
     switchLanguageText: "BM",
   },
