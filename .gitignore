@@ -34,3 +34,8 @@ design-assets/textures/golden-leaf-1.svg
 design-assets/textures/golden-leaf-2.svg
 design-assets/textures/golden-leaf-3.svg
 design-assets/source/
+
+# Music track: kept out of git until its licence is confirmed (docs/OPEN_DECISIONS.md D-16).
+# Remove these two lines to commit and deploy it.
+design-assets/audio/*.mp3
+public/audio/*.mp3

@@ -80,6 +80,7 @@ export interface Strings {
   navWishes: string;
   musicPlay: string;
   musicPause: string;
+  musicUnavailable: string;
 }
 
 export const strings: Record<Lang, Strings> = {
@@ -156,6 +157,7 @@ export const strings: Record<Lang, Strings> = {
     navWishes: "Ucapan",
     musicPlay: "Mainkan muzik",
     musicPause: "Jeda muzik",
+    musicUnavailable: "Muzik tidak tersedia",
   },
   en: {
     rsvpHeading: "RSVP",
@@ -230,6 +232,7 @@ export const strings: Record<Lang, Strings> = {
     navWishes: "Wishes",
     musicPlay: "Play music",
     musicPause: "Pause music",
+    musicUnavailable: "Music unavailable",
   },
 };
 

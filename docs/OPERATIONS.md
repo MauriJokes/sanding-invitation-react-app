@@ -29,6 +29,10 @@ To hide an entry without deleting it, set its `isPublic` field to `false`; it th
 
 To remove a mistaken RSVP, delete its document in `rsvps` and its row in the `Family RSVP` tab; the family can then submit again.
 
+## Changing the music
+
+The site plays one looping track from `public/audio/music.mp3`, only after a guest presses the music button (never automatically). To change it, replace that file (keep the name, MP3, ideally under 4 MB) and redeploy; browsers may keep the old one for up to a day. If the file is missing or cannot play, the button reads "Muzik tidak tersedia" and the rest of the page is unaffected. The file is git-ignored until its licence is confirmed (D-16); remove the two `.mp3` lines in `.gitignore` to commit and deploy it.
+
 ## If a secret is exposed
 
 Rotate it at the source, update it in Vercel (all environments) and `.env.local`, and redeploy: the MongoDB user's password in Atlas; the Google service-account key (create a new key, delete the old one); `INTERNAL_INVITE_CODE` (this invalidates old internal links, so re-share the new one); `RATE_LIMIT_SALT` (harmless to change, it only resets the rate-limit counters).

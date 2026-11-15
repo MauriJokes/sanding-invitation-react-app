@@ -23,7 +23,7 @@ The botanical cover idea (new flower and leaf art around the diamond) is **parke
 - Bottom bar below 768 px, sticky top bar from 768 px; BM/EN toggle and the music control in the bar; the temporary toggle is gone. The bar links only to sections that exist (today RSVP and Ucapan); Butiran and Lokasi appear when 6c and 6d add those sections, with no change to the bar.
 - Hero with the approved corner medallions and tassels, the tile band with turning rosettes, drifting particles (mounted only once the gate has opened) and the entrance sequence, which starts when **Buka** is pressed so it lands as the doors open.
 - Hero scroll cue ("Lihat butiran") is added in 6c, when its target exists.
-- The music control is **visual only** (a stub hook); it plays nothing. **Step 6e must wire it to the real track, or hide it, before M7.**
+- The music control was a visual stub here; it is wired to the real track in 6e.
 - The hero keeps the approved medallion corners; no botanicals (B-1 in `docs/BACKLOG.md`).
 
 ## Step 6c — Invitation, event and countdown
@@ -34,9 +34,9 @@ Invitation text (adjusted for one event, duplicate greeting removed), hosts, cou
 
 Venue block, copyable address, directions link (open in the maps app), no embedded map unless approved.
 
-## Step 6e — Music
+## Step 6e — Music — built (pending licence decision, D-16)
 
-One track, explicit play/pause, never autoplay, failure never blocks the page. **Needs the owner's file in `design-assets/audio/`.** Until then the control is built and tested with a stub.
+One looping track from `public/audio/music.mp3`, played only by the explicit button (nothing is requested before the first press), failure shows "Muzik tidak tersedia" and never blocks the page. The track file is git-ignored until its licence is confirmed.
 
 ## Step 6f — Assembly, desktop layout and hardening
 
@@ -49,6 +49,6 @@ One or more rounds of feedback on the preview URL, with fixes, until the owner a
 ## Owner inputs still needed
 
 - Feedback after each step's review pack.
-- Music file (before 6e). Original "IA" monogram file (placeholder until then).
+- Licence decision for the music track (D-16). Original "IA" monogram file (placeholder until then).
 
 Do not commit the heavy botanical source SVGs in `design-assets/textures/` (git-ignored).

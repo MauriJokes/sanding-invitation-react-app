@@ -21,7 +21,7 @@ class FakeObserver {
   }
 }
 
-const player = { playing: false, toggle: vi.fn() };
+const player = { playing: false, unavailable: false, toggle: vi.fn() };
 
 function setup(ids: readonly string[] = ["rsvp", "guestbook"], lang: "ms" | "en" = "ms") {
   for (const id of ["details", "rsvp", "location", "guestbook"]) {
@@ -39,6 +39,7 @@ function setup(ids: readonly string[] = ["rsvp", "guestbook"], lang: "ms" | "en"
 beforeEach(() => {
   observers = [];
   player.playing = false;
+  player.unavailable = false;
   player.toggle.mockClear();
   vi.stubGlobal("IntersectionObserver", FakeObserver);
 });

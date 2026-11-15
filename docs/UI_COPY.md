@@ -126,3 +126,4 @@ Source of truth: `src/i18n/strings.ts` (TypeScript enforces that both languages 
 | `navWishes` | Ucapan | Wishes | approved (M1, `nWishes`) |
 | `musicPlay` | Mainkan muzik | Play music | draft |
 | `musicPause` | Jeda muzik | Pause music | draft |
+| `musicUnavailable` | Muzik tidak tersedia | Music unavailable | draft |
