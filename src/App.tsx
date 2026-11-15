@@ -26,7 +26,10 @@ export function App({ invite }: { invite?: string }) {
 
   // Focus only after the page is no longer inert; an inert element cannot take focus.
   useEffect(() => {
-    if (opened) heading.current?.focus({ preventScroll: true });
+    if (opened) {
+      heading.current?.focus({ preventScroll: true });
+      player.toggle()
+    }
   }, [opened]);
 
   // One switch pauses every decorative animation while the tab is in the background.
