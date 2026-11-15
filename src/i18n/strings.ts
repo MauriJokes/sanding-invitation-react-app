@@ -84,8 +84,11 @@ export interface Strings {
   detailsGreeting: string;
   detailsIntro: string;
   detailsInvite: string;
+  detailsAnd: string;
   factDate: string;
-  factTime: string;
+  factItinerary: string;
+  normalDate: string;
+  islamicDate: string;
   factVenue: string;
   countdownHeading: string;
   countdownDays: string;
@@ -181,9 +184,12 @@ export const strings: Record<Lang, Strings> = {
     musicUnavailable: "Muzik tidak tersedia",
     detailsGreeting: "Assalamualaikum WBT & Salam Sejahtera",
     detailsIntro: "Dengan izin Allah S.W.T dan rahmatnya, kami:",
-    detailsInvite: "Dengan segala hormat dan takzim sukacita menjunjung Pengiran berangkat / mempersilakan Pehin / Tan Sri / Puan Sri / Dato / Datin / Awang / Dayang / Tuan / Puan / Encik dan Cik untuk hadir ke Majlis Walimatulurus anakanda kami:",
+    detailsInvite: "Dengan penuh hormat dan takzim sukacita mejunjung Pengiran berangkat / mempersilakan Pehin / Dato / Datin / Awang / Dayang / Tuan / Puan / Encik / Cik hadir ke Majlis Perkahwinananaknda / kekanda abis peramba /kaola / kami:",
+    detailsAnd: "dengan penuh hatinya",
     factDate: "Tarikh",
-    factTime: "Ketibaan Tetamu",
+    factItinerary: "Aturcara Majlis",
+    normalDate: "Isnin, 28 Disember 2026M",
+    islamicDate: "Bersamaan 18 Rejab 1448H",
     factVenue: "Tempat",
     countdownHeading: "Menanti Hari",
     countdownDays: "Hari",
@@ -277,9 +283,12 @@ export const strings: Record<Lang, Strings> = {
     musicUnavailable: "Music unavailable",
     detailsGreeting: "Assalamualaikum WBT & Salam Sejahtera",
     detailsIntro: "By the grace and blessings of Allah S.W.T, we",
-    detailsInvite: "With utmost respect and honor, we humbly invite Pengiran / Pehin / Tan Sri / Puan Sri / Dato / Datin / Sir / Madam / Mr / Ms to attend the walimatulurus of our beloved children:",
+    detailsInvite: "With utmost respect and honor, we humbly invite Pehin / Dato / Datin / Awang / Dayang / Sir / Madam / Mr / Ms to attend the Wedding Ceremony of our beloved children:",
+    detailsAnd: "and",
     factDate: "Date",
-    factTime: "Guest Arrival",
+    factItinerary: "Itinerary",
+    normalDate: "Monday, 28 December 2026",
+    islamicDate: "18 Rejab 1448H",
     factVenue: "Venue",
     countdownHeading: "Counting Down",
     countdownDays: "Days",

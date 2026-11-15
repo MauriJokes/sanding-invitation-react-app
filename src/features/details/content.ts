@@ -14,8 +14,8 @@ export const HOST_GROUPS: readonly (readonly Person[])[] = [
     { name: "Awangku Mohamad Izzan Qayyum", lineage: "bin Pengiran Haji Mohamad Jaludin" },
   ],
   [
-    { name: "Nik Joharris", lineage: "bin Nik Ahmad" },
-    { name: "Nerisa", lineage: "binti Nawi" },
+    { name: "Haji Nik Joharris", lineage: "bin Nik Ahmad" },
+    { name: "Hajjah Nerisa", lineage: "binti Nawi" },
   ],
   [
     { name: "Nik Arman Danish", lineage: "bin Nik Joharris" },
@@ -29,3 +29,17 @@ export const COUPLE: readonly string[] = [
   "Dk Izyan Naqiyah binti Pengiran Haji Mohd. Jaludin",
   "Nik Adam Danish bin Nik Joharris",
 ];
+
+export const ITINERARY = [
+        { time: "7:15 MLM", item: "Menerima Jemputan" },
+        { time: "8:15 MLM", item: "Perarakan Masuk Raja Sehari" },
+        { time: "", item: "Iringan Persembahan Tausyeh" },
+        {
+            time: "",
+            item: "Majlis Bersanding",
+        },
+        { time: "", item: "Ucapan Alu-aluan daripada Wakil Keluarga" },
+        { time: "", item: "Bacaan Doa Selamat" },
+        { time: "", item: "Menikmati Jamuan" },
+        { time: "", item: "Sesi bergambar & Rakaman Ucapan Kenangan" },
+    ]

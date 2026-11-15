@@ -1,5 +1,5 @@
-import { useEffect, useId, useRef, useState, type FormEvent } from "react";
-import { EVENT, RSVP_DEADLINE, VENUE_TIMEZONE } from "../../../shared/config/event";
+import { useEffect, useId, useRef, useState, type SubmitEvent } from "react";
+import { RSVP_DEADLINE, VENUE_TIMEZONE } from "../../../shared/config/event";
 import {
   FAMILY_NAME_MAX,
   FAMILY_NAME_MIN,
@@ -7,7 +7,12 @@ import {
   normalizeFamilyName,
   type RsvpStatus,
 } from "../../../shared/rsvp/constants";
-import { buttonClass, hintClass, labelClass, noticeClass } from "../../components/formStyles";
+import {
+  buttonClass,
+  hintClass,
+  labelClass,
+  noticeClass,
+} from "../../components/formStyles";
 import { useI18n } from "../../i18n/I18nProvider";
 import type { Strings } from "../../i18n/strings";
 import { submitRsvp, type RsvpPayload } from "./api";
@@ -36,7 +41,11 @@ function validateName(normalized: string): NameError | undefined {
 }
 
 const nameErrorText = (t: Strings, error: NameError) =>
-  error === "required" ? t.nameRequired(FAMILY_NAME_MIN) : error === "tooLong" ? t.nameTooLong(FAMILY_NAME_MAX) : t.nameInvalid;
+  error === "required"
+    ? t.nameRequired(FAMILY_NAME_MIN)
+    : error === "tooLong"
+      ? t.nameTooLong(FAMILY_NAME_MAX)
+      : t.nameInvalid;
 
 function formErrorText(t: Strings, error: FormError, max: number): string {
   switch (error) {
@@ -55,7 +64,8 @@ function formErrorText(t: Strings, error: FormError, max: number): string {
   }
 }
 
-const stepButtonClass = "min-h-12 w-[3.25rem] text-[1.6rem] text-navy disabled:cursor-not-allowed disabled:opacity-35";
+const stepButtonClass =
+  "min-h-12 w-[3.25rem] text-[1.6rem] text-navy disabled:cursor-not-allowed disabled:opacity-35";
 
 /**
  * One public RSVP for the whole family/group, Walimatulurus only. `invite` is the candidate code from the
@@ -97,7 +107,8 @@ export function RsvpSection({ invite }: { invite?: string }) {
 
   const max = config.status === "ready" ? config.maxAttendees : 0;
   const shownCount = Math.min(Math.max(count, 1), Math.max(max, 1));
-  const closed = closedByServer || (config.status === "ready" && !config.rsvpOpen);
+  const closed =
+    closedByServer || (config.status === "ready" && !config.rsvpOpen);
   const deadlineDate = new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "long",
@@ -105,7 +116,7 @@ export function RsvpSection({ invite }: { invite?: string }) {
     timeZone: VENUE_TIMEZONE,
   }).format(new Date(RSVP_DEADLINE));
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submittingRef.current || config.status !== "ready") return;
 
@@ -135,7 +146,11 @@ export function RsvpSection({ invite }: { invite?: string }) {
 
     if (result.ok) {
       unansweredRef.current = undefined;
-      setDone({ familyGroupName: normalized, status: result.data.status, attendeeCount: result.data.attendeeCount });
+      setDone({
+        familyGroupName: normalized,
+        status: result.data.status,
+        attendeeCount: result.data.attendeeCount,
+      });
       return;
     }
 
@@ -147,7 +162,11 @@ export function RsvpSection({ invite }: { invite?: string }) {
 
     switch (result.code) {
       case "RSVP_DUPLICATE":
-        setFormError(unansweredRef.current === attemptKey ? "duplicateAfterRetry" : "duplicate");
+        setFormError(
+          unansweredRef.current === attemptKey
+            ? "duplicateAfterRetry"
+            : "duplicate",
+        );
         break;
       case "RSVP_CLOSED":
         setClosedByServer(true);
@@ -180,28 +199,42 @@ export function RsvpSection({ invite }: { invite?: string }) {
             ref={successRef}
             tabIndex={-1}
             id={headingId}
-            className="text-[clamp(1.9rem,6vw,2.6rem)] font-medium uppercase tracking-[0.12em]"
+            className="text-[clamp(1.9rem,6vw,2.6rem)] font-medium tracking-[0.12em] uppercase"
           >
             {t.successTitle}
           </h2>
-          <p className="mt-4">{done.status === "attending" ? t.successAttending : t.successDeclined}</p>
-          <dl className="mx-auto mt-6 grid max-w-sm gap-3 border-y border-gold py-5 text-left">
+          <p className="mt-4">
+            {done.status === "attending"
+              ? t.successAttending
+              : t.successDeclined}
+          </p>
+          <dl className="border-gold mx-auto mt-6 grid max-w-sm gap-3 border-y py-5 text-left">
             <div>
-              <dt className={`${labelClass} text-gold-ink`}>{t.summaryFamily}</dt>
+              <dt className={`${labelClass} text-gold-ink`}>
+                {t.summaryFamily}
+              </dt>
               <dd>{done.familyGroupName}</dd>
             </div>
             <div>
-              <dt className={`${labelClass} text-gold-ink`}>{t.summaryAttendance}</dt>
-              <dd>{done.status === "attending" ? t.statusAttending : t.statusDeclined}</dd>
+              <dt className={`${labelClass} text-gold-ink`}>
+                {t.summaryAttendance}
+              </dt>
+              <dd>
+                {done.status === "attending"
+                  ? t.statusAttending
+                  : t.statusDeclined}
+              </dd>
             </div>
             {done.status === "attending" && (
               <div>
-                <dt className={`${labelClass} text-gold-ink`}>{t.summaryCount}</dt>
+                <dt className={`${labelClass} text-gold-ink`}>
+                  {t.summaryCount}
+                </dt>
                 <dd className="lining-nums">{done.attendeeCount}</dd>
               </div>
             )}
           </dl>
-          <p className="mt-6 text-base italic text-slate">{t.successFinal}</p>
+          <p className="text-slate mt-6 text-base italic">{t.successFinal}</p>
         </div>
       );
     }
@@ -209,7 +242,6 @@ export function RsvpSection({ invite }: { invite?: string }) {
     return (
       <>
         <p className="mt-4">{t.rsvpLead}</p>
-        <p className="mt-1 font-semibold">{t.scopeNote}</p>
         {closed ? (
           <div className={`${noticeClass} mt-8`} role="status">
             <p className="font-semibold">{t.closedTitle}</p>
@@ -224,12 +256,20 @@ export function RsvpSection({ invite }: { invite?: string }) {
             <p className={noticeClass} role="alert">
               {t.configFailed}
             </p>
-            <button type="button" className={buttonClass} onClick={() => reload()}>
+            <button
+              type="button"
+              className={buttonClass}
+              onClick={() => reload()}
+            >
               {t.retry}
             </button>
           </div>
         ) : (
-          <form className="mt-8 grid gap-6 text-left" noValidate onSubmit={(event) => void onSubmit(event)}>
+          <form
+            className="mt-8 grid gap-6 text-left"
+            noValidate
+            onSubmit={(event) => void onSubmit(event)}
+          >
             <div>
               <label htmlFor={nameId} className={labelClass}>
                 {t.familyLabel}
@@ -243,19 +283,21 @@ export function RsvpSection({ invite }: { invite?: string }) {
                 autoComplete="off"
                 autoCapitalize="words"
                 aria-invalid={nameError ? true : undefined}
-                aria-describedby={nameError ? `${nameHintId} ${nameErrorId}` : nameHintId}
+                aria-describedby={
+                  nameError ? `${nameHintId} ${nameErrorId}` : nameHintId
+                }
                 onChange={(event) => {
                   setName(event.target.value);
                   if (nameError) setNameError(undefined);
                 }}
-                className={`mt-2 min-h-12 w-full rounded-[2px] border bg-transparent px-3 py-2 text-[1.15rem] text-navy ${
-                  nameError ? "border-2 border-burgundy" : "border-slate"
+                className={`text-navy mt-2 min-h-12 w-full rounded-[2px] border bg-transparent px-3 py-2 text-[1.15rem] ${
+                  nameError ? "border-burgundy border-2" : "border-slate"
                 }`}
               />
               <span id={nameHintId} className={hintClass}>
                 {t.familyHint}
               </span>
-              <p id={nameErrorId} className="mt-2 font-semibold text-burgundy">
+              <p id={nameErrorId} className="text-burgundy mt-2 font-semibold">
                 {nameError ? nameErrorText(t, nameError) : null}
               </p>
             </div>
@@ -275,13 +317,20 @@ export function RsvpSection({ invite }: { invite?: string }) {
                         onChange={() => setStatus(value)}
                         className="peer sr-only"
                       />
-                      <span className="flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[2px] border border-slate px-2 py-1 text-center text-[0.95rem] uppercase tracking-[0.06em] peer-checked:border-navy peer-checked:bg-navy peer-checked:text-ivory peer-focus-visible:outline-2 peer-focus-visible:outline-offset-[3px] peer-focus-visible:outline-navy">
+                      <span className="border-slate peer-checked:border-navy peer-checked:bg-navy peer-checked:text-ivory peer-focus-visible:outline-navy flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[2px] border px-2 py-1 text-center text-[0.95rem] tracking-[0.06em] uppercase peer-focus-visible:outline-2 peer-focus-visible:outline-offset-[3px]">
                         {/* Always rendered and only hidden with CSS, and the label has its own element: React must
                             never insert or remove a node next to bare text, which page translators rewrite. */}
-                        <span aria-hidden="true" className={checked ? undefined : "hidden"}>
+                        <span
+                          aria-hidden="true"
+                          className={checked ? undefined : "hidden"}
+                        >
                           ✓
                         </span>
-                        <span>{value === "attending" ? t.statusAttending : t.statusDeclined}</span>
+                        <span>
+                          {value === "attending"
+                            ? t.statusAttending
+                            : t.statusDeclined}
+                        </span>
                       </span>
                     </label>
                   );
@@ -294,7 +343,11 @@ export function RsvpSection({ invite }: { invite?: string }) {
                 <span id={countLabelId} className={labelClass}>
                   {t.countLabel}
                 </span>
-                <div role="group" aria-labelledby={countLabelId} className="mt-2 flex w-fit rounded-[2px] border border-slate">
+                <div
+                  role="group"
+                  aria-labelledby={countLabelId}
+                  className="border-slate mt-2 flex w-fit rounded-[2px] border"
+                >
                   <button
                     type="button"
                     className={stepButtonClass}
@@ -304,7 +357,7 @@ export function RsvpSection({ invite }: { invite?: string }) {
                   >
                     −
                   </button>
-                  <output className="grid min-w-14 place-items-center border-x border-slate text-[1.5rem] lining-nums tabular-nums">
+                  <output className="border-slate grid min-w-14 place-items-center border-x text-[1.5rem] lining-nums tabular-nums">
                     {shownCount}
                   </output>
                   <button
@@ -324,11 +377,20 @@ export function RsvpSection({ invite }: { invite?: string }) {
             <p className={noticeClass}>{t.deadline(deadlineDate)}</p>
 
             <div className="grid gap-4">
-              <button type="submit" className={buttonClass} disabled={submitting} aria-busy={submitting}>
+              <button
+                type="submit"
+                className={buttonClass}
+                disabled={submitting}
+                aria-busy={submitting}
+              >
                 {submitting ? t.sending : t.send}
               </button>
               <div role="alert" aria-live="assertive">
-                {formError && <p className={noticeClass}>{formErrorText(t, formError, max)}</p>}
+                {formError && (
+                  <p className={noticeClass}>
+                    {formErrorText(t, formError, max)}
+                  </p>
+                )}
               </div>
             </div>
           </form>
@@ -342,12 +404,14 @@ export function RsvpSection({ invite }: { invite?: string }) {
       ref={sectionRef}
       id="rsvp"
       aria-labelledby={headingId}
-      className="grid min-h-svh content-center bg-ivory text-navy [&_:focus-visible]:outline-navy"
+      className="bg-ivory text-navy [&_:focus-visible]:outline-navy grid min-h-svh content-center"
     >
       <div className="mx-auto w-full max-w-[42rem] px-6 py-[4.5rem] text-center">
-        <p className="text-[0.9rem] font-semibold uppercase tracking-[0.28em] text-gold-ink">{EVENT.title}</p>
         {done ? null : (
-          <h2 id={headingId} className="mb-2 mt-2 text-[clamp(1.9rem,6vw,2.6rem)] font-medium uppercase tracking-[0.12em]">
+          <h2
+            id={headingId}
+            className="mt-2 mb-2 text-[clamp(1.9rem,6vw,2.6rem)] font-medium tracking-[0.12em] uppercase"
+          >
             {t.rsvpHeading}
           </h2>
         )}

@@ -24,7 +24,9 @@ export function countdownParts(now: number, target: number): CountdownParts {
 
 /** Calendar day (YYYY-MM-DD) of an instant in the venue timezone. */
 function venueDay(ms: number): string {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: VENUE_TIMEZONE }).format(new Date(ms));
+  return new Intl.DateTimeFormat("en-CA", { timeZone: VENUE_TIMEZONE }).format(
+    new Date(ms),
+  );
 }
 
 export function countdownPhase(now: number, target: number): CountdownPhase {

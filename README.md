@@ -1,5 +1,15 @@
 # Adam & Izyan Wedding Invitation — Project & Agent Skills Package
 
+## Formatting
+
+Prettier is configured with Tailwind CSS class sorting. Format or check a
+specific file with:
+
+```sh
+npm run format -- src/features/details/DetailsSection.tsx
+npm run format:check -- src/features/details/DetailsSection.tsx
+```
+
 **Package version:** 1.0.0  
 **Purpose:** Repository-ready project documentation and GitHub Copilot Agent Skills for the wedding invitation website.
 
@@ -40,5 +50,5 @@ The Google Sheets integration is one-way write-through (no cron on Vercel Hobby)
 - Confirm the MongoDB Atlas database and network access configuration.
 - Confirm the Vercel plan supports the intended scheduled function frequency and execution duration.
 - Add approved visual references and final wedding copy.
-# sanding-invitation-react-app
+
 # sanding-invitation-react-app

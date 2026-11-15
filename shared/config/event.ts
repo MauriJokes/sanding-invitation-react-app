@@ -13,7 +13,7 @@ export const VENUE_TIMEZONE = "Asia/Brunei";
 
 export const EVENT = {
   id: "sanding",
-  title: "Walimatulurus",
+  title: "Walimatul Urus",
   startsAt: "2026-12-28T19:15:00+08:00",
   venueName: "The Rizqun International Hotel",
   venueRoom: "Songket Ballroom",
