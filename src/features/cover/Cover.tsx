@@ -1,17 +1,17 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { EVENT, VENUE_TIMEZONE } from "../../../shared/config/event";
+import { Monogram } from "../../components/Monogram";
 import { useI18n } from "../../i18n/I18nProvider";
 import { usePageHidden } from "../../lib/usePageHidden";
 import { useReducedMotion } from "../../lib/useReducedMotion";
 import { useViewportSize } from "../../lib/useViewportSize";
-import { doorRosettes, type DoorSide } from "./rosettes";
+import { Rosette } from "../motif/Rosette";
+import { doorRosettes, type DoorSide } from "../motif/rosettes";
 import "./cover.css";
 
 /** Time for the plaque to fade and the doors to slide apart (matches cover.css), and the reduced-motion crossfade. */
 export const OPEN_MS = 1300;
 export const OPEN_REDUCED_MS = 450;
-
-type RosetteStyle = CSSProperties & { "--d": string; "--dir": "normal" | "reverse" };
 
 function Door({ side }: { side: DoorSide }) {
   const { width, height } = useViewportSize();
@@ -19,11 +19,7 @@ function Door({ side }: { side: DoorSide }) {
   return (
     <div className={`cover-door cover-door-${side}`}>
       {rosettes.map((r) => (
-        <i
-          key={r.key}
-          className="cover-ros"
-          style={{ left: r.x, top: r.y, "--d": `${r.duration}s`, "--dir": r.reverse ? "reverse" : "normal" } as RosetteStyle}
-        />
+        <Rosette key={r.key} spec={r} />
       ))}
       <span className="cover-edge" />
     </div>
@@ -31,6 +27,8 @@ function Door({ side }: { side: DoorSide }) {
 }
 
 interface CoverProps {
+  /** Called when Buka is pressed, so the page behind can start its entrance in step with the doors. */
+  onOpening?: () => void;
   /** Called once the gate has finished opening; the parent then unmounts the cover. Must be stable (memoised). */
   onOpened: () => void;
 }
@@ -39,7 +37,7 @@ interface CoverProps {
  * Gate cover. Pressing Buka fades the plaque, slides the two doors apart, then asks its parent to remove it from the tree
  * so its animations stop and the scroll lock is released. It never holds back information: the page behind it is only inert until it opens.
  */
-export function Cover({ onOpened }: CoverProps) {
+export function Cover({ onOpening, onOpened }: CoverProps) {
   const { t, locale } = useI18n();
   const reduced = useReducedMotion();
   const hidden = usePageHidden();
@@ -51,6 +49,11 @@ export function Cover({ onOpened }: CoverProps) {
     button.current?.focus({ preventScroll: true });
     return () => document.documentElement.classList.remove("cover-open");
   }, []);
+
+  const open = () => {
+    setOpening(true);
+    onOpening?.();
+  };
 
   useEffect(() => {
     if (!opening) return;
@@ -76,10 +79,7 @@ export function Cover({ onOpened }: CoverProps) {
       <Door side="right" />
       <div className="cover-plaque">
         <div className="cover-card">
-          <p className="cover-monogram" aria-hidden="true">
-            <span className="cover-mono-i">I</span>
-            <span className="cover-mono-a">A</span>
-          </p>
+          <Monogram className="text-[2.6rem]" />
           <p className="cover-title">{EVENT.title}</p>
           <p className="cover-names font-script">
             <span className="cover-name-first">
@@ -88,7 +88,7 @@ export function Cover({ onOpened }: CoverProps) {
             <span className="cover-name-second">Adam</span>
           </p>
           <p className="cover-date">{date}</p>
-          <button ref={button} type="button" className="cover-button" disabled={opening} onClick={() => setOpening(true)}>
+          <button ref={button} type="button" className="cover-button" disabled={opening} onClick={open}>
             {t.coverOpen}
           </button>
         </div>

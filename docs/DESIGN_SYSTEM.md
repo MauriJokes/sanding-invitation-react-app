@@ -129,7 +129,7 @@ Verified contrast ratios: ivory on navy 9.19; ivory on navy-deep 11.5; gold-brig
 
 ## 5b. Navigation (approved)
 
-Below 768 px: fixed bottom bar with four icon-and-label anchors (Butiran, RSVP, Lokasi, Ucapan), a divider, then icon-only BM/EN and music controls. Safe-area padding, current section marked by a gold line as well as colour, hidden while a text field has focus. From 768 px: sticky top bar with the monogram left, anchors centred and controls right.
+Below 768 px: fixed bottom bar with four icon-and-label anchors (Butiran, RSVP, Lokasi, Ucapan), a divider, then icon-only BM/EN and music controls. Safe-area padding, current section marked by a gold line as well as colour, hidden while a text field has focus. From 768 px: sticky top bar with the monogram left, anchors centred and controls right. The current section is also underlined on the top bar. A link appears only once its section exists on the page. The music control shows its state by a slash through the note (off) as well as colour.
 
 ## 5c. Forms (built in M4)
 

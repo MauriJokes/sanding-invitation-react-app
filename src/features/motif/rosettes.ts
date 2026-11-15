@@ -12,6 +12,28 @@ export interface Rosette {
 export const TILE_PX = 84;
 export const ROSETTE_PX = 50.4;
 
+/** Mixed speed and direction for the nth rosette, deterministic so layouts and tests are stable. */
+function motion(seq: number): Pick<Rosette, "duration" | "reverse"> {
+  return { duration: 36 + ((seq * 13) % 7) * 8, reverse: (seq * 7 + 3) % 5 < 2 };
+}
+
+/** Rosettes for the decorative band at the bottom of the hero: `rows` rows on the tile grid, full width. */
+export function bandRosettes(viewportWidth: number, rows = 3): Rosette[] {
+  const cols = Math.ceil(viewportWidth / TILE_PX) + 1;
+  const result: Rosette[] = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      result.push({
+        key: `band-${r}-${c}`,
+        x: c * TILE_PX - ROSETTE_PX / 2,
+        y: r * TILE_PX - ROSETTE_PX / 2,
+        ...motion(result.length),
+      });
+    }
+  }
+  return result;
+}
+
 /**
  * Rosettes for one gate door, on the same grid as the tile background. Those fully hidden under the navy
  * wedge behind the plaque are skipped. Speeds and directions are mixed deterministically.
@@ -34,8 +56,7 @@ export function doorRosettes(side: DoorSide, viewportWidth: number, viewportHeig
         key: `${side}-${r}-${c}`,
         x: x - ROSETTE_PX / 2,
         y: y - ROSETTE_PX / 2,
-        duration: 36 + ((seq * 13) % 7) * 8,
-        reverse: (seq * 7 + 3) % 5 < 2,
+        ...motion(seq),
       });
       seq++;
     }

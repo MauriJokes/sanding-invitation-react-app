@@ -133,8 +133,8 @@ describe("Cover", () => {
   it("is decorative only apart from the button: rosettes and the monogram are not announced", () => {
     renderApp();
     const cover = screen.getByRole("region", { name: "Muka depan jemputan" });
-    expect(cover.querySelectorAll(".cover-ros").length).toBeGreaterThan(0);
-    expect(cover.querySelector(".cover-monogram")!.getAttribute("aria-hidden")).toBe("true");
+    expect(cover.querySelectorAll(".ros").length).toBeGreaterThan(0);
+    expect(cover.querySelector("[aria-hidden=true]")!.textContent).toBe("IA");
     expect(cover.querySelectorAll("button, a, input").length).toBe(1);
   });
 });

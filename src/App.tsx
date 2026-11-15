@@ -1,22 +1,39 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { EVENT, VENUE_TIMEZONE } from "../shared/config/event";
-import { LanguageToggle } from "./components/LanguageToggle";
 import { Cover } from "./features/cover/Cover";
 import { GuestbookSection } from "./features/guestbook/GuestbookSection";
+import { useMusicPlayer } from "./features/music/useMusicPlayer";
 import { RsvpSection } from "./features/rsvp/RsvpSection";
+import { Hero } from "./features/shell/Hero";
+import { Navigation } from "./features/shell/Navigation";
+import { Particles } from "./features/shell/Particles";
+import { ShellDefs } from "./features/shell/ShellDefs";
 import { useI18n } from "./i18n/I18nProvider";
+import { usePageHidden } from "./lib/usePageHidden";
 
-/** Minimal shell: landmarks, tokens, fonts, language and the RSVP. The full experience is a later milestone. */
+/** Sections that exist on the page today; the bar links to these only. Later steps add details and location. */
+const SECTIONS = ["rsvp", "guestbook"] as const;
+
 export function App({ invite }: { invite?: string }) {
   const { t, locale } = useI18n();
+  const [intro, setIntro] = useState(false);
   const [opened, setOpened] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
+  const player = useMusicPlayer();
+  const hidden = usePageHidden();
+  const handleOpening = useCallback(() => setIntro(true), []);
   const handleOpened = useCallback(() => setOpened(true), []);
 
   // Focus only after the page is no longer inert; an inert element cannot take focus.
   useEffect(() => {
     if (opened) heading.current?.focus({ preventScroll: true });
   }, [opened]);
+
+  // One switch pauses every decorative animation while the tab is in the background.
+  useEffect(() => {
+    document.documentElement.classList.toggle("page-hidden", hidden);
+  }, [hidden]);
+
   const eventDate = new Intl.DateTimeFormat(locale, {
     weekday: "long",
     day: "numeric",
@@ -27,26 +44,19 @@ export function App({ invite }: { invite?: string }) {
 
   return (
     <>
-      {!opened && <Cover onOpened={handleOpened} />}
-      <div inert={!opened}>
+      {!opened && <Cover onOpening={handleOpening} onOpened={handleOpened} />}
+      {opened && <Particles />}
+      <div inert={!opened} className="relative z-[1] pb-[calc(60px+env(safe-area-inset-bottom))] md:pb-0">
+        <ShellDefs />
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-20 focus:bg-ivory focus:px-4 focus:py-2 focus:text-navy"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-30 focus:bg-ivory focus:px-4 focus:py-2 focus:text-navy"
         >
           {t.skipToContent}
         </a>
+        <Navigation sectionIds={SECTIONS} player={player} />
         <main id="main">
-          <div className="relative grid min-h-svh place-items-center px-6 text-center">
-            <LanguageToggle />
-            <div>
-              <p className="text-base font-semibold uppercase tracking-[0.34em] text-gold-bright">{EVENT.title}</p>
-              <h1 ref={heading} tabIndex={-1} className="font-script text-[clamp(4.6rem,22vw,8.5rem)] leading-[1.05] text-ivory">
-                Izyan <span className="text-gold-bright">&amp;</span> Adam
-              </h1>
-              <p className="mt-6 text-base uppercase tracking-[0.2em]">{eventDate}</p>
-              <p className="text-base uppercase tracking-[0.14em]">{EVENT.venueName}</p>
-            </div>
-          </div>
+          <Hero intro={intro} headingRef={heading} date={eventDate} />
           <RsvpSection invite={invite} />
           <GuestbookSection />
         </main>

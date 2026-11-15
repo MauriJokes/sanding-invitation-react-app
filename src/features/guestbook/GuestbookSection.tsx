@@ -106,7 +106,7 @@ export function GuestbookSection() {
   }
 
   return (
-    <section aria-labelledby={headingId} className="border-t border-gold bg-ivory text-navy [&_:focus-visible]:outline-navy">
+    <section id="guestbook" aria-labelledby={headingId} className="border-t border-gold bg-ivory text-navy [&_:focus-visible]:outline-navy">
       <div className="mx-auto max-w-[42rem] px-6 py-[4.5rem] text-center">
         <h2 id={headingId} className={`${headingClass} mb-8`}>
           {t.guestbookHeading}

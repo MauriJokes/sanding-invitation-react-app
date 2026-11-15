@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { doorRosettes, ROSETTE_PX, TILE_PX } from "../../../src/features/cover/rosettes";
+import { bandRosettes, doorRosettes, ROSETTE_PX, TILE_PX } from "../../../src/features/motif/rosettes";
 
 describe("doorRosettes", () => {
   it("places rosettes on the tile grid, centred on the tile corners", () => {
@@ -32,5 +32,24 @@ describe("doorRosettes", () => {
   it("keeps a phone-sized cover within the performance budget", () => {
     const total = doorRosettes("left", 390, 844).length + doorRosettes("right", 390, 844).length;
     expect(total).toBeLessThanOrEqual(60);
+  });
+});
+
+describe("bandRosettes", () => {
+  it("fills the band width on the tile grid in the requested number of rows", () => {
+    const band = bandRosettes(390);
+    const cols = Math.ceil(390 / TILE_PX) + 1;
+    expect(band).toHaveLength(cols * 3);
+    expect(new Set(band.map((r) => r.key)).size).toBe(band.length);
+    expect(Math.max(...band.map((r) => r.x + ROSETTE_PX / 2))).toBeGreaterThanOrEqual(390);
+    expect(new Set(band.map((r) => r.y)).size).toBe(3);
+    expect(bandRosettes(390, 2)).toHaveLength(cols * 2);
+  });
+
+  it("mixes speeds and directions like the gate", () => {
+    const band = bandRosettes(1280);
+    expect(band.some((r) => r.reverse)).toBe(true);
+    expect(band.some((r) => !r.reverse)).toBe(true);
+    expect(new Set(band.map((r) => r.duration)).size).toBeGreaterThan(3);
   });
 });

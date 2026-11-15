@@ -2,14 +2,13 @@
 
 Malay is the default language; English is the toggle. These strings were accepted by the owner during M1 ("translations seem fine"). `{n}` is the attendee limit. Invitation body copy (host names, dress code source) lives in `WEDDING_CONTENT.md` and `WEDDING_CONTENT_INFO/`.
 
-Not yet written (add and have the owner proofread in M6): music button labels, navigation, gate, countdown and location. The RSVP and guestbook strings are in the second table below.
+Written in M6 (shell strings below): gate, navigation and music labels. Still to write and proofread: countdown and location. The RSVP and guestbook strings are in the second table below.
 
 | Key | Bahasa Melayu | English |
 |---|---|---|
 | `event` | Walimatulurus | Walimatulurus |
 | `coverDate` | 28 Disember 2026 | 28 December 2026 |
 | `open` | Buka | Open |
-| `coverLabel` | Muka depan jemputan | Invitation cover |
 | `nDetails` | Butiran | Details |
 | `nLocation` | Lokasi | Location |
 | `nWishes` | Ucapan | Wishes |
@@ -118,3 +117,12 @@ Source of truth: `src/i18n/strings.ts` (TypeScript enforces that both languages 
 | `skipToContent` | Langkau ke kandungan | Skip to content | draft |
 | `switchLanguageLabel` | Switch language to English | Tukar bahasa ke Bahasa Melayu | draft |
 | `switchLanguageText` | EN | BM | draft |
+| `coverLabel` | Muka depan jemputan | Invitation cover | draft |
+| `coverOpen` | Buka | Open | approved (M1, `open`) |
+| `navLabel` | Navigasi utama | Main navigation | draft |
+| `navDetails` | Butiran | Details | approved (M1, `nDetails`) |
+| `navRsvp` | RSVP | RSVP | approved (M1) |
+| `navLocation` | Lokasi | Location | approved (M1, `nLocation`) |
+| `navWishes` | Ucapan | Wishes | approved (M1, `nWishes`) |
+| `musicPlay` | Mainkan muzik | Play music | draft |
+| `musicPause` | Jeda muzik | Pause music | draft |

@@ -1,0 +1,23 @@
+/* A tile rosette that turns slowly. Shared by the cover doors and the hero band; transform only. */
+.ros {
+  position: absolute;
+  z-index: 0;
+  width: 50.4px;
+  height: 50.4px;
+  background: url("../../assets/motif/rosette.svg") center / contain no-repeat;
+  animation: ros-spin var(--d, 60s) linear infinite var(--dir, normal);
+  will-change: transform;
+}
+@keyframes ros-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.page-hidden .ros {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ros {
+    animation: none;
+  }
+}

@@ -73,6 +73,13 @@ export interface Strings {
   coverOpen: string;
   switchLanguageLabel: string;
   switchLanguageText: string;
+  navLabel: string;
+  navDetails: string;
+  navRsvp: string;
+  navLocation: string;
+  navWishes: string;
+  musicPlay: string;
+  musicPause: string;
 }
 
 export const strings: Record<Lang, Strings> = {
@@ -142,6 +149,13 @@ export const strings: Record<Lang, Strings> = {
     coverOpen: "Buka",
     switchLanguageLabel: "Switch language to English",
     switchLanguageText: "EN",
+    navLabel: "Navigasi utama",
+    navDetails: "Butiran",
+    navRsvp: "RSVP",
+    navLocation: "Lokasi",
+    navWishes: "Ucapan",
+    musicPlay: "Mainkan muzik",
+    musicPause: "Jeda muzik",
   },
   en: {
     rsvpHeading: "RSVP",
@@ -209,6 +223,13 @@ export const strings: Record<Lang, Strings> = {
     coverOpen: "Open",
     switchLanguageLabel: "Tukar bahasa ke Bahasa Melayu",
     switchLanguageText: "BM",
+    navLabel: "Main navigation",
+    navDetails: "Details",
+    navRsvp: "RSVP",
+    navLocation: "Location",
+    navWishes: "Wishes",
+    musicPlay: "Play music",
+    musicPause: "Pause music",
   },
 };
 

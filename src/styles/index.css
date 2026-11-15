@@ -56,6 +56,13 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Clear the bottom bar on phones and the sticky top bar from 768px. */
+    scroll-padding-block: 12px 84px;
+  }
+  @media (min-width: 768px) {
+    html {
+      scroll-padding-block: 56px 0;
+    }
   }
   body {
     background-color: var(--color-navy);

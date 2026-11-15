@@ -6,7 +6,7 @@ UX is the heart of this site, so M6 is delivered in **reviewable steps with an o
 
 Already built and approved: RSVP, guestbook, Sheets mirror, tokens, fonts, tile/rosette/tassel assets, and the cover, hero, corner and particle design (M1). M6 replaces the temporary hero and language toggle with the real experience.
 
-## Step 6a — Cover and gate (first gate) — built, awaiting owner review
+## Step 6a — Cover and gate — approved
 
 Build the **approved** cover from `docs/DESIGN_SYSTEM.md` §5a, ported from the archived prototype (`design-assets/archive/m1-prototype/index.html`):
 
@@ -18,9 +18,13 @@ Build the **approved** cover from `docs/DESIGN_SYSTEM.md` §5a, ported from the 
 
 The botanical cover idea (new flower and leaf art around the diamond) is **parked in `docs/BACKLOG.md` (B-1)** and is not part of M6.
 
-## Step 6b — Shell: navigation, hero, language and music control
+## Step 6b — Shell: navigation, hero, language and music control — built, awaiting owner review
 
-Bottom navigation on mobile and top bar from 768 px (approved), BM/EN toggle in the bar, music button (UI only until the file arrives), hero entrance with the approved tile band, corners and particles. Replace the temporary toggle. Hero uses the approved medallion corners, tassels and particles.
+- Bottom bar below 768 px, sticky top bar from 768 px; BM/EN toggle and the music control in the bar; the temporary toggle is gone. The bar links only to sections that exist (today RSVP and Ucapan); Butiran and Lokasi appear when 6c and 6d add those sections, with no change to the bar.
+- Hero with the approved corner medallions and tassels, the tile band with turning rosettes, drifting particles (mounted only once the gate has opened) and the entrance sequence, which starts when **Buka** is pressed so it lands as the doors open.
+- Hero scroll cue ("Lihat butiran") is added in 6c, when its target exists.
+- The music control is **visual only** (a stub hook); it plays nothing. **Step 6e must wire it to the real track, or hide it, before M7.**
+- The hero keeps the approved medallion corners; no botanicals (B-1 in `docs/BACKLOG.md`).
 
 ## Step 6c — Invitation, event and countdown
 

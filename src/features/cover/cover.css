@@ -57,22 +57,7 @@ html.cover-open {
   left: 0;
 }
 
-.cover-ros {
-  position: absolute;
-  z-index: 0;
-  width: 50.4px;
-  height: 50.4px;
-  background: url("../../assets/motif/rosette.svg") center / contain no-repeat;
-  animation: cover-spin var(--d, 60s) linear infinite var(--dir, normal);
-  will-change: transform;
-}
-@keyframes cover-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.cover[data-paused="true"] .cover-ros {
+.cover[data-paused="true"] .ros {
   animation-play-state: paused;
 }
 
@@ -95,26 +80,6 @@ html.cover-open {
   border: 1px solid var(--color-gold);
   outline: 1px solid var(--color-gold);
   outline-offset: 5px;
-}
-
-/* Placeholder monogram until the designer's original is supplied. */
-.cover-monogram {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 0.05em;
-  margin: 0;
-  font-size: 2.6rem;
-  line-height: 1;
-  letter-spacing: 0.04em;
-}
-.cover-mono-a {
-  font-size: 3.1rem;
-}
-.cover-mono-i {
-  margin-left: -0.12em;
-  font-size: 2.1rem;
-  color: var(--color-gold-bright);
 }
 
 .cover-title {
@@ -179,9 +144,6 @@ html.cover-open {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cover-ros {
-    animation: none;
-  }
   .cover-door {
     transition: opacity 0.4s ease;
   }
