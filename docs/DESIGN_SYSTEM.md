@@ -140,9 +140,9 @@ Below 768 px: fixed bottom bar with four icon-and-label anchors (Butiran, RSVP, 
 - The guestbook uses the same fields on the ivory surface, plus a 24 px checkbox with a 48 px tap row, a text-only character counter (lining numerals) and a list of wishes: plain text, a gold hairline between entries, the name in small gold-ink capitals. Hidden spam-trap field: positioned off-screen, `aria-hidden`, `tabindex=-1`.
 - All controls are at least 48 px tall. The submit button shows "Menghantar…" and is disabled while a request is pending.
 
-## 5d. Cover composition and botanicals (M6, in review)
+## 5d. Cover plaque
 
-Direction from the owner's reference (`design-assets/moodboard/theme/photo_2026-11-15 02.32.41.jpeg`), as decided in D-31 to D-34: a portrait card centred over the full-viewport tile pattern; a rotated-square navy diamond with a gold hairline outline; a deep navy plaque with a double gold frame; four corner clusters of the supplied botanicals around the diamond (each on one gate door, none crossing the centre seam); a few gold confetti specks; subtle sway and breathing motion. Text colours on the plaque stay gold-bright and ivory (contrast 6.9:1 and 11.5:1). The final proportions, sizes and motion are approved on a prototype in M6 step 6a.
+The cover follows §5a. The plaque is deep navy (`navy-deep`) with gold and ivory text and gold hairlines (D-31; contrast 6.9:1 and 11.5:1). A botanical variant using the owner's flower and leaf art is parked in `BACKLOG.md` (B-1) and is not part of the current design.
 
 ## 6. Accessibility
 

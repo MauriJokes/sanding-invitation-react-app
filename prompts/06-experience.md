@@ -4,30 +4,23 @@ Activate `wedding-ui-design`, `react-frontend`, `guestbook-interactions` and `qu
 
 UX is the heart of this site, so M6 is delivered in **reviewable steps with an owner approval gate after each**. Nothing in a later step starts until the previous one is approved. Follow `docs/DESIGN_SYSTEM.md`; new colours, shapes or motion beyond it need approval first. No gallery.
 
-Already built and approved: RSVP, guestbook, Sheets mirror, tokens, fonts, tile/rosette/tassel assets. M6 replaces the temporary hero and language toggle with the real experience.
+Already built and approved: RSVP, guestbook, Sheets mirror, tokens, fonts, tile/rosette/tassel assets, and the cover, hero, corner and particle design (M1). M6 replaces the temporary hero and language toggle with the real experience.
 
-## Step 6a — Botanical art pipeline and the new cover (first gate)
+## Step 6a — Cover and gate (first gate)
 
-Source art is in `design-assets/textures/` (owner-supplied, git-ignored): `blue-flower` (navy anemone + two cream blossoms + gold line leaves, in two layers), `white-flower` (three blossoms, only 362 px wide), `branch-1`, `branch-2` (eucalyptus), `fern`, `golden-leaf-1`, `-2` (gold line art), `golden-leaf-3` (gold glitter). They are **bitmaps wrapped in SVG** (about 68 MB), so they must not ship or be committed as they are.
+Build the **approved** cover from `docs/DESIGN_SYSTEM.md` §5a, ported from the archived prototype (`design-assets/archive/m1-prototype/index.html`):
 
-1. **Pipeline** (dev-only script, run locally, outputs committed): decode each source, join colour image and mask into transparency, trim, split `blue-flower` into a gold-leaf layer, a flower layer and the two small blossoms, resize to about 1.5x the largest displayed size, and write WebP with alpha into `src/assets/botanicals/`. Budget: **at most 600 KB for everything the cover loads**. Report sizes.
-2. **Cover composition** (from the owner's reference `design-assets/moodboard/theme/photo_2026-11-15 02.32.41.jpeg`, adjusted by the decisions below):
-   - Tile pattern fills the viewport. A portrait "card" (about 2:3) scales to fit and is centred; on desktop the tile continues to the sides.
-   - A true rotated-square diamond in deep navy with a gold hairline outline, and a navy plaque with a double gold frame holding the monogram placeholder, "Walimatulurus", the names, the date and **Buka**. **Plaque stays deep navy with gold/ivory text (D-31).**
-   - Four corner clusters around the diamond: top-left eucalyptus + gold line leaves; top-right anemone cluster; bottom-left fern + glitter gold leaf + white blossoms; bottom-right white blossoms + eucalyptus (D-32). Each cluster belongs to **one door half** and never crosses the centre seam, so the gate opens cleanly. A few gold confetti specks near the clusters (CSS, no image).
-   - Clusters never cover text or the button; they take at most about a third of the width on a phone.
-3. **Motion (subtle, desynchronised, transform and opacity only):**
-   - Leaf sprays sway 1.5 to 3 degrees about the stem base, 6 to 11 s per cycle, each with its own duration and delay.
-   - Anemone and blossoms "breathe": about 1.5 degrees of rotation and 1% scale over 7 to 10 s; the two small cream blossoms turn up to about 4 degrees.
-   - 6 to 8 loose cream petals drift down slowly on the cover (simple vector petal, no new colours).
-   - On **Buka** the botanicals ride their door and lean outward a few degrees as it slides; the cover is then removed so its animation stops.
-   - Reduced motion: botanicals static, gate becomes a crossfade. Paused when the tab is hidden.
-4. **Performance:** plaque text paints first and botanicals fade in as they decode (nothing blocks the Buka button). Measure frame times with 4x CPU throttling (and report); if needed, reduce the cover's 48 to 113 rotating rosettes (animate only those near the edges).
-5. **Review pack:** screenshots at 320, 375, 414, 768 and 1280 px, plus a short screen recording of the gate and the idle motion, and the sizes report.
+- A deep navy plaque (D-31) with the monogram placeholder, "Walimatulurus", the names, the date and **Buka**, over two tile-pattern door panels.
+- Rotating rosettes on the panels (skip those hidden under the plaque); pressing **Buka** fades the plaque, slides the panels apart onto the live page, then removes the cover so its animations stop.
+- Page content is `inert` until opened; focus moves to the main heading; reduced motion turns the gate into a short crossfade; animation pauses when the tab is hidden.
+- **Performance:** plaque text paints first; nothing blocks **Buka**. Measure frame times with 4x CPU throttling and report; if needed, reduce the rosette count (up to 113 on desktop, 48 on phones) by animating only those near the edges.
+- **Review pack:** screenshots at 320, 375, 414, 768 and 1280 px and a short screen recording of the gate opening.
+
+The botanical cover idea (new flower and leaf art around the diamond) is **parked in `docs/BACKLOG.md` (B-1)** and is not part of M6.
 
 ## Step 6b — Shell: navigation, hero, language and music control
 
-Bottom navigation on mobile and top bar from 768 px (approved), BM/EN toggle in the bar, music button (UI only until the file arrives), hero entrance with the approved tile band, corners and particles. Replace the temporary toggle. Decide with the owner whether the hero also gets botanicals (default: no, keep the approved medallion corners).
+Bottom navigation on mobile and top bar from 768 px (approved), BM/EN toggle in the bar, music button (UI only until the file arrives), hero entrance with the approved tile band, corners and particles. Replace the temporary toggle. Hero uses the approved medallion corners, tassels and particles.
 
 ## Step 6c — Invitation, event and countdown
 
@@ -53,6 +46,5 @@ One or more rounds of feedback on the preview URL, with fixes, until the owner a
 
 - Feedback after each step's review pack.
 - Music file (before 6e). Original "IA" monogram file (placeholder until then).
-- Optional: a higher-resolution original of the white blossoms (the current one limits how large they can appear).
 
-Do not commit the heavy source SVGs. Commit only optimised outputs.
+Do not commit the heavy botanical source SVGs in `design-assets/textures/` (git-ignored).

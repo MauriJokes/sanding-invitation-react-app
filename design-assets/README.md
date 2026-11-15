@@ -14,7 +14,7 @@ You can also add a short note called `design-assets/moodboard/NOTES.md` describi
 ## Asset folders
 
 - `design-assets/moodboard/`: full moodboard and reference screenshots (`theme/` and `uiux-sample/`).
-- `textures/`: approved tile, rosette and tassel SVGs (see `docs/DESIGN_SYSTEM.md` §3a), plus the owner's botanical source art (`blue-flower`, `white-flower`, `branch-1/2`, `fern`, `golden-leaf-1/2/3`). The botanical files are bitmaps wrapped in SVG, about 68 MB in total, so they are **git-ignored**: keep them on your machine and back them up elsewhere. Only the optimised WebP versions generated from them (in `src/assets/botanicals/`) are committed. Never add large source files to git: history keeps them forever and every clone and build downloads them.
+- `textures/`: approved tile, rosette and tassel SVGs (see `docs/DESIGN_SYSTEM.md` §3a), plus the owner's botanical source art (`blue-flower`, `white-flower`, `branch-1/2`, `fern`, `golden-leaf-1/2/3`). The botanical files are bitmaps wrapped in SVG, about 68 MB in total, so they are **git-ignored**: keep them on your machine and back them up elsewhere. They are parked in `docs/BACKLOG.md` (B-1); if revived, only optimised WebP versions are committed. Never add large source files to git: history keeps them forever and every clone and build downloads them.
 - `fonts/`: self-hosted Allura and Cormorant Garamond (SIL OFL).
 - `archive/m1-prototype/`: throwaway M1 prototype (reference only, not shipped).
 - `florals/`: approved floral artwork or photographs.
