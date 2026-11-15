@@ -134,3 +134,9 @@ Source of truth: `src/i18n/strings.ts` (TypeScript enforces that both languages 
 | `countdownToday` | Hari ini hari bahagia kami. | Today is our special day. | draft |
 | `countdownAfter` | Terima kasih kerana meraikan hari bahagia kami. | Thank you for celebrating our special day with us. | draft |
 | `heroScroll` | Lihat butiran | View details | approved (M1, `scroll`) |
+| `locationHeading` | Lokasi | Location | approved (M1, `locT`) |
+| `locationMapOpen` | Buka di Peta | Open in Maps | approved (M1, `map`) |
+| `locationNewTab` | (dibuka di tab baharu) | (opens in a new tab) | draft (screen-reader only) |
+| `locationCopy` | Salin alamat | Copy address | approved (M1, `copy`) |
+| `locationCopied` | Alamat disalin. | Address copied. | approved (M1, `copiedMsg`) |
+| `locationCopyFailed` | Alamat tidak dapat disalin. Sila salin secara manual. | The address could not be copied. Please copy it manually. | draft |

@@ -25,13 +25,13 @@ The botanical cover idea (new flower and leaf art around the diamond) is **parke
 - The music control was a visual stub here; it is wired to the real track in 6e.
 - The hero keeps the approved medallion corners; no botanicals (B-1 in `docs/BACKLOG.md`).
 
-## Step 6c — Invitation, event and countdown — built, awaiting owner review
+## Step 6c — Invitation, event and countdown — approved
 
 Invitation text (adjusted for one event, duplicate greeting removed), hosts, couple, event facts (date, arrival 19:15, venue, no end time; no dress code, by owner decision), countdown to 2026-12-28 19:15 `Asia/Brunei` with a clear state after the date.
 
-## Step 6d — Location and directions
+## Step 6d — Location and directions — built, awaiting owner review
 
-Venue block, copyable address, directions link (open in the maps app), no embedded map unless approved.
+Venue, room and full address as plain text; "Buka di Peta" opens the owner's map link in a new tab (`noopener noreferrer`); "Salin alamat" copies the venue and address and says whether it worked; no embedded map. Placed between the RSVP and the guestbook, in the navigation bar as Lokasi.
 
 ## Step 6e — Music — built (licence still to be sorted by the owner, D-16)
 

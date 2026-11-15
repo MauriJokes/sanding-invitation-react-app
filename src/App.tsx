@@ -3,6 +3,7 @@ import { Countdown } from "./features/details/Countdown";
 import { DetailsSection } from "./features/details/DetailsSection";
 import { formatEventDate } from "./features/details/time";
 import { Cover } from "./features/cover/Cover";
+import { LocationSection } from "./features/location/LocationSection";
 import { GuestbookSection } from "./features/guestbook/GuestbookSection";
 import { useMusicPlayer } from "./features/music/useMusicPlayer";
 import { RsvpSection } from "./features/rsvp/RsvpSection";
@@ -14,8 +15,8 @@ import { TileDivider } from "./features/shell/TileDivider";
 import { useI18n } from "./i18n/I18nProvider";
 import { usePageHidden } from "./lib/usePageHidden";
 
-/** Sections that exist on the page today; the bar links to these only. The location section is added in a later step. */
-const SECTIONS = ["details", "rsvp", "guestbook"] as const;
+/** Sections on the page; the bar links to these only. */
+const SECTIONS = ["details", "rsvp", "location", "guestbook"] as const;
 
 export function App({ invite }: { invite?: string }) {
   const { t, locale } = useI18n();
@@ -63,6 +64,9 @@ export function App({ invite }: { invite?: string }) {
           <Countdown />
           <TileDivider />
           <RsvpSection invite={invite} />
+          <TileDivider />
+          <LocationSection />
+          <TileDivider />
           <GuestbookSection />
         </main>
       </div>

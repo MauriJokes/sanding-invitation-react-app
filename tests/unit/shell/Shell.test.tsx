@@ -87,13 +87,17 @@ describe("Shell", () => {
     expect(screen.getByRole("navigation").closest("[inert]")).toBeNull();
   });
 
-  it("links the bar to the sections that exist today, and every link has a target", () => {
+  it("links the bar to all four sections in the approved order, and every link has a target", () => {
     renderApp();
     const bar = screen.getByRole("navigation", { hidden: true });
     const hrefs = Array.from(bar.querySelectorAll("a")).map((a) => a.getAttribute("href"));
-    expect(hrefs).toEqual(["#details", "#rsvp", "#guestbook"]);
+    expect(hrefs).toEqual(["#details", "#rsvp", "#location", "#guestbook"]);
     for (const href of hrefs) expect(document.querySelector(href!)).not.toBeNull();
-    expect(hrefs).not.toContain("#location");
+    // the page itself runs in the same order as the bar
+    const order = hrefs.map((h) => document.querySelector(h!)!);
+    for (let i = 1; i < order.length; i++) {
+      expect(order[i - 1]!.compareDocumentPosition(order[i]!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    }
   });
 
   it("renders decoration that assistive technology skips", () => {

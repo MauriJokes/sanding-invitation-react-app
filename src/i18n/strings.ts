@@ -95,6 +95,12 @@ export interface Strings {
   countdownToday: string;
   countdownAfter: string;
   heroScroll: string;
+  locationHeading: string;
+  locationMapOpen: string;
+  locationNewTab: string;
+  locationCopy: string;
+  locationCopied: string;
+  locationCopyFailed: string;
   countdownLabel: (when: string) => string;
 }
 
@@ -187,6 +193,12 @@ export const strings: Record<Lang, Strings> = {
     countdownToday: "Hari ini hari bahagia kami.",
     countdownAfter: "Terima kasih kerana meraikan hari bahagia kami.",
     heroScroll: "Lihat butiran",
+    locationHeading: "Lokasi",
+    locationMapOpen: "Buka di Peta",
+    locationNewTab: "(dibuka di tab baharu)",
+    locationCopy: "Salin alamat",
+    locationCopied: "Alamat disalin.",
+    locationCopyFailed: "Alamat tidak dapat disalin. Sila salin secara manual.",
     countdownLabel: (when) => `Kiraan detik ke ${when}`,
   },
   en: {
@@ -277,6 +289,12 @@ export const strings: Record<Lang, Strings> = {
     countdownToday: "Today is our special day.",
     countdownAfter: "Thank you for celebrating our special day with us.",
     heroScroll: "View details",
+    locationHeading: "Location",
+    locationMapOpen: "Open in Maps",
+    locationNewTab: "(opens in a new tab)",
+    locationCopy: "Copy address",
+    locationCopied: "Address copied.",
+    locationCopyFailed: "The address could not be copied. Please copy it manually.",
     countdownLabel: (when) => `Countdown to ${when}`,
   },
 };

@@ -49,7 +49,7 @@ export function DetailsSection() {
         <Rule />
         <p className={body}>{t.detailsIntro}</p>
 
-        <div className="my-6 grid gap-4">
+        <div className="my-6 grid gap-2">
           {family(bride)}
           <Ampersand />
           {family(groom)}
