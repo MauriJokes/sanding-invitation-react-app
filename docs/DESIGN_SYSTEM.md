@@ -125,7 +125,7 @@ Verified contrast ratios: ivory on navy 9.19; ivory on navy-deep 11.5; gold-brig
 - **Still static by design:** the thin tile dividers between sections and the tile inside the medallions.
 - **Constraints:** animate `transform` and `opacity` only; pause when the tab is hidden; decoration is `aria-hidden` with `pointer-events: none`; with `prefers-reduced-motion` the gate becomes a short crossfade and the rosettes, corners, tassels and particles stop or switch off; no animation dependency unless CSS cannot do it. Measure on a mid-range phone in M6 and trim rosettes if needed.
 - **Accessibility:** Buka is a real button; page content is `inert` until opened; focus moves to the main heading; the site works with animation disabled.
-- **Audio:** off by default; opening the cover does not start music. A visible play/pause control only.
+- **Audio:** the music starts when the guest presses **Buka** (their own gesture, per the owner on 2026-11-15) and never otherwise: no autoplay on load, and the browser may still refuse. The play/pause control in the navigation bar always stops it; its icon shows the state, and a failure shows "Muzik tidak tersedia" without affecting the page.
 
 ## 5b. Navigation (approved)
 

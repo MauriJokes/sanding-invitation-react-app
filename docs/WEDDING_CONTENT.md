@@ -52,7 +52,7 @@ The supplied texts in `docs/WEDDING_CONTENT_INFO/` are adjusted for the one Sand
 - Malay: "...untuk hadir ke Majlis Walimatulurus anakanda kami:"
 - English: "...to attend the walimatulurus of our beloved children:"
 
-Then show the couple's names: headline, then full names from the section above. The supplied files' opening ("Bismillah / ASSALAMU'ALAIKUM WR. WB.") and the headline "ASSALAMUALAIKUM WBT & SALAM SEJAHTERA" overlap. **Confirmed:** keep "Bismillah", use the headline once, and omit the duplicate "ASSALAMU'ALAIKUM WR. WB." line. The source files are left unedited.
+The supplied opening line ("Dengan izin Allah S.W.T dan rahmatnya, kami:" / "By the grace and blessings of Allah S.W.T, we") is kept before the hosts. Then show the couple's names: headline, then full names from the section above. The supplied files' opening ("Bismillah / ASSALAMU'ALAIKUM WR. WB.") and the headline "ASSALAMUALAIKUM WBT & SALAM SEJAHTERA" overlap. **Confirmed:** keep "Bismillah", use the headline once, and omit the duplicate "ASSALAMU'ALAIKUM WR. WB." line. The source files are left unedited.
 
 ## Venue / event copy
 

@@ -5,12 +5,14 @@ export interface MusicPlayer {
   playing: boolean;
   /** The track could not be loaded or played. The page is unaffected; the control just says so. */
   unavailable: boolean;
+  /** Start if stopped; does nothing when already playing. Call it only from a user gesture. */
+  play: () => void;
   toggle: () => void;
 }
 
 /**
- * One looping track with an explicit play/pause control. Nothing is requested until the first press, and playback only
- * ever starts from that press (a user gesture), so browser autoplay rules are never worked around.
+ * One looping track. Nothing is requested until a guest acts, and playback only ever starts from a user gesture (the
+ * Buka press or the music button), so browser autoplay rules are never worked around. The button can always stop it.
  */
 export function useMusicPlayer(src: string = MUSIC_SRC): MusicPlayer {
   const audio = useRef<HTMLAudioElement | null>(null);
@@ -25,7 +27,7 @@ export function useMusicPlayer(src: string = MUSIC_SRC): MusicPlayer {
     [],
   );
 
-  const toggle = useCallback(() => {
+  const start = useCallback(() => {
     if (!audio.current) {
       const el = new Audio();
       el.preload = "none";
@@ -41,10 +43,7 @@ export function useMusicPlayer(src: string = MUSIC_SRC): MusicPlayer {
       audio.current = el;
     }
     const el = audio.current;
-    if (!el.paused) {
-      el.pause();
-      return;
-    }
+    if (!el.paused) return;
     // play() rejects when the file is missing or the browser refuses; neither may disturb the page.
     el.play().catch(() => {
       setPlaying(false);
@@ -52,5 +51,10 @@ export function useMusicPlayer(src: string = MUSIC_SRC): MusicPlayer {
     });
   }, [src]);
 
-  return { playing, unavailable, toggle };
+  const toggle = useCallback(() => {
+    if (audio.current && !audio.current.paused) audio.current.pause();
+    else start();
+  }, [start]);
+
+  return { playing, unavailable, play: start, toggle };
 }

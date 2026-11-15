@@ -63,7 +63,7 @@
 - [ ] Form errors are understandable and associated with inputs.
 - [ ] Contrast is adequate.
 - [ ] Reduced motion is respected.
-- [ ] Audio does not autoplay unexpectedly.
+- [ ] Audio never starts on page load; it starts only from the guest pressing Buka or the music button, and the music button always stops it.
 - [ ] Audio failure does not block the site.
 
 ## 7. Deployment

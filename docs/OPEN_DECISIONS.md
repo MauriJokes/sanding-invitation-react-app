@@ -52,3 +52,4 @@ Because the site is intentionally public and has no personalised invite link or 
 - Enforce attendee-count bounds and duplicate checks on the server.
 - Never expose MongoDB or Google service-account credentials to the browser.
 - Keep MongoDB as the source of truth and Google Sheets as a one-way mirror.
+| D-35 | Music starts on Buka | **Confirmed by owner (2026-11-15):** pressing Buka starts the track (a user gesture, so no autoplay rule is bypassed); the music button in the bar stops and restarts it. Replaces the earlier "off until the music button is pressed". |

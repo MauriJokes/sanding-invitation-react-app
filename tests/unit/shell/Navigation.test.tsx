@@ -21,7 +21,7 @@ class FakeObserver {
   }
 }
 
-const player = { playing: false, unavailable: false, toggle: vi.fn() };
+const player = { playing: false, unavailable: false, play: vi.fn(), toggle: vi.fn() };
 
 function setup(ids: readonly string[] = ["rsvp", "guestbook"], lang: "ms" | "en" = "ms") {
   for (const id of ["details", "rsvp", "location", "guestbook"]) {

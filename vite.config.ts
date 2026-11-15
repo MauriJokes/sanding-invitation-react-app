@@ -16,6 +16,6 @@ export default defineConfig({
     include: ["tests/**/*.test.{ts,tsx}"],
     environment: "node",
     restoreMocks: true,
-    setupFiles: ["tests/setup-sheets.ts"],
+    setupFiles: ["tests/setup-sheets.ts", "tests/setup-audio.ts"],
   },
 });

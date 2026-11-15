@@ -15,11 +15,13 @@ class FakeAudio extends EventTarget {
   preload = "";
   src = "";
   pauseCalls = 0;
+  playCalls = 0;
   constructor() {
     super();
     FakeAudio.instances.push(this);
   }
   play(): Promise<void> {
+    this.playCalls++;
     if (FakeAudio.playResult === "reject") return Promise.reject(new Error("NotAllowedError"));
     this.paused = false;
     this.dispatchEvent(new Event("play"));
@@ -69,6 +71,18 @@ describe("useMusicPlayer", () => {
     expect(el?.volume).toBeGreaterThan(0);
     expect(el?.volume).toBeLessThan(1);
     expect(result.current.playing).toBe(true);
+  });
+
+  it("play() starts once and never restarts or pauses a track that is already playing", async () => {
+    const { result } = renderHook(() => useMusicPlayer());
+    await press(result.current.play);
+    await press(result.current.play);
+    expect(result.current.playing).toBe(true);
+    expect(FakeAudio.instances).toHaveLength(1);
+    expect(FakeAudio.instances[0]?.pauseCalls).toBe(0);
+    expect(FakeAudio.instances[0]?.playCalls).toBe(1);
+    await press(result.current.toggle);
+    expect(result.current.playing).toBe(false);
   });
 
   it("pauses on the second press and resumes on the third, reusing one element", async () => {
@@ -121,7 +135,7 @@ describe("MusicButton with an unavailable track", () => {
 
   it("says so, looks dimmed and no longer toggles", () => {
     const toggle = vi.fn();
-    renderButton({ playing: false, unavailable: true, toggle });
+    renderButton({ playing: false, unavailable: true, play: vi.fn(), toggle });
     const button = screen.getByRole("button", { name: "Muzik tidak tersedia" });
     expect(button.getAttribute("aria-disabled")).toBe("true");
     fireEvent.click(button);
@@ -130,7 +144,7 @@ describe("MusicButton with an unavailable track", () => {
 
   it("toggles normally otherwise", () => {
     const toggle = vi.fn();
-    renderButton({ playing: false, unavailable: false, toggle });
+    renderButton({ playing: false, unavailable: false, play: vi.fn(), toggle });
     fireEvent.click(screen.getByRole("button", { name: "Mainkan muzik" }));
     expect(toggle).toHaveBeenCalledTimes(1);
   });

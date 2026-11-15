@@ -37,6 +37,36 @@ describe("Shell", () => {
     expect(screen.queryByRole("region", { name: "Muka depan jemputan" })).not.toBeNull();
   });
 
+  it("starts the music from the Buka press itself, once, and never before it", () => {
+    const play = vi.spyOn(HTMLMediaElement.prototype, "play");
+    renderApp();
+    expect(play).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Buka" }));
+    expect(play).toHaveBeenCalledTimes(1);
+    act(() => void vi.advanceTimersByTime(OPEN_MS * 3));
+    expect(play).toHaveBeenCalledTimes(1);
+  });
+
+  it("opens the gate normally when the music cannot start, and says the music is unavailable", async () => {
+    vi.spyOn(HTMLMediaElement.prototype, "play").mockRejectedValue(new Error("NotAllowedError"));
+    renderApp();
+    fireEvent.click(screen.getByRole("button", { name: "Buka" }));
+    await act(async () => {
+      await Promise.resolve();
+    });
+    act(() => void vi.advanceTimersByTime(OPEN_MS));
+    expect(screen.queryByRole("region", { name: "Muka depan jemputan" })).toBeNull();
+    expect(screen.getByRole("button", { name: "Muzik tidak tersedia" })).toBeTruthy();
+    expect(hero().getAttribute("data-intro")).toBe("play");
+  });
+
+  it("links the hero's scroll cue to the details section", () => {
+    renderApp();
+    const cue = screen.getByRole("link", { name: "Lihat butiran", hidden: true });
+    expect(cue.getAttribute("href")).toBe("#details");
+    expect(document.getElementById("details")).not.toBeNull();
+  });
+
   it("mounts the drifting particles only after the gate has opened", () => {
     renderApp();
     expect(document.querySelector(".particles")).toBeNull();
@@ -57,14 +87,12 @@ describe("Shell", () => {
     expect(screen.getByRole("navigation").closest("[inert]")).toBeNull();
   });
 
-  it("links the bar to the RSVP and guestbook sections that exist today", () => {
+  it("links the bar to the sections that exist today, and every link has a target", () => {
     renderApp();
-    const hrefs = screen.getAllByRole("link", { hidden: true }).map((a) => a.getAttribute("href"));
-    expect(hrefs).toContain("#rsvp");
-    expect(hrefs).toContain("#guestbook");
-    expect(document.getElementById("rsvp")).not.toBeNull();
-    expect(document.getElementById("guestbook")).not.toBeNull();
-    expect(hrefs).not.toContain("#details");
+    const bar = screen.getByRole("navigation", { hidden: true });
+    const hrefs = Array.from(bar.querySelectorAll("a")).map((a) => a.getAttribute("href"));
+    expect(hrefs).toEqual(["#details", "#rsvp", "#guestbook"]);
+    for (const href of hrefs) expect(document.querySelector(href!)).not.toBeNull();
     expect(hrefs).not.toContain("#location");
   });
 

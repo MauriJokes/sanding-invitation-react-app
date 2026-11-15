@@ -28,8 +28,8 @@ describe("App shell", () => {
     renderApp();
     expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Izyan & Adam");
     expect(screen.getAllByText("Walimatulurus").length).toBeGreaterThan(0);
-    expect(screen.getByText("The Rizqun International Hotel")).toBeTruthy();
-    expect(screen.getByText(/Isnin, 28 Disember 2026/i)).toBeTruthy();
+    expect(screen.getAllByText("The Rizqun International Hotel").length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Isnin, 28 Disember 2026/i).length).toBeGreaterThan(0);
     await screen.findByLabelText("Nama keluarga / kumpulan");
   });
 
@@ -54,7 +54,7 @@ describe("App shell", () => {
     fireEvent.click(toEnglish);
     expect(document.documentElement.lang).toBe("en");
     expect(screen.getByRole("link", { name: "Skip to content" })).toBeTruthy();
-    expect(screen.getByText(/Monday, 28 December 2026/i)).toBeTruthy();
+    expect(screen.getAllByText(/Monday, 28 December 2026/i).length).toBeGreaterThan(0);
     expect(screen.getByLabelText("Family / group name")).toBeTruthy();
 
     const toMalay = screen.getByRole("button", { name: "Tukar bahasa ke Bahasa Melayu" });

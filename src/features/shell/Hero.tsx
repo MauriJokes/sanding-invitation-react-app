@@ -1,5 +1,6 @@
 import { useMemo, type CSSProperties, type Ref } from "react";
 import { EVENT } from "../../../shared/config/event";
+import { useI18n } from "../../i18n/I18nProvider";
 import { useViewportSize } from "../../lib/useViewportSize";
 import { Rosette } from "../motif/Rosette";
 import { bandRosettes } from "../motif/rosettes";
@@ -44,6 +45,7 @@ interface HeroProps {
 }
 
 export function Hero({ intro, headingRef, date }: HeroProps) {
+  const { t } = useI18n();
   return (
     <section className="hero" data-intro={intro ? "play" : undefined} aria-labelledby="hero-title">
       <Corner side="left" />
@@ -59,6 +61,9 @@ export function Hero({ intro, headingRef, date }: HeroProps) {
           <span>{date}</span>
           <span>{EVENT.venueName}</span>
         </p>
+        <a href="#details" className="hero-rise hero-cue" style={{ "--i": 3 } as RiseStyle}>
+          {t.heroScroll}
+        </a>
       </div>
       <Band />
     </section>

@@ -81,6 +81,24 @@ export interface Strings {
   musicPlay: string;
   musicPause: string;
   musicUnavailable: string;
+  detailsGreeting: string;
+  detailsIntro: string;
+  detailsInvite: string;
+  factDate: string;
+  factTime: string;
+  factVenue: string;
+  dressHeading: string;
+  dressBurgundy: string;
+  dressNavy: string;
+  countdownHeading: string;
+  countdownDays: string;
+  countdownHours: string;
+  countdownMinutes: string;
+  countdownSeconds: string;
+  countdownToday: string;
+  countdownAfter: string;
+  heroScroll: string;
+  countdownLabel: (when: string) => string;
 }
 
 export const strings: Record<Lang, Strings> = {
@@ -158,6 +176,24 @@ export const strings: Record<Lang, Strings> = {
     musicPlay: "Mainkan muzik",
     musicPause: "Jeda muzik",
     musicUnavailable: "Muzik tidak tersedia",
+    detailsGreeting: "Assalamualaikum WBT & Salam Sejahtera",
+    detailsIntro: "Dengan izin Allah S.W.T dan rahmatnya, kami:",
+    detailsInvite: "Dengan segala hormat dan takzim sukacita menjunjung Pengiran berangkat / mempersilakan Pehin / Tan Sri / Puan Sri / Dato / Datin / Awang / Dayang / Tuan / Puan / Encik dan Cik untuk hadir ke Majlis Walimatulurus anakanda kami:",
+    factDate: "Tarikh",
+    factTime: "Ketibaan Tetamu",
+    factVenue: "Tempat",
+    dressHeading: "Pakaian",
+    dressBurgundy: "Baju Melayu untuk lelaki dan Baju Kurung untuk wanita dalam warna burgundy.",
+    dressNavy: "Baju Melayu untuk lelaki dan Baju Kurung untuk wanita dalam warna biru navy.",
+    countdownHeading: "Menanti Hari",
+    countdownDays: "Hari",
+    countdownHours: "Jam",
+    countdownMinutes: "Minit",
+    countdownSeconds: "Saat",
+    countdownToday: "Hari ini hari bahagia kami.",
+    countdownAfter: "Terima kasih kerana meraikan hari bahagia kami.",
+    heroScroll: "Lihat butiran",
+    countdownLabel: (when) => `Kiraan detik ke ${when}`,
   },
   en: {
     rsvpHeading: "RSVP",
@@ -233,6 +269,24 @@ export const strings: Record<Lang, Strings> = {
     musicPlay: "Play music",
     musicPause: "Pause music",
     musicUnavailable: "Music unavailable",
+    detailsGreeting: "Assalamualaikum WBT & Salam Sejahtera",
+    detailsIntro: "By the grace and blessings of Allah S.W.T, we",
+    detailsInvite: "With utmost respect and honor, we humbly invite Pengiran / Pehin / Tan Sri / Puan Sri / Dato / Datin / Sir / Madam / Mr / Ms to attend the walimatulurus of our beloved children:",
+    factDate: "Date",
+    factTime: "Guest Arrival",
+    factVenue: "Venue",
+    dressHeading: "Dress Code",
+    dressBurgundy: "Baju Melayu for gentlemen and Baju Kurung for ladies in burgundy.",
+    dressNavy: "Baju Melayu for gentlemen and Baju Kurung for ladies in navy blue.",
+    countdownHeading: "Counting Down",
+    countdownDays: "Days",
+    countdownHours: "Hours",
+    countdownMinutes: "Minutes",
+    countdownSeconds: "Seconds",
+    countdownToday: "Today is our special day.",
+    countdownAfter: "Thank you for celebrating our special day with us.",
+    heroScroll: "View details",
+    countdownLabel: (when) => `Countdown to ${when}`,
   },
 };
 

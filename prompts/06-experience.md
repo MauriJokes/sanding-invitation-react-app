@@ -18,15 +18,14 @@ Build the **approved** cover from `docs/DESIGN_SYSTEM.md` §5a, ported from the 
 
 The botanical cover idea (new flower and leaf art around the diamond) is **parked in `docs/BACKLOG.md` (B-1)** and is not part of M6.
 
-## Step 6b — Shell: navigation, hero, language and music control — built, awaiting owner review
+## Step 6b — Shell: navigation, hero, language and music control — approved
 
 - Bottom bar below 768 px, sticky top bar from 768 px; BM/EN toggle and the music control in the bar; the temporary toggle is gone. The bar links only to sections that exist (today RSVP and Ucapan); Butiran and Lokasi appear when 6c and 6d add those sections, with no change to the bar.
 - Hero with the approved corner medallions and tassels, the tile band with turning rosettes, drifting particles (mounted only once the gate has opened) and the entrance sequence, which starts when **Buka** is pressed so it lands as the doors open.
-- Hero scroll cue ("Lihat butiran") is added in 6c, when its target exists.
 - The music control was a visual stub here; it is wired to the real track in 6e.
 - The hero keeps the approved medallion corners; no botanicals (B-1 in `docs/BACKLOG.md`).
 
-## Step 6c — Invitation, event and countdown
+## Step 6c — Invitation, event and countdown — built, awaiting owner review
 
 Invitation text (adjusted for one event, duplicate greeting removed), hosts, couple, event facts (date, arrival 19:15, venue, no end time), dress code (Malay/English), countdown to 2026-12-28 19:15 `Asia/Brunei` with a clear state after the date.
 
@@ -36,7 +35,7 @@ Venue block, copyable address, directions link (open in the maps app), no embedd
 
 ## Step 6e — Music — built (pending licence decision, D-16)
 
-One looping track from `public/audio/music.mp3`, played only by the explicit button (nothing is requested before the first press), failure shows "Muzik tidak tersedia" and never blocks the page. The track file is git-ignored until its licence is confirmed.
+One looping track from `public/audio/music.mp3`, started by the guest pressing Buka (D-35) or the music button, never on load (nothing is requested before then), failure shows "Muzik tidak tersedia" and never blocks the page. The track file is git-ignored until its licence is confirmed.
 
 ## Step 6f — Assembly, desktop layout and hardening
 

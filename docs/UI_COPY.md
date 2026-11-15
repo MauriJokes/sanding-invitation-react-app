@@ -127,3 +127,14 @@ Source of truth: `src/i18n/strings.ts` (TypeScript enforces that both languages 
 | `musicPlay` | Mainkan muzik | Play music | draft |
 | `musicPause` | Jeda muzik | Pause music | draft |
 | `musicUnavailable` | Muzik tidak tersedia | Music unavailable | draft |
+| `detailsGreeting` | Assalamualaikum WBT & Salam Sejahtera | Assalamualaikum WBT & Salam Sejahtera | approved (source) |
+| `detailsIntro` | Dengan izin Allah S.W.T dan rahmatnya, kami: | By the grace and blessings of Allah S.W.T, we | approved (source) |
+| `detailsInvite` | (see first table, `inviteText`) | (see first table) | closing line proofread pending |
+| `factDate` / `factTime` / `factVenue` | Tarikh / Ketibaan Tetamu / Tempat | Date / Guest Arrival / Venue | approved (M1) |
+| `dressHeading`, `dressBurgundy`, `dressNavy` | Pakaian + the two dress lines | Dress Code + the two lines | approved (M1) |
+| `countdownHeading` | Menanti Hari | Counting Down | approved (M1, `cdT`) |
+| `countdownDays` / `Hours` / `Minutes` / `Seconds` | Hari / Jam / Minit / Saat | Days / Hours / Minutes / Seconds | approved (M1) |
+| `countdownLabel` | Kiraan detik ke {date, time} | Countdown to {date, time} | draft |
+| `countdownToday` | Hari ini hari bahagia kami. | Today is our special day. | draft |
+| `countdownAfter` | Terima kasih kerana meraikan hari bahagia kami. | Thank you for celebrating our special day with us. | draft |
+| `heroScroll` | Lihat butiran | View details | approved (M1, `scroll`) |
