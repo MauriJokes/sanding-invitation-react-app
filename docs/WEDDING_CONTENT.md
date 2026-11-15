@@ -23,7 +23,7 @@ This is the single source of truth for the Sanding invitation page and its RSVP 
 - Full public venue address: Abdul Razak Complex, Jln Gadong, Bandar Seri Begawan BE3519, Brunei Darussalam
 - Google Maps / directions URL: https://share.google/1Q23UIJpJpyXhl9l9
 - Venue timezone: `Asia/Brunei`
-- Dress code: Refer to `docs/WEDDING_CONTENT_INFO/dresscode.md`
+- Dress code: **not shown on the site** (owner decision, 2026-11-15). `docs/WEDDING_CONTENT_INFO/dresscode.md` is kept only as the original supplied text.
 - Additional guest guidance: None else so far but open to suggestions if you have any
 
 ## RSVP configuration

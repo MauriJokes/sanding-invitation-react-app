@@ -15,7 +15,7 @@ The product-access and RSVP decisions below are confirmed. Remaining rows concer
 | D-09 | Guestbook identity | **Confirmed:** display name optional; "Send anonymously" checkbox; blank name = anonymous. Anonymous entries are stored and mirrored to Sheets but never shown publicly. Named entries are shown newest first. |
 | D-10 | Guestbook abuse handling | **Confirmed:** immediate publication of named entries; length limits, MongoDB TTL rate limits (hashed IP), honeypot, plain-text rendering, owner-controlled manual removal. |
 | D-11 | Guestbook retention | **Default adopted (owner may override):** entries stay until the owner removes them manually; nothing is auto-deleted. |
-| D-12 | Languages | **Default adopted (owner may override):** Malay/English toggle, Malay shown first. Agent drafts UI strings in both languages; owner proofreads the Malay (including dress code). |
+| D-12 | Languages | **Default adopted (owner may override):** Malay/English toggle, Malay shown first. Agent drafts UI strings in both languages; owner proofreads the Malay. |
 | D-13 | Venue timezone | **Confirmed:** `Asia/Brunei` (UTC+8, no DST). |
 | D-14 | Google Sheets | **Confirmed:** MongoDB is authoritative; Sheets is a one-way mirror. Write-through on each submission with a `sheetStatus` pending flag and a manual backfill script; no scheduled sync (Vercel Hobby). |
 | D-15 | Sheets layout | **Confirmed:** two worksheets, `Family RSVP` and `Guestbook` (see `GOOGLE_SHEETS_SYNC.md`). No secrets. |

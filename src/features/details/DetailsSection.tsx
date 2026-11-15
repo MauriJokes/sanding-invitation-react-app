@@ -4,7 +4,8 @@ import { COUPLE, HOST_GROUPS, HOST_TITLE } from "./content";
 import { formatArrivalTime, formatEventDate } from "./time";
 
 const eyebrow = "text-[0.85rem] font-semibold uppercase tracking-[0.24em] text-gold-ink";
-const body = "text-[1.3rem] leading-[1.55]";
+const body = "text-[1.0rem]";
+const coupleName = "text-[clamp(1.5rem,6vw,2rem)] font-semibold uppercase leading-[1.3] tracking-[0.06em] text-balance";
 
 function Rule() {
   return (
@@ -14,11 +15,11 @@ function Rule() {
   );
 }
 
-function Ampersand() {
-  return <p className="font-script text-[2.6rem] leading-none text-gold-ink">&amp;</p>;
+function Ampersand({ large = false }: { large?: boolean }) {
+  return <p className={`font-script leading-none text-gold-ink ${large ? "text-[3.4rem]" : "text-[1.8rem]"}`}>&amp;</p>;
 }
 
-/** The invitation text, the couple, the event facts and the dress code, from the owner-supplied copy. */
+/** The invitation text, the couple and the event facts, from the owner-supplied copy. The couple is the focus; the families are set smaller. */
 export function DetailsSection() {
   const { t, lang, locale } = useI18n();
   const arrival = formatArrivalTime(new Date(EVENT.startsAt), lang);
@@ -26,10 +27,10 @@ export function DetailsSection() {
 
   const family = (groups: typeof bride) =>
     groups.map((group, i) => (
-      <div key={i} className="grid gap-3 leading-[1.3]">
+      <div key={i} className="grid gap-2 leading-[1.3]">
         {group.map((person) => (
-          <p key={person.name}>
-            <span className="block text-[0.85rem] font-semibold uppercase tracking-[0.2em] text-gold-ink">{HOST_TITLE}</span>
+          <p key={person.name} className="text-[0.85rem]">
+            <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-gold-ink">{HOST_TITLE}</span>
             <span className="block font-semibold">{person.name}</span>
             <span className="block">{person.lineage}</span>
           </p>
@@ -48,7 +49,7 @@ export function DetailsSection() {
         <Rule />
         <p className={body}>{t.detailsIntro}</p>
 
-        <div className="my-7 grid gap-6">
+        <div className="my-6 grid gap-4">
           {family(bride)}
           <Ampersand />
           {family(groom)}
@@ -56,10 +57,10 @@ export function DetailsSection() {
 
         <p className={`my-8 text-balance ${body}`}>{t.detailsInvite}</p>
 
-        <div className="mt-5 grid gap-2">
-          <p className="text-[1.15rem] font-semibold uppercase leading-[1.4] tracking-[0.06em]">{COUPLE[0]}</p>
-          <Ampersand />
-          <p className="text-[1.15rem] font-semibold uppercase leading-[1.4] tracking-[0.06em]">{COUPLE[1]}</p>
+        <div className="mt-6 grid gap-3">
+          <p className={coupleName}>{COUPLE[0]}</p>
+          <Ampersand large />
+          <p className={coupleName}>{COUPLE[1]}</p>
         </div>
 
         <Rule />
@@ -81,21 +82,6 @@ export function DetailsSection() {
             </dd>
           </div>
         </dl>
-
-        <div className="mt-8 border-t border-gold pt-5">
-          <h3 className="text-[0.9rem] font-semibold uppercase tracking-[0.28em] text-gold-ink">{t.dressHeading}</h3>
-          <ul className="m-0 mt-3 grid list-none gap-3 p-0">
-            {[
-              { text: t.dressBurgundy, swatch: "bg-burgundy" },
-              { text: t.dressNavy, swatch: "bg-navy" },
-            ].map((d) => (
-              <li key={d.swatch} className="text-balance">
-                <span aria-hidden="true" className={`mr-3 inline-block size-[14px] rounded-full border border-current align-middle ${d.swatch}`} />
-                <span>{d.text}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
       </div>
     </section>
   );

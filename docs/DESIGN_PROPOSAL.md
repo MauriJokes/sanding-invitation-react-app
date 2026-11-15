@@ -50,7 +50,7 @@ I tried Pinyon Script first and replaced it: its capital "I" reads like a "Z" in
 
 ## 5. Flow (from `uiux-sample/`, adjusted to `docs/`)
 
-Cover (gate) → hero (names, date, venue) → invitation text and details (with dress code) → countdown → RSVP → location → guestbook → footer. Navigation (owner request: bottom on mobile):
+Cover (gate) → hero (names, date, venue) → invitation text and details → countdown → RSVP → location → guestbook → footer. Navigation (owner request: bottom on mobile):
 - **Below 768 px:** a fixed bottom bar with four icon-and-label anchors (Butiran, RSVP, Lokasi, Ucapan), then a divider and two icon-only controls (BM/EN and music). It respects the iOS safe area, marks the current section with a gold line as well as colour, and hides while a text field is focused so the on-screen keyboard is not crowded.
 - **768 px and up (tablet and desktop):** the same links in a sticky top bar with the monogram on the left and the controls on the right.
 - **Side rail not recommended:** the content is a single centred column, so a rail would add width and a second layout to maintain for no gain. Say so if you would still like to see it. No Money Gift, Wishlist, Contact or Calendar, and no programme list: there is one event with an arrival time and no end time.

@@ -38,11 +38,13 @@ describe("owner-supplied copy", () => {
     expect(HOST_GROUPS.flat()).toHaveLength(8);
   });
 
-  it("has the dress code lines from the supplied dress code file", () => {
-    const supplied = lines(doc("dresscode.md")).map((l) => l.replace(/^-\s*/, "")).filter(Boolean);
-    renderIt("en");
-    for (const line of supplied) expect(screen.getByText(line)).toBeTruthy();
-    expect(supplied).toHaveLength(2);
+  it("does not show a dress code (owner decision)", () => {
+    for (const lang of ["ms", "en"] as const) {
+      const { container } = renderIt(lang);
+      expect(container.textContent).not.toMatch(/Pakaian|Dress Code|Baju (Melayu|Kurung)/i);
+      expect(container.querySelector("h3, ul, li")).toBeNull();
+      cleanup();
+    }
   });
 
   it("uses the closing lines the owner approved for the single Walimatulurus event", () => {
@@ -98,18 +100,23 @@ describe("DetailsSection", () => {
     const { container } = renderIt("en");
     expect(Array.from(container.querySelectorAll("dt")).map((e) => e.textContent)).toEqual(["Date", "Guest Arrival", "Venue"]);
     expect(Array.from(container.querySelectorAll("dd"))[1]?.textContent).toBe("7:15 PM");
-    expect(screen.getByRole("heading", { level: 3, name: "Dress Code" })).toBeTruthy();
     expect(screen.getByRole("heading", { level: 2, name: "Details" })).toBeTruthy();
   });
 
   it("has decoration hidden from assistive technology and no links, buttons or images", () => {
     const { container } = renderIt();
     expect(container.querySelectorAll("a, button, img, input").length).toBe(0);
-    const swatches = container.querySelectorAll("li > span:first-child");
-    expect(swatches).toHaveLength(2);
-    for (const s of swatches) expect(s.getAttribute("aria-hidden")).toBe("true");
-    const rules = container.querySelectorAll("div[aria-hidden=true]");
-    expect(rules.length).toBe(2);
+    expect(container.querySelectorAll("div[aria-hidden=true]")).toHaveLength(2);
+  });
+
+  it("makes the couple the focus: their names are larger than the body text and the families' are smaller", () => {
+    renderIt();
+    const size = (el: Element) => /text-\[(?:clamp\()?([\d.]+)rem/.exec(el.className)?.[1];
+    const couple = screen.getByText(COUPLE[0]!);
+    const family = screen.getByText(HOST_GROUPS[0]![0]!.name).closest("p")!;
+    const body = screen.getByText("Bismillah");
+    expect(Number(size(couple))).toBeGreaterThan(Number(size(body)));
+    expect(Number(size(family))).toBeLessThan(Number(size(body)));
   });
 
   it("keeps each piece of text in its own element so machine translation cannot break it", () => {

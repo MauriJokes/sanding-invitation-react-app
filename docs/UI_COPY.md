@@ -20,9 +20,6 @@ Written in M6 (shell strings below): gate, navigation and music labels. Still to
 | `fTime` | Ketibaan Tetamu | Guest Arrival |
 | `fTimeV` | 7.15 malam | 7:15 PM |
 | `fPlace` | Tempat | Venue |
-| `dressT` | Pakaian | Dress Code |
-| `dress1` | Baju Melayu untuk lelaki dan Baju Kurung untuk wanita dalam warna burgundy. | Baju Melayu for gentlemen and Baju Kurung for ladies in burgundy. |
-| `dress2` | Baju Melayu untuk lelaki dan Baju Kurung untuk wanita dalam warna biru navy. | Baju Melayu for gentlemen and Baju Kurung for ladies in navy blue. |
 | `cdT` | Menanti Hari | Counting Down |
 | `cdD` | Hari | Days |
 | `cdH` | Jam | Hours |
@@ -131,7 +128,6 @@ Source of truth: `src/i18n/strings.ts` (TypeScript enforces that both languages 
 | `detailsIntro` | Dengan izin Allah S.W.T dan rahmatnya, kami: | By the grace and blessings of Allah S.W.T, we | approved (source) |
 | `detailsInvite` | (see first table, `inviteText`) | (see first table) | closing line proofread pending |
 | `factDate` / `factTime` / `factVenue` | Tarikh / Ketibaan Tetamu / Tempat | Date / Guest Arrival / Venue | approved (M1) |
-| `dressHeading`, `dressBurgundy`, `dressNavy` | Pakaian + the two dress lines | Dress Code + the two lines | approved (M1) |
 | `countdownHeading` | Menanti Hari | Counting Down | approved (M1, `cdT`) |
 | `countdownDays` / `Hours` / `Minutes` / `Seconds` | Hari / Jam / Minit / Saat | Days / Hours / Minutes / Seconds | approved (M1) |
 | `countdownLabel` | Kiraan detik ke {date, time} | Countdown to {date, time} | draft |

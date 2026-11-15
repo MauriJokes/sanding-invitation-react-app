@@ -87,9 +87,6 @@ export interface Strings {
   factDate: string;
   factTime: string;
   factVenue: string;
-  dressHeading: string;
-  dressBurgundy: string;
-  dressNavy: string;
   countdownHeading: string;
   countdownDays: string;
   countdownHours: string;
@@ -182,9 +179,6 @@ export const strings: Record<Lang, Strings> = {
     factDate: "Tarikh",
     factTime: "Ketibaan Tetamu",
     factVenue: "Tempat",
-    dressHeading: "Pakaian",
-    dressBurgundy: "Baju Melayu untuk lelaki dan Baju Kurung untuk wanita dalam warna burgundy.",
-    dressNavy: "Baju Melayu untuk lelaki dan Baju Kurung untuk wanita dalam warna biru navy.",
     countdownHeading: "Menanti Hari",
     countdownDays: "Hari",
     countdownHours: "Jam",
@@ -275,9 +269,6 @@ export const strings: Record<Lang, Strings> = {
     factDate: "Date",
     factTime: "Guest Arrival",
     factVenue: "Venue",
-    dressHeading: "Dress Code",
-    dressBurgundy: "Baju Melayu for gentlemen and Baju Kurung for ladies in burgundy.",
-    dressNavy: "Baju Melayu for gentlemen and Baju Kurung for ladies in navy blue.",
     countdownHeading: "Counting Down",
     countdownDays: "Days",
     countdownHours: "Hours",

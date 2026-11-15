@@ -27,7 +27,7 @@ The botanical cover idea (new flower and leaf art around the diamond) is **parke
 
 ## Step 6c — Invitation, event and countdown — built, awaiting owner review
 
-Invitation text (adjusted for one event, duplicate greeting removed), hosts, couple, event facts (date, arrival 19:15, venue, no end time), dress code (Malay/English), countdown to 2026-12-28 19:15 `Asia/Brunei` with a clear state after the date.
+Invitation text (adjusted for one event, duplicate greeting removed), hosts, couple, event facts (date, arrival 19:15, venue, no end time; no dress code, by owner decision), countdown to 2026-12-28 19:15 `Asia/Brunei` with a clear state after the date.
 
 ## Step 6d — Location and directions
 
