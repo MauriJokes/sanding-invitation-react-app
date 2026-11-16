@@ -24,7 +24,9 @@
     "sheets:backfill:prod": "node --env-file-if-exists=.env --import tsx scripts/backfill-sheets.ts"
   },
   "dependencies": {
+    "embla-carousel-react": "^8.6.0",
     "google-auth-library": "^11.3.4",
+    "libphonenumber-js": "^1.13.16",
     "mongodb": "^7.9.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

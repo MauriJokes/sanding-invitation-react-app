@@ -1,12 +1,27 @@
 import { EVENT } from "../../../shared/config/event";
 import { useI18n } from "../../i18n/I18nProvider";
-import { COUPLE, HOST_GROUPS, HOST_TITLE, ITINERARY } from "./content";
+import {
+  COUPLE,
+  HOST_GROUPS,
+  HOST_TITLE,
+  ITINERARY,
+  ITINERARY_EN,
+} from "./content";
+import { useCopy } from "./useCopy";
 
 const eyebrow =
   "text-[0.85rem] font-semibold uppercase tracking-[0.24em] text-gold-ink";
 const body = "text-[1.0rem]";
 const coupleName =
   "text-[clamp(1.5rem,6vw,2rem)] font-semibold uppercase leading-[1.3] tracking-[0.06em] text-balance";
+const actionClass =
+  "inline-flex min-h-12 min-w-0 flex-1 items-center justify-center rounded-[2px] border border-navy-deep px-3 text-center text-[0.8rem] font-semibold uppercase leading-tight tracking-[0.14em] no-underline sm:px-6 sm:text-[0.9rem] sm:tracking-[0.2em]";
+const primaryAction = `${actionClass} bg-navy-deep text-gold-bright hover:bg-gold-bright hover:text-navy-deep`;
+const secondaryAction = `${actionClass} bg-transparent text-navy hover:bg-navy-deep hover:text-gold-bright`;
+
+const addressParts = EVENT.venueAddress
+  .split(/(?<=,) /)
+  .map((part, i, all) => (i < all.length - 1 ? `${part} ` : part));
 
 function Rule() {
   return (
@@ -31,8 +46,15 @@ function Ampersand({ large = false }: { large?: boolean }) {
 
 /** The invitation text, the couple and the event facts, from the owner-supplied copy. The couple is the focus; the families are set smaller. */
 export function DetailsSection() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [bride, groom] = [HOST_GROUPS.slice(0, 2), HOST_GROUPS.slice(2)];
+  const { state, copy } = useCopy(`${EVENT.venueName}, ${EVENT.venueAddress}`);
+  const message =
+    state === "copied"
+      ? t.locationCopied
+      : state === "failed"
+        ? t.locationCopyFailed
+        : "";
 
   const family = (groups: typeof bride) => (
     <div className="grid gap-4">
@@ -89,7 +111,7 @@ export function DetailsSection() {
 
         <Rule />
 
-        <dl className="mt-9 grid gap-8 md:grid-cols-3">
+        <dl className="mt-9 grid gap-8 md:gap-12">
           <div>
             <dt className={eyebrow}>{t.factDate}</dt>
             <dd className={`mt-1 ${body} lining-nums`}>{t.normalDate}</dd>
@@ -97,10 +119,10 @@ export function DetailsSection() {
           </div>
           <div>
             <dt className={eyebrow}>{t.factItinerary}</dt>
-            <div className="relative mx-auto max-w-sm md:max-w-md">
+            <dd className="relative mx-auto max-w-sm md:max-w-md">
               <div className="bg-gold absolute top-0 bottom-0 left-[72px] w-px" />
               <ul className="mt-2 flex flex-col">
-                {ITINERARY.map((entry, i) => (
+                {(lang === "en" ? ITINERARY_EN : ITINERARY).map((entry, i) => (
                   <li key={i} className="flex gap-6">
                     <div className="w-16 flex-shrink-0 pt-[3px] text-right text-[0.75rem] leading-relaxed tracking-wide">
                       {entry.time}
@@ -115,16 +137,42 @@ export function DetailsSection() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </dd>
           </div>
           <div>
             <dt className={eyebrow}>{t.factVenue}</dt>
             <dd className={`mt-1 ${body}`}>
               <span className="block">{EVENT.venueName}</span>
               <span className="block">{EVENT.venueRoom}</span>
+              {/* Each part stays on one line, so the address only ever wraps at a comma. */}
+              <address className="block not-italic">
+                {addressParts.map((part) => (
+                  <span key={part} className="inline-block whitespace-pre-wrap">
+                    {part}
+                  </span>
+                ))}
+              </address>
             </dd>
           </div>
         </dl>
+
+        <div className="mx-auto mt-10 flex max-w-[30rem] gap-3">
+          <a
+            href={EVENT.directionsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={primaryAction}
+          >
+            <span>{t.locationMapOpen}</span>
+            <span className="sr-only">{t.locationNewTab}</span>
+          </a>
+          <button type="button" onClick={copy} className={secondaryAction}>
+            {t.locationCopy}
+          </button>
+        </div>
+        <p role="status" className="mt-3 min-h-[1.6rem] italic">
+          {message}
+        </p>
       </div>
     </section>
   );

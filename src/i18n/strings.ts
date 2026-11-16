@@ -11,6 +11,8 @@ export interface Strings {
   rsvpLead: string;
   familyLabel: string;
   familyHint: string;
+  phoneLabel: string;
+  phoneHint: string;
   statusLabel: string;
   statusAttending: string;
   statusDeclined: string;
@@ -19,7 +21,6 @@ export interface Strings {
   deadline: (date: string) => string;
   send: string;
   // RSVP: drafts
-  scopeNote: string;
   checking: string;
   configFailed: string;
   retry: string;
@@ -29,6 +30,9 @@ export interface Strings {
   nameRequired: (min: number) => string;
   nameTooLong: (max: number) => string;
   nameInvalid: string;
+  phoneRequired: string;
+  phoneTooLong: (max: number) => string;
+  phoneInvalid: string;
   errorDuplicate: string;
   errorDuplicateAfterRetry: string;
   errorLimitChanged: (n: number) => string;
@@ -42,17 +46,18 @@ export interface Strings {
   successDeclined: string;
   successFinal: string;
   summaryFamily: string;
+  summaryPhone: string;
   summaryAttendance: string;
   summaryCount: string;
   // Guestbook: approved in M1
   guestbookHeading: string;
   guestbookNameLabel: string;
+  guestbookNameRequired: string;
   guestbookAnonymous: string;
   guestbookMessageLabel: string;
   guestbookAnonymousHint: string;
   guestbookSend: string;
   // Guestbook: drafts
-  guestbookNameHint: string;
   guestbookPublished: string;
   guestbookPrivate: string;
   guestbookMessageRequired: string;
@@ -63,7 +68,15 @@ export interface Strings {
   guestbookLoading: string;
   guestbookEmpty: string;
   guestbookLoadFailed: string;
-  guestbookLoadMore: string;
+  guestbookLead: string;
+  guestbookOpen: string;
+  guestbookDialogTitle: string;
+  guestbookClose: string;
+  guestbookPrev: string;
+  guestbookNext: string;
+  guestbookPause: string;
+  guestbookPlay: string;
+  guestbookSlideLabel: (position: number, total: number) => string;
   // Shell
   crashTitle: string;
   crashBody: string;
@@ -110,62 +123,91 @@ export interface Strings {
 export const strings: Record<Lang, Strings> = {
   ms: {
     rsvpHeading: "RSVP",
-    rsvpLead: "Satu RSVP untuk seluruh keluarga / kumpulan anda.",
-    familyLabel: "Nama keluarga / kumpulan",
-    familyHint: "Gunakan nama yang sama untuk seluruh keluarga anda.",
+    rsvpLead: "Sila isi borang RSVP di bawah.",
+    familyLabel: "Nama Anda / Pasangan",
+    familyHint: 'e.g. "Izyan Jaludin" atau "Izyan & Adam"',
+    phoneLabel: "Nombor telefon",
+    phoneHint: "e.g. +673 812 3456.",
     statusLabel: "Kehadiran",
     statusAttending: "Akan hadir",
-    statusDeclined: "Tidak dapat hadir",
+    statusDeclined: "Tidak hadir",
     countLabel: "Jumlah kehadiran",
     max: (n) => `Maksimum ${n} orang.`,
     deadline: (date) => `RSVP ditutup pada ${date}.`,
-    send: "Send RSVP",
+    send: "Hantar RSVP",
 
-    scopeNote: "RSVP ini untuk majlis Walimatulurus sahaja.",
     checking: "Menyemak…",
-    configFailed: "Borang RSVP tidak dapat dimuatkan. Sila semak sambungan anda.",
+    configFailed:
+      "Borang RSVP tidak dapat dimuatkan. Sila semak sambungan anda.",
     retry: "Cuba lagi",
     decrease: "Kurang",
     increase: "Tambah",
     sending: "Menghantar…",
-    nameRequired: (min) => `Sila masukkan nama keluarga / kumpulan (sekurang-kurangnya ${min} aksara).`,
+    nameRequired: (min) =>
+      `Sila masukkan nama anda / pasangan (sekurang-kurangnya ${min} aksara).`,
     nameTooLong: (max) => `Nama terlalu panjang (maksimum ${max} aksara).`,
     nameInvalid: "Nama mengandungi aksara yang tidak dibenarkan.",
-    errorDuplicate: "Satu RSVP untuk keluarga / kumpulan ini telah diterima.",
+    phoneRequired: "Sila masukkan nombor telefon anda.",
+    phoneTooLong: (max) =>
+      `Nombor telefon terlalu panjang (maksimum ${max} aksara).`,
+    phoneInvalid:
+      "Sila masukkan nombor telefon yang sah dengan kod negara, contohnya +673 812 3456.",
+    errorDuplicate: "Satu RSVP untuk anda telah diterima.",
     errorDuplicateAfterRetry:
-      "Penghantaran anda sebelum ini mungkin telah berjaya. Satu RSVP untuk keluarga / kumpulan ini telah diterima.",
-    errorLimitChanged: (n) => `Had telah dikemas kini kepada ${n} orang. Sila semak jumlah anda.`,
+      "Penghantaran anda sebelum ini mungkin telah berjaya. Satu RSVP untuk anda telah diterima.",
+    errorLimitChanged: (n) =>
+      `Had telah dikemas kini kepada ${n} orang. Sila semak jumlah anda.`,
     errorValidation: "Sila semak jawapan anda.",
     errorRateLimited: "Terlalu banyak percubaan. Sila cuba lagi sebentar lagi.",
-    errorFailed: "RSVP anda belum dihantar. Sila semak sambungan anda dan cuba lagi. Maklumat anda masih ada.",
+    errorFailed:
+      "RSVP anda belum dihantar. Sila semak sambungan anda dan cuba lagi. Maklumat anda masih ada.",
     closedTitle: "RSVP telah ditutup.",
-    closedBody: "Jika anda perlu membuat perubahan, sila hubungi pasangan secara terus.",
+    closedBody:
+      "Jika anda perlu membuat perubahan, sila hubungi Izyan dan Adam secara terus.",
     successTitle: "Terima kasih",
-    successAttending: "RSVP anda untuk majlis Walimatulurus telah diterima.",
-    successDeclined: "Terima kasih kerana memaklumkan kami. RSVP anda untuk majlis Walimatulurus telah diterima.",
-    successFinal: "RSVP ini muktamad. Jika anda perlu membuat pembetulan, sila hubungi pasangan secara terus.",
-    summaryFamily: "Keluarga / kumpulan",
+    successAttending:
+      "RSVP anda untuk Majlis Perkahwinan Izyan dan Adam telah diterima.",
+    successDeclined:
+      "Terima kasih kerana memaklumkan kami. RSVP anda untuk Majlis Perkahwinan Izyan dan Adam telah diterima.",
+    successFinal:
+      "RSVP ini muktamad. Jika anda perlu membuat pembetulan, sila hubungi Izyan dan Adam secara terus.",
+    summaryFamily: "Nama Anda / Pasangan",
+    summaryPhone: "Nombor telefon",
     summaryAttendance: "Kehadiran",
     summaryCount: "Jumlah",
 
     guestbookHeading: "Ucapan",
-    guestbookNameLabel: "Nama (pilihan)",
-    guestbookAnonymous: "Hantar tanpa nama",
+    guestbookNameLabel: "Nama",
+    guestbookNameRequired: "Sila masukkan nama anda.",
+    guestbookAnonymous: "Hantar secara rahsia",
     guestbookMessageLabel: "Ucapan anda",
-    guestbookAnonymousHint: "Ucapan tanpa nama hanya dilihat oleh pasangan dan tidak dipaparkan di sini.",
+    guestbookAnonymousHint:
+      "Ucapan tersebut hanya diterima oleh pasangan dan tidak akan dipaparkan di sini",
     guestbookSend: "Hantar Ucapan",
-    guestbookNameHint: "Jika dikosongkan, ucapan anda tidak akan dipaparkan.",
     guestbookPublished: "Terima kasih! Ucapan anda telah dipaparkan.",
-    guestbookPrivate: "Terima kasih! Ucapan anda telah diterima dan hanya dilihat oleh pasangan.",
+    guestbookPrivate:
+      "Terima kasih! Ucapan anda telah diterima dan hanya dilihat oleh pasangan.",
     guestbookMessageRequired: "Sila tulis ucapan anda.",
-    guestbookMessageTooLong: (max) => `Ucapan terlalu panjang (maksimum ${max} aksara).`,
+    guestbookMessageTooLong: (max) =>
+      `Ucapan terlalu panjang (maksimum ${max} aksara).`,
     guestbookMessageInvalid: "Ucapan mengandungi aksara yang tidak dibenarkan.",
-    guestbookErrorFailed: "Ucapan anda belum dihantar. Sila semak sambungan anda dan cuba lagi. Ucapan anda masih ada.",
+    guestbookErrorFailed:
+      "Ucapan anda belum dihantar. Sila semak sambungan anda dan cuba lagi. Ucapan anda masih ada.",
     guestbookListLabel: "Ucapan daripada tetamu",
     guestbookLoading: "Memuatkan ucapan…",
     guestbookEmpty: "Belum ada ucapan. Jadilah yang pertama!",
     guestbookLoadFailed: "Ucapan tidak dapat dimuatkan.",
-    guestbookLoadMore: "Muat lagi",
+    guestbookLead:
+      "Baca ucapan daripada keluarga dan sahabat, atau tinggalkan ucapan anda untuk kami.",
+    guestbookOpen: "Tinggalkan Ucapan",
+    guestbookDialogTitle: "Tinggalkan Ucapan Anda",
+    guestbookClose: "Tutup",
+    guestbookPrev: "Ucapan sebelumnya",
+    guestbookNext: "Ucapan seterusnya",
+    guestbookPause: "Jeda slaid",
+    guestbookPlay: "Main slaid",
+    guestbookSlideLabel: (position, total) =>
+      `Ucapan ${position} daripada ${total}`,
     crashTitle: "Maaf, sesuatu tidak kena.",
     crashBody: "Halaman ini tidak dapat dipaparkan. Sila muat semula halaman.",
     crashReload: "Muat semula",
@@ -184,7 +226,8 @@ export const strings: Record<Lang, Strings> = {
     musicUnavailable: "Muzik tidak tersedia",
     detailsGreeting: "Assalamualaikum WBT & Salam Sejahtera",
     detailsIntro: "Dengan izin Allah S.W.T dan rahmatnya, kami:",
-    detailsInvite: "Dengan penuh hormat dan takzim sukacita mejunjung Pengiran berangkat / mempersilakan Pehin / Dato / Datin / Awang / Dayang / Tuan / Puan / Encik / Cik hadir ke Majlis Perkahwinananaknda / kekanda abis peramba /kaola / kami:",
+    detailsInvite:
+      "Dengan penuh hormat dan takzim sukacita menjunjung Pengiran berangkat / mempersilakan Pehin / Dato / Datin / Awang / Dayang / Tuan / Puan / Encik / Cik hadir ke Majlis Perkahwinan anakanda / kekanda abis peramba / kaola / kami:",
     detailsAnd: "dengan penuh hatinya",
     factDate: "Tarikh",
     factItinerary: "Aturcara Majlis",
@@ -209,62 +252,91 @@ export const strings: Record<Lang, Strings> = {
   },
   en: {
     rsvpHeading: "RSVP",
-    rsvpLead: "One RSVP for your whole family / group.",
-    familyLabel: "Family / group name",
-    familyHint: "Please use the same name for your whole family.",
+    rsvpLead: "Please fill out the RSVP form below.",
+    familyLabel: "Your name / partner's name",
+    familyHint: 'e.g. "Izyan Jaludin" or "Izyan and Adam"',
+    phoneLabel: "Phone number",
+    phoneHint: "e.g. +673 812 3456.",
     statusLabel: "Attendance",
     statusAttending: "Attending",
-    statusDeclined: "Unable to attend",
+    statusDeclined: "Not attending",
     countLabel: "Total attendees",
     max: (n) => `Maximum ${n} people.`,
     deadline: (date) => `RSVP closes on ${date}.`,
     send: "Send RSVP",
 
-    scopeNote: "This RSVP is for the Walimatulurus celebration only.",
     checking: "Checking…",
-    configFailed: "The RSVP form could not be loaded. Please check your connection.",
+    configFailed:
+      "The RSVP form could not be loaded. Please check your connection.",
     retry: "Try again",
     decrease: "Decrease",
     increase: "Increase",
     sending: "Sending…",
-    nameRequired: (min) => `Please enter your family / group name (at least ${min} characters).`,
+    nameRequired: (min) =>
+      `Please enter your name / your partner's name (at least ${min} characters).`,
     nameTooLong: (max) => `The name is too long (maximum ${max} characters).`,
     nameInvalid: "The name contains characters that are not allowed.",
-    errorDuplicate: "An RSVP for this family/group has already been received.",
+    phoneRequired: "Please enter your phone number.",
+    phoneTooLong: (max) =>
+      `The phone number is too long (maximum ${max} characters).`,
+    phoneInvalid:
+      "Please enter a valid phone number with the country code, e.g. +673 812 3456.",
+    errorDuplicate: "An RSVP for this name has already been received.",
     errorDuplicateAfterRetry:
-      "Your earlier submission may have gone through. An RSVP for this family/group has already been received.",
-    errorLimitChanged: (n) => `The limit has been updated to ${n} people. Please check your total.`,
+      "Your earlier submission may have gone through. An RSVP for this name has already been received.",
+    errorLimitChanged: (n) =>
+      `The limit has been updated to ${n} people. Please check your total.`,
     errorValidation: "Please check your responses.",
     errorRateLimited: "Too many attempts. Please try again in a little while.",
-    errorFailed: "Your RSVP has not been sent. Please check your connection and try again. Your details are still here.",
+    errorFailed:
+      "Your RSVP has not been sent. Please check your connection and try again. Your details are still here.",
     closedTitle: "RSVP is now closed.",
-    closedBody: "If you need to make a change, please contact the couple directly.",
+    closedBody:
+      "If you need to make a change, please contact Izyan and Adam directly.",
     successTitle: "Thank you",
-    successAttending: "Your RSVP for the Walimatulurus celebration has been received.",
-    successDeclined: "Thank you for letting us know. Your RSVP for the Walimatulurus celebration has been received.",
-    successFinal: "This RSVP is final. If you need to make a correction, please contact the couple directly.",
-    summaryFamily: "Family / group",
+    successAttending:
+      "Your RSVP for Izyan and Adam's Wedding Ceremony has been received.",
+    successDeclined:
+      "Thank you for letting us know. Your RSVP for Izyan and Adam's Wedding Ceremony has been received.",
+    successFinal:
+      "This RSVP is final. If you need to make a correction, please contact Izyan and Adam directly.",
+    summaryFamily: "Your name / partner's name",
+    summaryPhone: "Phone number",
     summaryAttendance: "Attendance",
     summaryCount: "Total",
 
     guestbookHeading: "Wishes",
-    guestbookNameLabel: "Name (optional)",
-    guestbookAnonymous: "Send anonymously",
+    guestbookNameLabel: "Name",
+    guestbookNameRequired: "Please enter your name.",
+    guestbookAnonymous: "Send privately",
     guestbookMessageLabel: "Your wishes",
-    guestbookAnonymousHint: "Anonymous wishes are seen only by the couple and are not displayed here.",
+    guestbookAnonymousHint:
+      "Private wishes are seen only by the couple and are not displayed here.",
     guestbookSend: "Send Wishes",
-    guestbookNameHint: "If left blank, your wish will not be displayed.",
     guestbookPublished: "Thank you! Your wish is now displayed.",
-    guestbookPrivate: "Thank you! Your wish has been received and will be seen only by the couple.",
+    guestbookPrivate:
+      "Thank you! Your wish has been received and will be seen only by the couple.",
     guestbookMessageRequired: "Please write your wish.",
-    guestbookMessageTooLong: (max) => `Your message is too long (maximum ${max} characters).`,
-    guestbookMessageInvalid: "Your message contains characters that are not allowed.",
-    guestbookErrorFailed: "Your wish has not been sent. Please check your connection and try again. Your message is still here.",
+    guestbookMessageTooLong: (max) =>
+      `Your message is too long (maximum ${max} characters).`,
+    guestbookMessageInvalid:
+      "Your message contains characters that are not allowed.",
+    guestbookErrorFailed:
+      "Your wish has not been sent. Please check your connection and try again. Your message is still here.",
     guestbookListLabel: "Wishes from guests",
     guestbookLoading: "Loading wishes…",
     guestbookEmpty: "No wishes yet. Be the first!",
     guestbookLoadFailed: "Wishes could not be loaded.",
-    guestbookLoadMore: "Load more",
+    guestbookLead:
+      "Read the wishes from family and friends, or leave a message of your own for us.",
+    guestbookOpen: "Leave a Wish",
+    guestbookDialogTitle: "Leave Your Wishes",
+    guestbookClose: "Close",
+    guestbookPrev: "Previous wish",
+    guestbookNext: "Next wish",
+    guestbookPause: "Pause slides",
+    guestbookPlay: "Play slides",
+    guestbookSlideLabel: (position, total) => `Wish ${position} of ${total}`,
     crashTitle: "Sorry, something went wrong.",
     crashBody: "This page could not be shown. Please reload the page.",
     crashReload: "Reload",
@@ -283,7 +355,8 @@ export const strings: Record<Lang, Strings> = {
     musicUnavailable: "Music unavailable",
     detailsGreeting: "Assalamualaikum WBT & Salam Sejahtera",
     detailsIntro: "By the grace and blessings of Allah S.W.T, we",
-    detailsInvite: "With utmost respect and honor, we humbly invite Pehin / Dato / Datin / Awang / Dayang / Sir / Madam / Mr / Ms to attend the Wedding Ceremony of our beloved children:",
+    detailsInvite:
+      "With utmost respect and honor, we humbly invite Pehin / Dato / Datin / Awang / Dayang / Sir / Madam / Mr / Ms to attend the Wedding Ceremony of our beloved children:",
     detailsAnd: "and",
     factDate: "Date",
     factItinerary: "Itinerary",
@@ -303,7 +376,8 @@ export const strings: Record<Lang, Strings> = {
     locationNewTab: "(opens in a new tab)",
     locationCopy: "Copy address",
     locationCopied: "Address copied.",
-    locationCopyFailed: "The address could not be copied. Please copy it manually.",
+    locationCopyFailed:
+      "The address could not be copied. Please copy it manually.",
     countdownLabel: (when) => `Countdown to ${when}`,
   },
 };

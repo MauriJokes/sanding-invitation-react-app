@@ -10,7 +10,7 @@ Google Sheets (write-through, no cron):
 - Test failure leaving `pending`, backfill, repeated backfill and formula-like input.
 
 Guestbook:
-- Optional name, "Send anonymously" checkbox, required message, honeypot field.
+- Name (required from M6, D-38), "Send privately" checkbox, required message, honeypot field.
 - Named entries publish immediately; anonymous entries are stored and mirrored but never returned publicly.
 - Validate lengths, rate-limit writes (MongoDB TTL, hashed IP), render plain text only.
 - Return bounded, cursor-paginated public records, newest first.

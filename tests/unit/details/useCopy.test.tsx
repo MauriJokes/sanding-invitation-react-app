@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { useCopy } from "../../../src/features/location/useCopy";
+import { useCopy } from "../../../src/features/details/useCopy";
 
 const setClipboard = (value: unknown) => Object.defineProperty(navigator, "clipboard", { configurable: true, value });
 

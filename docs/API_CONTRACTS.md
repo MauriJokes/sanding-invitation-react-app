@@ -46,14 +46,15 @@ Public, rate-limited, insert-only endpoint. No per-guest token, login, or group 
 Example requests (overall RSVP for the Sanding celebration):
 
 ```json
-{ "familyGroupName": "The Ahmad Family", "attendeeCount": 5, "status": "attending", "invite": "<optional shared code>" }
-{ "familyGroupName": "The Lim Family", "attendeeCount": 0, "status": "declined" }
+{ "familyGroupName": "The Ahmad Family", "phoneNumber": "+673 812 3456", "attendeeCount": 5, "status": "attending", "invite": "<optional shared code>" }
+{ "familyGroupName": "The Lim Family", "phoneNumber": "+673 712 3456", "attendeeCount": 0, "status": "declined" }
 ```
 
 `invite` is optional and is omitted for external guests. A wrong value is treated as external and gets the same response as a missing one, so validity is never revealed.
 
 Server validation:
 - Validate the family/group name: whitespace trimmed and collapsed, Unicode NFC, 2 to 100 characters, no control, format (zero-width, bidi) or similar characters.
+- Validate `phoneNumber`: at most 20 characters of digits, `+`, spaces, dashes and brackets; it must parse as a valid international number (country code required) and is stored in E.164. An invalid or missing value returns `400 VALIDATION_ERROR`.
 - Generate the canonical group key on the server; never trust a client-supplied key.
 - Validate `invite` with Zod (optional string, bounded length). Compare it to `INTERNAL_INVITE_CODE` in constant time and derive `guestType` (`internal` | `external`).
 - Validate status and attendee count: `attending` is 1 to the maximum for the derived `guestType` (internal 10, external 2); `declined` must be 0. Exceeding the limit returns `400` with code `ATTENDEE_LIMIT_EXCEEDED` and a message stating only the applicable maximum; attending with 0, or declining with a non-zero count, returns `400 VALIDATION_ERROR`.
@@ -103,7 +104,7 @@ Public, rate-limited (20 per 10 minutes per hashed IP; deliberately generous bec
 { "displayName": "A guest", "message": "Wishing you both a wonderful life together.", "anonymous": false, "homepage": "" }
 ```
 
-- `displayName` is optional, 60 characters at most. A blank or missing name, or `anonymous: true`, makes the entry anonymous: stored and mirrored to Sheets, never shown publicly. A name given with `anonymous: true` is still stored for the couple.
+- `displayName` is required, 1 to 60 characters after normalisation (Unicode NFC, whitespace collapsed, trimmed); control, zero-width and bidi characters are rejected. A blank or missing name returns `400 VALIDATION_ERROR` naming `displayName`. `anonymous: true` keeps the entry private: stored and mirrored to Sheets with the name, never shown publicly.
 - `message` is required, 1 to 500 characters after normalisation (Unicode NFC, whitespace collapsed, line breaks kept with at most one blank line in a row, trimmed). Control, zero-width and bidi characters are rejected.
 - `homepage` is the hidden spam trap: a real browser sends it empty. Any non-blank value returns `400 VALIDATION_ERROR` with the generic message and **no field names**, and stores and mirrors nothing.
 - Unknown keys (for example `isPublic`) are ignored.

@@ -15,6 +15,7 @@ interface FamilyGroupRSVP {
   _id: ObjectId;
   familyGroupName: string;
   canonicalGroupKey: string; // server-generated normalised value
+  phoneNumber: string; // E.164 (e.g. +6738123456), normalised server-side; never public, not used for duplicate detection
   status: RSVPStatus;
   attendeeCount: number; // attending: 1..max for guestType; declined: 0
   guestType: GuestType; // derived server-side from the verified invite; "external" by default
@@ -42,9 +43,9 @@ Rules:
 ```ts
 interface GuestbookEntry {
   _id: ObjectId;
-  displayName?: string; // optional; may be stored for anonymous entries so the couple can see it in Sheets
+  displayName?: string; // required for new entries so the couple know who wrote it; only shown publicly when isPublic (older entries may have none)
   message: string;
-  isPublic: boolean; // true only when a name was given and "Send anonymously" was not ticked
+  isPublic: boolean; // false when the guest ticked "Send privately"
   createdAt: Date;
   sheetStatus: SheetStatus;
   sheetSyncedAt?: Date;
@@ -57,7 +58,7 @@ Indexes:
 
 Rules:
 - Store plain text. Do not store rendered HTML.
-- A blank name means anonymous (`isPublic = false`).
+- The name is required. "Send privately" sets `isPublic = false`; the name is still stored for the couple.
 - Public reads filter on `isPublic: true` and project only `displayName`, `message`, `createdAt`.
 - Anonymous entries are never returned by any public endpoint.
 

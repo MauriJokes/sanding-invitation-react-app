@@ -41,15 +41,16 @@ describe("rejections that never reach the database", () => {
   it("rejects an invalid body with 400, naming fields but never echoing values", async () => {
     const secretish = "my-private-family-name-\u200b";
     const res = await send(rsvpRoute, {
-      body: JSON.stringify({ familyGroupName: secretish, status: "maybe", attendeeCount: 1.5 }),
+      body: JSON.stringify({ familyGroupName: secretish, phoneNumber: "not-a-number", status: "maybe", attendeeCount: 1.5 }),
     });
     expect(res.status).toBe(400);
     const text = await res.text();
     const body = JSON.parse(text) as { data: null; error: { code: string; fields: string[] } };
     expect(body.data).toBeNull();
     expect(body.error.code).toBe("VALIDATION_ERROR");
-    expect(body.error.fields.sort()).toEqual(["attendeeCount", "familyGroupName", "status"]);
+    expect(body.error.fields.sort()).toEqual(["attendeeCount", "familyGroupName", "phoneNumber", "status"]);
     expect(text).not.toContain("my-private-family-name");
+    expect(text).not.toContain("not-a-number");
   });
 
   it("never sends cross-origin or caching permissions", async () => {
@@ -64,7 +65,7 @@ describe("misconfiguration", () => {
     vi.stubEnv("RATE_LIMIT_SALT", "");
     const log = vi.spyOn(console, "error").mockImplementation(() => undefined);
     const res = await send(rsvpRoute, {
-      body: JSON.stringify({ familyGroupName: "The Ahmad Family", status: "attending", attendeeCount: 2, invite: "SECRET-INVITE-VALUE" }),
+      body: JSON.stringify({ familyGroupName: "The Ahmad Family", phoneNumber: "+673 812 3456", status: "attending", attendeeCount: 2, invite: "SECRET-INVITE-VALUE" }),
     });
     expect(res.status).toBe(500);
     const body = (await res.json()) as { error: { code: string; message: string } };

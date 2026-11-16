@@ -32,6 +32,7 @@ Two application-owned tabs in one spreadsheet. Use a fixed header row and put no
 | Guest Type | `internal` / `external` |
 | RSVP Status | `attending` / `declined` |
 | Attendee Count | `attendeeCount` |
+| Phone Number | `phoneNumber` (E.164) |
 
 **`Guestbook`**
 
@@ -39,8 +40,8 @@ Two application-owned tabs in one spreadsheet. Use a fixed header row and put no
 |---|---|
 | Entry ID | MongoDB `_id` |
 | Submitted At | `createdAt` |
-| Name | `displayName` (blank if none given) |
-| Visibility | `public` / `anonymous` |
+| Name | `displayName` (always given for new entries; blank only on entries from before the name became required) |
+| Visibility | `public` / `anonymous` (`anonymous` means the guest chose to send privately) |
 | Message | `message` |
 
 Never include the invite code, secrets, IP addresses or hashes.
@@ -76,7 +77,7 @@ Server-side: `GOOGLE_SERVICE_ACCOUNT_EMAIL`, `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY
 4. **Create the spreadsheet** (a new Google Sheet, owned by you). Copy its ID from the URL (`https://docs.google.com/spreadsheets/d/<ID>/edit`).
 5. **Share the spreadsheet with the service account's email** (the `client_email` in the key file) as **Editor**. Share it with nobody else except the couple.
 6. **Set the variables** in `.env.local` and in Vercel (Preview and Production): `GOOGLE_SERVICE_ACCOUNT_EMAIL` = `client_email`; `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY` = `private_key` (paste the value including the `-----BEGIN/END PRIVATE KEY-----` lines; literal `\n` sequences and real line breaks both work); `GOOGLE_SHEETS_SPREADSHEET_ID` = the ID. The two tab-name variables are optional (blank means `Family RSVP` / `Guestbook`).
-7. **Create the tabs and headers:** `npm run sheets:backfill -- --setup`. It prints `created`/`exists` and the header status for each tab, and never overwrites an existing header row (a different one is reported as `mismatch` and left alone).
+7. **Create the tabs and headers:** `npm run sheets:backfill -- --setup`. It prints `created`/`exists` and the header status for each tab, and never overwrites an existing header row (a different one is reported as `mismatch` and left alone). A `Family RSVP` tab created before the phone number was added has six headers: type `Phone Number` in cell G1 by hand (the app appends seven values per row, and rows written before that simply have an empty column G).
 8. **Send already-stored rows** (anything submitted before Sheets was configured): `npm run sheets:backfill`.
 
 Keep the two tabs for the app only: no other content in them, and no rows inserted above the header. Sorting or filtering the sheet is safe; the app never reads edits back.

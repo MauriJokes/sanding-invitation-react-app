@@ -31,7 +31,7 @@ Invitation text (adjusted for one event, duplicate greeting removed), hosts, cou
 
 ## Step 6d — Location and directions — approved
 
-Venue, room and full address as plain text; "Buka di Peta" opens the owner's map link in a new tab (`noopener noreferrer`); "Salin alamat" copies the venue and address and says whether it worked; no embedded map. Placed between the RSVP and the guestbook, in the navigation bar as Lokasi.
+Venue, room and full address as plain text; "Buka di Peta" opens the owner's map link in a new tab (`noopener noreferrer`); "Salin alamat" copies the venue and address and says whether it worked; no embedded map. Placed between the RSVP and the guestbook, in the navigation bar as Lokasi. (Superseded in 6g: the owner moved the two buttons into the details section, side by side; the separate location section is to be replaced by the owner.)
 
 ## Step 6e — Music — built (licence still to be sorted by the owner, D-16)
 
@@ -48,6 +48,14 @@ One looping track from `public/audio/music.mp3`, started by the guest pressing B
 ## Step 6g — Owner review rounds
 
 One or more rounds of feedback on the preview URL, with fixes, until the owner approves M6. Then M7 (production verification).
+
+Changes made in these rounds (all approved by the owner):
+- The owner edited the copy directly (`src/i18n/strings.ts`, `src/features/details/content.ts`): title "Walimatul Urus", the invitation lines, an itinerary instead of a guest-arrival fact, no RSVP scope note.
+- RSVP full-width attendee stepper.
+- RSVP phone number (D-36): validated in the browser and on the server, stored in E.164, mirrored to the `Family RSVP` sheet (new seventh column).
+- Details section: the map and copy-address buttons sit side by side below the three facts.
+- Guestbook slider with auto-play and a pop-up form, replacing the list (D-37, `DESIGN_SYSTEM.md` §5e).
+- Tests were brought up to date: copy-dependent tests now read the strings from `strings.ts` instead of repeating them, so later copy edits do not break the build.
 
 ## Owner inputs still needed
 

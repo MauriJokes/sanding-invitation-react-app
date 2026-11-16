@@ -3,8 +3,11 @@ import { RSVP_DEADLINE, VENUE_TIMEZONE } from "../../../shared/config/event";
 import {
   FAMILY_NAME_MAX,
   FAMILY_NAME_MIN,
-  hasDisallowedCharacters,
+  PHONE_NUMBER_MAX,
+  nameHasDisallowedCharacters,
+  phoneNumberHasDisallowedCharacters,
   normalizeFamilyName,
+  normalizePhoneNumber,
   type RsvpStatus,
 } from "../../../shared/rsvp/constants";
 import {
@@ -18,6 +21,7 @@ import type { Strings } from "../../i18n/strings";
 import { submitRsvp, type RsvpPayload } from "./api";
 import { useRsvpConfig } from "./useRsvpConfig";
 
+type PhoneNumberError = "required" | "tooLong" | "invalid";
 type NameError = "required" | "tooLong" | "invalid";
 type FormError =
   | "duplicate"
@@ -29,6 +33,7 @@ type FormError =
 
 interface Submitted {
   familyGroupName: string;
+  phoneNumber: string;
   status: RsvpStatus;
   attendeeCount: number;
 }
@@ -36,9 +41,25 @@ interface Submitted {
 function validateName(normalized: string): NameError | undefined {
   if (normalized.length < FAMILY_NAME_MIN) return "required";
   if (normalized.length > FAMILY_NAME_MAX) return "tooLong";
-  if (hasDisallowedCharacters(normalized)) return "invalid";
+  if (nameHasDisallowedCharacters(normalized)) return "invalid";
   return undefined;
 }
+
+function validatePhoneNumber(raw: string): PhoneNumberError | undefined {
+  const value = raw.trim();
+  if (value === "") return "required";
+  if (value.length > PHONE_NUMBER_MAX) return "tooLong";
+  if (phoneNumberHasDisallowedCharacters(value) || !normalizePhoneNumber(value))
+    return "invalid";
+  return undefined;
+}
+
+const phoneNumberErrorText = (t: Strings, error: PhoneNumberError) =>
+  error === "required"
+    ? t.phoneRequired
+    : error === "tooLong"
+      ? t.phoneTooLong(PHONE_NUMBER_MAX)
+      : t.phoneInvalid;
 
 const nameErrorText = (t: Strings, error: NameError) =>
   error === "required"
@@ -65,7 +86,7 @@ function formErrorText(t: Strings, error: FormError, max: number): string {
 }
 
 const stepButtonClass =
-  "min-h-12 w-[3.25rem] text-[1.6rem] text-navy disabled:cursor-not-allowed disabled:opacity-35";
+  "min-h-14 text-[1.8rem] text-navy hover:bg-navy/5 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:bg-transparent";
 
 /**
  * One public RSVP for the whole family/group, Walimatulurus only. `invite` is the candidate code from the
@@ -76,9 +97,13 @@ export function RsvpSection({ invite }: { invite?: string }) {
   const { state: config, reload } = useRsvpConfig(invite);
 
   const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [status, setStatus] = useState<RsvpStatus>("attending");
   const [count, setCount] = useState(1);
   const [nameError, setNameError] = useState<NameError | undefined>();
+  const [phoneNumberError, setPhoneNumberError] = useState<
+    PhoneNumberError | undefined
+  >();
   const [formError, setFormError] = useState<FormError | undefined>();
   const [submitting, setSubmitting] = useState(false);
   const [closedByServer, setClosedByServer] = useState(false);
@@ -88,6 +113,7 @@ export function RsvpSection({ invite }: { invite?: string }) {
   /** Payload of an attempt that got no usable answer, so a later "duplicate" can be explained honestly. */
   const unansweredRef = useRef<string | undefined>(undefined);
   const nameRef = useRef<HTMLInputElement>(null);
+  const phoneNumberRef = useRef<HTMLInputElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const successRef = useRef<HTMLHeadingElement>(null);
 
@@ -95,6 +121,9 @@ export function RsvpSection({ invite }: { invite?: string }) {
   const nameId = useId();
   const nameHintId = useId();
   const nameErrorId = useId();
+  const phoneNumberId = useId();
+  const phoneNumberHintId = useId();
+  const phoneNumberErrorId = useId();
   const countLabelId = useId();
 
   useEffect(() => {
@@ -120,17 +149,27 @@ export function RsvpSection({ invite }: { invite?: string }) {
     event.preventDefault();
     if (submittingRef.current || config.status !== "ready") return;
 
-    const normalized = normalizeFamilyName(name);
-    const invalid = validateName(normalized);
-    setNameError(invalid);
-    if (invalid) {
+    const normalizedName = normalizeFamilyName(name);
+    const invalidName = validateName(normalizedName);
+    setNameError(invalidName);
+    if (invalidName) {
       setFormError(undefined);
       nameRef.current?.focus();
       return;
     }
 
+    const invalidPhone = validatePhoneNumber(phoneNumber);
+    setPhoneNumberError(invalidPhone);
+    if (invalidPhone) {
+      setFormError(undefined);
+      phoneNumberRef.current?.focus();
+      return;
+    }
+    const normalizedPhone = normalizePhoneNumber(phoneNumber)!; // validated above
+
     const payload: RsvpPayload = {
-      familyGroupName: normalized,
+      familyGroupName: normalizedName,
+      phoneNumber: normalizedPhone,
       status,
       attendeeCount: status === "declined" ? 0 : shownCount,
       invite: config.invite,
@@ -147,7 +186,8 @@ export function RsvpSection({ invite }: { invite?: string }) {
     if (result.ok) {
       unansweredRef.current = undefined;
       setDone({
-        familyGroupName: normalized,
+        familyGroupName: normalizedName,
+        phoneNumber: normalizedPhone,
         status: result.data.status,
         attendeeCount: result.data.attendeeCount,
       });
@@ -182,6 +222,9 @@ export function RsvpSection({ invite }: { invite?: string }) {
         if (result.fields.includes("familyGroupName")) {
           setNameError("invalid");
           nameRef.current?.focus();
+        } else if (result.fields.includes("phoneNumber")) {
+          setPhoneNumberError("invalid");
+          phoneNumberRef.current?.focus();
         } else {
           setFormError("validation");
         }
@@ -214,6 +257,12 @@ export function RsvpSection({ invite }: { invite?: string }) {
                 {t.summaryFamily}
               </dt>
               <dd>{done.familyGroupName}</dd>
+            </div>
+            <div>
+              <dt className={`${labelClass} text-gold-ink`}>
+                {t.summaryPhone}
+              </dt>
+              <dd>{done.phoneNumber}</dd>
             </div>
             <div>
               <dt className={`${labelClass} text-gold-ink`}>
@@ -278,6 +327,7 @@ export function RsvpSection({ invite }: { invite?: string }) {
                 ref={nameRef}
                 id={nameId}
                 type="text"
+                placeholder={t.familyHint}
                 value={name}
                 maxLength={FAMILY_NAME_MAX * 2}
                 autoComplete="off"
@@ -294,11 +344,50 @@ export function RsvpSection({ invite }: { invite?: string }) {
                   nameError ? "border-burgundy border-2" : "border-slate"
                 }`}
               />
-              <span id={nameHintId} className={hintClass}>
+              {/* <span id={nameHintId} className={hintClass}>
                 {t.familyHint}
-              </span>
+              </span> */}
               <p id={nameErrorId} className="text-burgundy mt-2 font-semibold">
                 {nameError ? nameErrorText(t, nameError) : null}
+              </p>
+            </div>
+
+            <div>
+              <label htmlFor={phoneNumberId} className={labelClass}>
+                {t.phoneLabel}
+              </label>
+              <input
+                ref={phoneNumberRef}
+                id={phoneNumberId}
+                type="tel"
+                placeholder={t.phoneHint}
+                value={phoneNumber}
+                maxLength={PHONE_NUMBER_MAX}
+                autoComplete="tel"
+                aria-invalid={phoneNumberError ? true : undefined}
+                aria-describedby={
+                  phoneNumberError
+                    ? `${phoneNumberHintId} ${phoneNumberErrorId}`
+                    : phoneNumberHintId
+                }
+                onChange={(event) => {
+                  setPhoneNumber(event.target.value);
+                  if (phoneNumberError) setPhoneNumberError(undefined);
+                }}
+                className={`text-navy mt-2 min-h-12 w-full rounded-[2px] border bg-transparent px-3 py-2 text-[1.15rem] ${
+                  phoneNumberError ? "border-burgundy border-2" : "border-slate"
+                }`}
+              />
+              {/* <span id={phoneNumberHintId} className={hintClass}>
+                {t.phoneHint}
+              </span> */}
+              <p
+                id={phoneNumberErrorId}
+                className="text-burgundy mt-2 font-semibold"
+              >
+                {phoneNumberError
+                  ? phoneNumberErrorText(t, phoneNumberError)
+                  : null}
               </p>
             </div>
 
@@ -346,7 +435,7 @@ export function RsvpSection({ invite }: { invite?: string }) {
                 <div
                   role="group"
                   aria-labelledby={countLabelId}
-                  className="border-slate mt-2 flex w-fit rounded-[2px] border"
+                  className="border-slate mt-2 grid grid-cols-[3.5rem_1fr_3.5rem] items-stretch rounded-[2px] border"
                 >
                   <button
                     type="button"
@@ -357,7 +446,7 @@ export function RsvpSection({ invite }: { invite?: string }) {
                   >
                     −
                   </button>
-                  <output className="border-slate grid min-w-14 place-items-center border-x text-[1.5rem] lining-nums tabular-nums">
+                  <output className="border-slate grid place-items-center border-x text-[1.75rem] lining-nums tabular-nums">
                     {shownCount}
                   </output>
                   <button

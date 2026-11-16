@@ -11,6 +11,7 @@ afterEach(() => vi.useRealTimers());
 
 const family = (over: Record<string, unknown> = {}) => ({
   familyGroupName: "The Ahmad Family",
+  phoneNumber: "+673 812 3456",
   status: "attending",
   attendeeCount: 2,
   ...over,
@@ -55,6 +56,7 @@ describe("POST /api/rsvp: accepted submissions", () => {
     expect(docs[0]).toMatchObject({
       familyGroupName: "The Ahmad Family",
       canonicalGroupKey: "the ahmad family",
+      phoneNumber: "+6738123456",
       status: "attending",
       attendeeCount: 2,
       guestType: "external",
@@ -113,6 +115,9 @@ describe("POST /api/rsvp: limits come from the server-verified invite", () => {
     ["declined with attendees", { status: "declined", attendeeCount: 2 }],
     ["empty name", { familyGroupName: "   " }],
     ["zero-width character in the name", { familyGroupName: "Ahmad\u200bFamily" }],
+    ["missing phone number", { phoneNumber: undefined }],
+    ["phone number without a country code", { phoneNumber: "8123456" }],
+    ["phone number with letters", { phoneNumber: "+673 abc 3456" }],
   ])("rejects %s with 400 and stores nothing", async (_name, patch) => {
     const res = await postJson(rsvpRoute, family(patch));
     expect(res.status).toBe(400);
@@ -230,6 +235,7 @@ describe("indexes", () => {
     const doc = {
       familyGroupName: "Direct Insert",
       canonicalGroupKey: "direct insert",
+      phoneNumber: "+6738123456",
       status: "attending",
       attendeeCount: 1,
       guestType: "external",

@@ -1,6 +1,6 @@
 import { EVENT } from "../../../shared/config/event";
 import { useI18n } from "../../i18n/I18nProvider";
-import { useCopy } from "./useCopy";
+import { useCopy } from "../details/useCopy";
 
 const addressParts = EVENT.venueAddress.split(/(?<=,) /).map((part, i, all) => (i < all.length - 1 ? `${part} ` : part));
 

@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   CURSOR_PATTERN,
   DISPLAY_NAME_MAX,
+  DISPLAY_NAME_MIN,
   HONEYPOT_FIELD,
   MESSAGE_MAX,
   MESSAGE_MIN,
@@ -22,10 +23,10 @@ const displayName = z
   .pipe(
     z
       .string()
+      .min(DISPLAY_NAME_MIN)
       .max(DISPLAY_NAME_MAX)
       .refine((value) => !hasDisallowedNameCharacters(value)),
-  )
-  .optional();
+  );
 
 const message = z
   .string()
@@ -40,8 +41,8 @@ const message = z
   );
 
 /**
- * A blank or missing name, or `anonymous: true`, makes the entry anonymous: saved and mirrored for the couple,
- * never shown publicly. Unknown keys are stripped. The honeypot is checked by the service, not here, so a bot
+ * The name is required, so the couple always know who wrote a wish. `anonymous: true` keeps the entry private: saved
+ * and mirrored for the couple, never shown publicly. Unknown keys are stripped. The honeypot is checked by the service, not here, so a bot
  * is not told which field gave it away.
  */
 export const guestbookRequestSchema = z.object({

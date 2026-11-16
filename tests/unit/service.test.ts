@@ -22,7 +22,13 @@ class FakeRepo implements RsvpRepository {
 }
 
 const input = (over: Record<string, unknown> = {}) =>
-  rsvpRequestSchema.parse({ familyGroupName: "The Ahmad Family", status: "attending", attendeeCount: 2, ...over });
+  rsvpRequestSchema.parse({
+    familyGroupName: "The Ahmad Family",
+    phoneNumber: "+673 812 3456",
+    status: "attending",
+    attendeeCount: 2,
+    ...over,
+  });
 
 const submit = (repo: FakeRepo, over: Record<string, unknown> = {}, now = BEFORE_DEADLINE) =>
   submitRsvp(input(over), { repo, inviteCode: INVITE, now });
@@ -109,6 +115,7 @@ describe("submitRsvp: stored document", () => {
     expect(doc).toEqual({
       familyGroupName: "the AHMAD family",
       canonicalGroupKey: "the ahmad family",
+      phoneNumber: "+6738123456",
       status: "attending",
       attendeeCount: 6,
       guestType: "internal",

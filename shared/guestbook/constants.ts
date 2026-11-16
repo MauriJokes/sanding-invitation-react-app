@@ -1,6 +1,7 @@
 /** Dependency-free guestbook constants and helpers shared by the browser and the server. */
 
 // Technical bounds (not business rules): see docs/OPEN_DECISIONS.md D-30.
+export const DISPLAY_NAME_MIN = 1;
 export const DISPLAY_NAME_MAX = 60;
 export const MESSAGE_MIN = 1;
 export const MESSAGE_MAX = 500;

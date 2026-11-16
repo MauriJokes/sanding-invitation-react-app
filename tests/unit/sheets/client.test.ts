@@ -48,7 +48,7 @@ describe("appendRows", () => {
     expect(google.calls).toHaveLength(1);
     const call = google.calls[0] as Recorded;
     expect(call.method).toBe("POST");
-    expect(call.url.origin + call.url.pathname).toBe("https://sheets.test/v4/spreadsheets/sheet-123/values/'Family RSVP'!A:F:append".replace("'Family RSVP'!A:F", encodeURIComponent("'Family RSVP'!A:F")));
+    expect(call.url.origin + call.url.pathname).toBe("https://sheets.test/v4/spreadsheets/sheet-123/values/'Family RSVP'!A:G:append".replace("'Family RSVP'!A:G", encodeURIComponent("'Family RSVP'!A:G")));
     expect(call.url.searchParams.get("valueInputOption")).toBe("RAW");
     expect(call.url.searchParams.get("insertDataOption")).toBe("INSERT_ROWS");
     expect(call.headers.get("authorization")).toBe("Bearer token-abc");
@@ -78,7 +78,7 @@ describe("appendRows", () => {
   it("quotes a tab name that contains an apostrophe", async () => {
     const google = fakeGoogle();
     await make(google).appendRows({ name: "Adam's RSVP", headers: RSVP_HEADERS }, [["x"]]);
-    expect(decodeURIComponent(google.calls[0]?.url.pathname ?? "")).toContain("'Adam''s RSVP'!A:F:append");
+    expect(decodeURIComponent(google.calls[0]?.url.pathname ?? "")).toContain("'Adam''s RSVP'!A:G:append");
   });
 
   it("sends formula-like and markup text unchanged in the body", async () => {

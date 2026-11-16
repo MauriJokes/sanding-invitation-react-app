@@ -12,9 +12,7 @@ This is the single source of truth for the Sanding invitation page and its RSVP 
 - RSVP button label: Send RSVP
 
 ## Sanding celebration
-- Displayed invitation title: Walimatulurus (not "Majlis Perkahwinan" as on the artwork)
-- Event name (Malay): Walimatulurus
-- Event name (English): Walimatulurus
+- Displayed invitation title: "Walimatul Urus" (`shared/config/event.ts`; the owner changed it from "Walimatulurus" on 2026-11-16)
 - Date (YYYY-MM-DD): 2026-12-28
 - Guest arrival time (24h): 1915
 - Event end time: **intentionally not published**. Show the guest arrival time only.
@@ -30,6 +28,7 @@ This is the single source of truth for the Sanding invitation page and its RSVP 
 
 - RSVP scope: **One RSVP for the Sanding celebration only**
 - Submission model: **One representative submits once for the whole family/group**
+- Contact phone number: **required**, international format with country code (e.g. `+673 812 3456`), stored in E.164 and visible only to the couple (D-36)
 - Attendee count: **One total number for the family/group**, not separate counts per event
 - RSVP deadline date: 2026-12-20 (**placeholder; owner to confirm with family**)
 - RSVP deadline time: 23:59 venue local time, open through 23:59:59 (**placeholder**)
@@ -47,7 +46,9 @@ This is the single source of truth for the Sanding invitation page and its RSVP 
 
 ## Invitation body copy (single event)
 
-The supplied texts in `docs/WEDDING_CONTENT_INFO/` are adjusted for the one Sanding event (owner decision). Proposed final closing lines (owner to proofread the Malay):
+**Superseded:** the owner has since rewritten the invitation lines, the host list and the itinerary directly in `src/i18n/strings.ts` and `src/features/details/content.ts`; those files are now the source of truth, and the supplied texts in `docs/WEDDING_CONTENT_INFO/` are kept only as the original input. The text below is the earlier proposal, kept for history.
+
+Earlier proposal (owner to proofread the Malay):
 
 - Malay: "...untuk hadir ke Majlis Walimatulurus anakanda kami:"
 - English: "...to attend the walimatulurus of our beloved children:"
@@ -69,6 +70,6 @@ The supplied opening line ("Dengan izin Allah S.W.T dan rahmatnya, kami:" / "By 
 - [ ] RSVP deadline placeholder (2026-12-20 23:59) is replaced with the confirmed value.
 - [x] Maximum attendee count is agreed (internal 10 pax, external 2 pax).
 - [ ] `INTERNAL_INVITE_CODE` is generated (long, random) and the internal link is shared only with internal family; the external link is the clean URL.
-- [ ] RSVP form clearly says the response covers the whole family/group for Sanding only.
+- [ ] RSVP form makes clear that the response covers the whole family/group (the owner removed the separate "Sanding only" note on 2026-11-16; the page presents only this one event).
 - [ ] The form collects one total attendee count, not per-event attendance.
 - [ ] The form shows the correct maximum (10 with a valid invite, otherwise 2).

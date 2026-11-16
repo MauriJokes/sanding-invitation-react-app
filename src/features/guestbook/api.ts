@@ -25,7 +25,7 @@ export function fetchGuestbookPage(cursor: string | undefined, signal?: AbortSig
 }
 
 export interface GuestbookPayload {
-  displayName: string | undefined;
+  displayName: string;
   anonymous: boolean;
   message: string;
   /** The hidden spam trap. Always sent exactly as the browser has it (empty for a person). */
@@ -33,6 +33,5 @@ export interface GuestbookPayload {
 }
 
 export function submitGuestbook(payload: GuestbookPayload): Promise<ApiResult<GuestbookSubmitted>> {
-  const { displayName, ...rest } = payload;
-  return requestJson("POST", "/api/guestbook", displayName ? { displayName, ...rest } : rest, parseSubmitted);
+  return requestJson("POST", "/api/guestbook", payload, parseSubmitted);
 }

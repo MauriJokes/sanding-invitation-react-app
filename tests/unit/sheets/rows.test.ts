@@ -26,15 +26,24 @@ describe("rsvpRow", () => {
     guestType: "internal",
     status: "attending",
     attendeeCount: 6,
+    phoneNumber: "+6738123456",
   } as const;
 
   it("has one value per header, in the documented order", () => {
-    expect(rsvpRow("abc123", doc)).toEqual(["abc123", "2026-12-01T12:05:06+08:00", "The Lim Family", "internal", "attending", 6]);
+    expect(rsvpRow("abc123", doc)).toEqual([
+      "abc123",
+      "2026-12-01T12:05:06+08:00",
+      "The Lim Family",
+      "internal",
+      "attending",
+      6,
+      "+6738123456",
+    ]);
     expect(rsvpRow("abc123", doc)).toHaveLength(RSVP_HEADERS.length);
   });
 
   it("carries a declined RSVP with zero attendees as a number", () => {
-    expect(rsvpRow("x", { ...doc, status: "declined", attendeeCount: 0 }).slice(4)).toEqual(["declined", 0]);
+    expect(rsvpRow("x", { ...doc, status: "declined", attendeeCount: 0 }).slice(4, 6)).toEqual(["declined", 0]);
   });
 
   it("passes formula-like text through unchanged (the sheet is written RAW, so it stays text)", () => {

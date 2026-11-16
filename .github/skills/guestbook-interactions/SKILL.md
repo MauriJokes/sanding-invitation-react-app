@@ -16,7 +16,7 @@ Implement a simple guestbook: named messages are published immediately; anonymou
 
 ## Requirements
 - Immediate publication of named messages is the confirmed behaviour.
-- Display name is optional; provide a "Send anonymously" checkbox. A blank name means anonymous.
+- Display name is required (D-38); provide a "Send privately" checkbox, which keeps the wish off the public slider. Public wishes show the name.
 - Anonymous entries (`isPublic: false`) are stored and mirrored to the `Guestbook` worksheet but never returned by any public endpoint. The confirmation text must say they are private.
 - Enforce server-side length limits.
 - Rate-limit submissions (MongoDB TTL collection, hashed IP).

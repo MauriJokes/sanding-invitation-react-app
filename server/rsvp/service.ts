@@ -53,6 +53,7 @@ export async function submitRsvp(input: RsvpRequest, deps: RsvpDeps): Promise<Rs
   const doc: RsvpDocument = {
     familyGroupName: input.familyGroupName,
     canonicalGroupKey: canonicalGroupKey(input.familyGroupName),
+    phoneNumber: input.phoneNumber,
     status: input.status,
     attendeeCount: input.attendeeCount,
     guestType,

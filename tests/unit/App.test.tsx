@@ -1,8 +1,10 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { EVENT } from "../../shared/config/event";
 import { App } from "../../src/App";
 import { I18nProvider } from "../../src/i18n/I18nProvider";
+import { strings } from "../../src/i18n/strings";
 import { configReply, mockFetch } from "./rsvp/helpers";
 
 const renderApp = (invite?: string) =>
@@ -27,10 +29,10 @@ describe("App shell", () => {
   it("renders the couple, event title, venue and date in the venue timezone", async () => {
     renderApp();
     expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Izyan & Adam");
-    expect(screen.getAllByText("Walimatulurus").length).toBeGreaterThan(0);
+    expect(screen.getAllByText(EVENT.title).length).toBeGreaterThan(0);
     expect(screen.getAllByText("The Rizqun International Hotel").length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Isnin, 28 Disember 2026/i).length).toBeGreaterThan(0);
-    await screen.findByLabelText("Nama keluarga / kumpulan");
+    await screen.findByLabelText(strings.ms.familyLabel);
   });
 
   it("provides one main landmark, a skip link that targets it, and the RSVP section inside it", async () => {
@@ -38,7 +40,7 @@ describe("App shell", () => {
     const main = screen.getByRole("main");
     const skip = screen.getByRole("link", { name: "Langkau ke kandungan" });
     expect(skip.getAttribute("href")).toBe(`#${main.id}`);
-    await screen.findByLabelText("Nama keluarga / kumpulan");
+    await screen.findByLabelText(strings.ms.familyLabel);
     const rsvp = screen.getByRole("region", { name: "RSVP" });
     expect(main.contains(rsvp)).toBe(true);
     expect(rsvp.id).toBe("rsvp");
@@ -46,7 +48,7 @@ describe("App shell", () => {
 
   it("starts in Malay and switches the whole page to English and back", async () => {
     renderApp();
-    await screen.findByLabelText("Nama keluarga / kumpulan");
+    await screen.findByLabelText(strings.ms.familyLabel);
     expect(document.documentElement.lang).toBe("ms");
 
     const toEnglish = screen.getByRole("button", { name: "Switch language to English" });
@@ -55,7 +57,7 @@ describe("App shell", () => {
     expect(document.documentElement.lang).toBe("en");
     expect(screen.getByRole("link", { name: "Skip to content" })).toBeTruthy();
     expect(screen.getAllByText(/Monday, 28 December 2026/i).length).toBeGreaterThan(0);
-    expect(screen.getByLabelText("Family / group name")).toBeTruthy();
+    expect(screen.getByLabelText(strings.en.familyLabel)).toBeTruthy();
 
     const toMalay = screen.getByRole("button", { name: "Tukar bahasa ke Bahasa Melayu" });
     expect(toMalay.getAttribute("lang")).toBe("ms");
@@ -65,9 +67,9 @@ describe("App shell", () => {
 
   it("keeps what the guest typed when the language changes", async () => {
     renderApp();
-    const input = await screen.findByLabelText<HTMLInputElement>("Nama keluarga / kumpulan");
+    const input = await screen.findByLabelText<HTMLInputElement>(strings.ms.familyLabel);
     fireEvent.change(input, { target: { value: "The Ahmad Family" } });
     fireEvent.click(screen.getByRole("button", { name: "Switch language to English" }));
-    expect(screen.getByLabelText<HTMLInputElement>("Family / group name").value).toBe("The Ahmad Family");
+    expect(screen.getByLabelText<HTMLInputElement>(strings.en.familyLabel).value).toBe("The Ahmad Family");
   });
 });

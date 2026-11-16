@@ -7,7 +7,7 @@ import { freshIp, postJson, useTestDatabase, type ApiBody } from "./helpers";
 const { db } = useTestDatabase();
 afterEach(() => vi.useRealTimers());
 
-const rsvpBody = (n: number) => ({ familyGroupName: `Family ${n}`, status: "attending", attendeeCount: 1 });
+const rsvpBody = (n: number) => ({ familyGroupName: `Family ${n}`, phoneNumber: "+673 812 3456", status: "attending", attendeeCount: 1 });
 const counters = async () => (await db()).collection<RateLimitDocument>(COLLECTIONS.rateLimits).find().toArray();
 
 describe("rate limiting (MongoDB TTL counters keyed by hashed IP)", () => {

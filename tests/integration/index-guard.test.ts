@@ -8,7 +8,7 @@ import { freshIp, postJson, useTestDatabase, type ApiBody } from "./helpers";
 
 const { db } = useTestDatabase();
 
-const family = (n: number) => ({ familyGroupName: `Family ${n}`, status: "attending", attendeeCount: 1 });
+const family = (n: number) => ({ familyGroupName: `Family ${n}`, phoneNumber: "+673 812 3456", status: "attending", attendeeCount: 1 });
 const json = async (res: Response) => (await res.json()) as ApiBody;
 const rsvps = async () => (await db()).collection(COLLECTIONS.rsvps);
 const dropUnique = async () => (await rsvps()).dropIndex("canonicalGroupKey_unique");

@@ -6,12 +6,21 @@ export interface Person {
 
 export const HOST_GROUPS: readonly (readonly Person[])[] = [
   [
-    { name: "Pengiran Haji Mohamad Jaludin", lineage: "bin Pengiran Haji Puteh" },
+    {
+      name: "Pengiran Haji Mohamad Jaludin",
+      lineage: "bin Pengiran Haji Puteh",
+    },
     { name: "Dayang Masdiah", lineage: "binti Awang Haji Tuah" },
   ],
   [
-    { name: "Awangku Mohamad Izzan Naqiuddin", lineage: "bin Pengiran Haji Mohamad Jaludin" },
-    { name: "Awangku Mohamad Izzan Qayyum", lineage: "bin Pengiran Haji Mohamad Jaludin" },
+    {
+      name: "Awangku Mohamad Izzan Naqiuddin",
+      lineage: "bin Pengiran Haji Mohamad Jaludin",
+    },
+    {
+      name: "Awangku Mohamad Izzan Qayyum",
+      lineage: "bin Pengiran Haji Mohamad Jaludin",
+    },
   ],
   [
     { name: "Haji Nik Joharris", lineage: "bin Nik Ahmad" },
@@ -31,15 +40,26 @@ export const COUPLE: readonly string[] = [
 ];
 
 export const ITINERARY = [
-        { time: "7:15 MLM", item: "Menerima Jemputan" },
-        { time: "8:15 MLM", item: "Perarakan Masuk Raja Sehari" },
-        { time: "", item: "Iringan Persembahan Tausyeh" },
-        {
-            time: "",
-            item: "Majlis Bersanding",
-        },
-        { time: "", item: "Ucapan Alu-aluan daripada Wakil Keluarga" },
-        { time: "", item: "Bacaan Doa Selamat" },
-        { time: "", item: "Menikmati Jamuan" },
-        { time: "", item: "Sesi bergambar & Rakaman Ucapan Kenangan" },
-    ]
+  { time: "7:15 MLM", item: "Menerima Jemputan" },
+  { time: "8:15 MLM", item: "Perarakan Masuk Raja Sehari" },
+  { time: "", item: "Iringan Persembahan Tausyeh" },
+  {
+    time: "",
+    item: "Majlis Bersanding",
+  },
+  { time: "", item: "Ucapan Alu-aluan daripada Wakil Keluarga" },
+  { time: "", item: "Bacaan Doa Selamat" },
+  { time: "", item: "Menikmati Jamuan" },
+  { time: "", item: "Sesi bergambar & Rakaman Ucapan Kenangan" },
+];
+
+export const ITINERARY_EN = [
+  { time: "7:15 PM", item: "Arrival of Guests" },
+  { time: "8:15 PM", item: "Procession of the Newlyweds" },
+  { time: "", item: "Tausyeh Performance" },
+  { time: "", item: "Majlis Bersanding" },
+  { time: "", item: "Speech from Family Representative" },
+  { time: "", item: "Closing Prayers" },
+  { time: "", item: "Dinner" },
+  { time: "", item: "Photography & Video Guest Book Session" },
+];

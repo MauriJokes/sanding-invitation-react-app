@@ -16,6 +16,7 @@ export const RSVP_HEADERS = [
   "Guest Type",
   "RSVP Status",
   "Attendee Count",
+  "Phone Number",
 ] as const;
 
 export const GUESTBOOK_HEADERS = ["Entry ID", "Submitted At", "Name", "Visibility", "Message"] as const;
@@ -42,8 +43,8 @@ export function formatVenueTimestamp(date: Date, timeZone: string = VENUE_TIMEZO
  * Rows contain only what the couple needs. Never the invite code, IP data or secrets.
  * The sheet is written with RAW input, so text such as "=1+1" is stored as text, not run as a formula.
  */
-export function rsvpRow(id: string, doc: Pick<RsvpDocument, "createdAt" | "familyGroupName" | "guestType" | "status" | "attendeeCount">): SheetValue[] {
-  return [id, formatVenueTimestamp(doc.createdAt), doc.familyGroupName, doc.guestType, doc.status, doc.attendeeCount];
+export function rsvpRow(id: string, doc: Pick<RsvpDocument, "createdAt" | "familyGroupName" | "guestType" | "status" | "attendeeCount" | "phoneNumber">): SheetValue[] {
+  return [id, formatVenueTimestamp(doc.createdAt), doc.familyGroupName, doc.guestType, doc.status, doc.attendeeCount, doc.phoneNumber];
 }
 
 export function guestbookRow(id: string, doc: Pick<GuestbookDocument, "createdAt" | "displayName" | "isPublic" | "message">): SheetValue[] {

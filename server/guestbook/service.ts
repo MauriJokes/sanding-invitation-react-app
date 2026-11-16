@@ -18,10 +18,9 @@ export async function submitGuestbookEntry(input: GuestbookRequest, deps: Submit
     throw new AppError("VALIDATION_ERROR", 400, "Please check your responses.");
   }
 
-  const name = input.displayName ?? "";
-  const isPublic = name !== "" && input.anonymous !== true;
+  const isPublic = input.anonymous !== true;
   const doc: GuestbookDocument = {
-    ...(name !== "" ? { displayName: name } : {}),
+    displayName: input.displayName,
     message: input.message,
     isPublic,
     createdAt: deps.now,

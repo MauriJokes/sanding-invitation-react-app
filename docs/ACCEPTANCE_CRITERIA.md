@@ -27,6 +27,8 @@
 - [ ] The invite is saved in `localStorage` for internal guests, removed from the address bar, and reused on later visits.
 - [ ] The derived `guestType` is stored with the RSVP and appears in the Google Sheet; the invite code never does.
 
+- [ ] A phone number with a country code is required, stored in E.164 form, appears in the `Family RSVP` sheet and is never returned by any API.
+- [ ] A missing, country-code-less, lettered or impossible phone number is rejected in the browser and by the server.
 - [ ] `attending` requires 1 to the maximum for the verified guest type; `declined` requires 0.
 - [ ] Declined responses are stored explicitly.
 - [ ] A duplicate canonical family/group is rejected with a neutral message and the original is unchanged.
@@ -37,8 +39,12 @@
 
 ## 4. Guestbook
 
+- [ ] Wishes are shown in a slider (no list); older wishes load as the guest nears the end.
+- [ ] Auto-play pauses on hover, drag, a hidden tab, an off-screen slider, an open pop-up and the Pause button, and starts paused with reduced motion.
+- [ ] The pop-up traps focus, closes with Escape, the close button and a click outside, and returns focus to its button.
 - [ ] A valid named message is stored and immediately visible.
-- [ ] An anonymous message (blank name or box ticked) is stored and mirrored but never returned by the public API.
+- [ ] The name is required, in the browser and in the API; a blank name is rejected and nothing is stored.
+- [ ] A message sent privately (box ticked) is stored and mirrored with its name but never returned by the public API.
 - [ ] Message length limits are enforced.
 - [ ] Rate limiting works.
 - [ ] User content is rendered as plain text.

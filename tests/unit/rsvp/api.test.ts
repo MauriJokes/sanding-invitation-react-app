@@ -41,14 +41,14 @@ describe("fetchRsvpConfig", () => {
 });
 
 describe("submitRsvp", () => {
-  const base = { familyGroupName: "The Ahmad Family", status: "attending", attendeeCount: 2 } as const;
+  const base = { familyGroupName: "The Ahmad Family", phoneNumber: "+6738123456", status: "attending", attendeeCount: 2 } as const;
 
   it("sends exactly the documented fields, and never a guest type or limit", async () => {
     const calls = mockFetch(() => createdReply("attending", 2));
     await submitRsvp({ ...base, invite: VALID_INVITE });
-    expect(Object.keys(calls[0]?.body ?? {}).sort()).toEqual(["attendeeCount", "familyGroupName", "invite", "status"]);
+    expect(Object.keys(calls[0]?.body ?? {}).sort()).toEqual(["attendeeCount", "familyGroupName", "invite", "phoneNumber", "status"]);
     await submitRsvp({ ...base, invite: undefined });
-    expect(Object.keys(calls[1]?.body ?? {}).sort()).toEqual(["attendeeCount", "familyGroupName", "status"]);
+    expect(Object.keys(calls[1]?.body ?? {}).sort()).toEqual(["attendeeCount", "familyGroupName", "phoneNumber", "status"]);
   });
 
   it("returns the confirmation", async () => {

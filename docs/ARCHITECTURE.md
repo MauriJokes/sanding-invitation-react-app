@@ -113,6 +113,8 @@ Runtime candidates:
 - `react-dom`
 - `zod`
 - `mongodb`
+- `libphonenumber-js` (RSVP phone number validation and E.164 normalisation, shared by the browser and the server so both agree; the `min` metadata build keeps it small)
+- `embla-carousel-react` (the guestbook slider: touch and mouse dragging, snapping and measurement; headless, about 7 KB gzipped, no stylesheet; auto-play is our own timer so it can follow the pause rules)
 - `google-auth-library` (service-account authentication only; the three Sheets REST calls use `fetch`, so requests are fully testable and no large Google client is bundled)
 - `motion` only if the approved design needs it; start with CSS/Web Animations
 

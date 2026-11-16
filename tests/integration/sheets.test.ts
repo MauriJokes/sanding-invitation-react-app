@@ -13,7 +13,13 @@ const NAMES = { rsvp: "Family RSVP", guestbook: "Guestbook" };
 afterEach(() => vi.restoreAllMocks());
 const quiet = () => vi.spyOn(console, "error").mockImplementation(() => undefined);
 
-const rsvp = (over: Record<string, unknown> = {}) => ({ familyGroupName: "The Lim Family", status: "attending", attendeeCount: 2, ...over });
+const rsvp = (over: Record<string, unknown> = {}) => ({
+  familyGroupName: "The Lim Family",
+  phoneNumber: "+60 12-345 6789",
+  status: "attending",
+  attendeeCount: 2,
+  ...over,
+});
 const rsvps = async () => (await db()).collection<RsvpDocument>(COLLECTIONS.rsvps).find().sort({ createdAt: 1 }).toArray();
 const wishes = async () => (await db()).collection<GuestbookDocument>(COLLECTIONS.guestbookEntries).find().sort({ createdAt: 1 }).toArray();
 
@@ -26,10 +32,10 @@ describe("RSVP write-through", () => {
     const [doc] = await rsvps();
     expect(doc).toMatchObject({ sheetStatus: "synced" });
     const row = fakeSheets.rows("Family RSVP")[0] ?? [];
-    expect(row).toHaveLength(6);
+    expect(row).toHaveLength(7);
     expect(row[0]).toBe(doc?._id.toHexString());
     expect(row[1]).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+08:00$/);
-    expect(row.slice(2)).toEqual(["The Lim Family", "external", "attending", 2]);
+    expect(row.slice(2)).toEqual(["The Lim Family", "external", "attending", 2, "+60123456789"]);
   });
 
   it("mirrors the derived guest type for an internal guest and never the invite code", async () => {
@@ -41,7 +47,7 @@ describe("RSVP write-through", () => {
 
   it("mirrors a declined RSVP with zero attendees", async () => {
     await postJson(rsvpRoute, rsvp({ status: "declined", attendeeCount: 0 }));
-    expect((fakeSheets.rows("Family RSVP")[0] ?? []).slice(4)).toEqual(["declined", 0]);
+    expect((fakeSheets.rows("Family RSVP")[0] ?? []).slice(4, 6)).toEqual(["declined", 0]);
   });
 
   it("keeps the RSVP and answers 201 when Google is down; the document stays pending", async () => {
@@ -83,7 +89,7 @@ describe("backfill", () => {
     fakeSheets.failWith = new SheetsError("http", 500);
     for (let i = 0; i < rsvpCount; i++) await postJson(rsvpRoute, rsvp({ familyGroupName: `Family ${i}` }));
     for (let i = 0; i < wishCount; i++) {
-      await postJson(guestbookRoute, { displayName: i % 2 ? "" : `Guest ${i}`, message: `Wish ${i}` }, undefined, "/api/guestbook");
+      await postJson(guestbookRoute, { displayName: `Guest ${i}`, anonymous: i % 2 === 1, message: `Wish ${i}` }, undefined, "/api/guestbook");
     }
     fakeSheets.failWith = undefined;
     fakeSheets.reset();
@@ -124,7 +130,7 @@ describe("backfill", () => {
   it("never duplicates a row whose append succeeded but whose response was lost", async () => {
     await submitWhileDown(2, 0);
     const [first] = await rsvps();
-    fakeSheets.seed("Family RSVP", [first?._id.toHexString() ?? "", "t", "Family 0", "external", "attending", 2]);
+    fakeSheets.seed("Family RSVP", [first?._id.toHexString() ?? "", "t", "Family 0", "external", "attending", 2, "+60123456789"]);
 
     const [report] = await backfill(await db(), fakeSheets, NAMES);
     expect(report).toMatchObject({ appended: 1, alreadyPresent: 1, remaining: 0 });

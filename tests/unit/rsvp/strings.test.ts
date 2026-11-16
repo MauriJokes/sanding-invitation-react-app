@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { strings, type Strings } from "../../../src/i18n/strings";
 
 const sample = (value: Strings[keyof Strings]): string =>
-  typeof value === "function" ? (value as (arg: never) => string)(7 as never) : value;
+  typeof value === "function" ? (value as (...args: never[]) => string)(7 as never, 7 as never) : value;
 
 describe("UI strings", () => {
   it("define the same keys in both languages", () => {
@@ -25,11 +25,13 @@ describe("UI strings", () => {
     expect(strings.ms.deadline("20 Disember 2026")).toBe("RSVP ditutup pada 20 Disember 2026.");
   });
 
-  it("state that the RSVP is for the Walimatulurus celebration only", () => {
-    expect(strings.ms.scopeNote).toMatch(/Walimatulurus sahaja/);
-    expect(strings.en.scopeNote).toMatch(/Walimatulurus celebration only/);
-    expect(strings.ms.successAttending).toMatch(/Walimatulurus/);
-    expect(strings.en.successDeclined).toMatch(/Walimatulurus/);
+  it("name the couple in the RSVP confirmations", () => {
+    for (const lang of ["ms", "en"] as const) {
+      for (const text of [strings[lang].successAttending, strings[lang].successDeclined]) {
+        expect(text).toMatch(/Izyan/);
+        expect(text).toMatch(/Adam/);
+      }
+    }
   });
 
   it("do not tell a duplicate submitter anything beyond 'already received'", () => {

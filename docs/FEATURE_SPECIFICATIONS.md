@@ -30,7 +30,7 @@ Allow one representative to submit an RSVP for the entire family/group through t
 - The client reads `invite` from the URL, saves it to `localStorage` (internal guests only), removes it from the address bar with `history.replaceState`, and reuses the stored value on later visits. If the server rejects a stored value, the client clears it and falls back to external.
 - `POST /api/rsvp/config` (see API contract) returns the maximum for the supplied invite so the form can show the correct limit. A wrong or missing invite silently yields the external limit.
 - `POST /api/rsvp` receives the invite; the server verifies it, derives `guestType`, and never accepts a client-supplied `guestType` or limit.
-- Collect the family/group name and total number of attendees. 
+- Collect the family/group name, a contact phone number (international format with country code, e.g. `+673 812 3456`; owner decision D-36) and the total number of attendees.
 - Configure a maximum attendee count per guest type (`internal` = 10, `external` = 2) and enforce it in both the UI and server-side validation, derived from the server-verified invite.
 - The form shows the applicable maximum and does not reveal the other guest type's limit.
 - Store the derived `guestType` on the RSVP; never store the invite code.
@@ -42,10 +42,11 @@ Allow one representative to submit an RSVP for the entire family/group through t
 - MongoDB is authoritative; a Sheets sync failure must not invalidate a successful RSVP.
 
 ### Duplicate detection caveat
-A public anonymous form cannot reliably identify a household if the submitter changes the family name spelling. Canonicalise whitespace, case and Unicode; explain that the family/group name should be entered consistently. Do not add phone or email collection without approval.
+A public anonymous form cannot reliably identify a household if the submitter changes the family name spelling. Canonicalise whitespace, case and Unicode; explain that the family/group name should be entered consistently. The phone number is collected for contact only and is deliberately not used to detect duplicates. Do not add email collection without approval.
 
 ### Edge cases
 - Missing or malformed family/group name.
+- Missing phone number, or one without a country code, with letters, with control or zero-width characters, longer than 20 characters or not a possible number (all rejected in the browser and again on the server).
 - Attendee count below one, above the maximum for the guest type, or not an integer.
 - Missing, malformed, wrong or rotated invite: treat as external; never fail open to the internal limit.
 - Invite removed, altered or cleared from `localStorage` between page load and submit; the server limit for what it verifies still applies.
@@ -64,6 +65,7 @@ A public anonymous form cannot reliably identify a household if the submitter ch
 - Only one accepted RSVP exists for each canonical family/group.
 - A duplicate does not overwrite the original response.
 - There is no public edit/update flow or API endpoint.
+- The phone number is stored in E.164 form, appears in the `Family RSVP` sheet, and is never returned to anyone but the guest who typed it.
 - Public visitors cannot retrieve private RSVP records.
 - Successful MongoDB writes remain successful even if Sheets is unavailable.
 
@@ -73,13 +75,15 @@ A public anonymous form cannot reliably identify a household if the submitter ch
 Allow visitors to share wedding wishes and read previously submitted messages
 
 ### Requirements
-- Provide an optional display name, a "Send anonymously" checkbox and a required message field.
+- Show the wishes as a slider, one wish at a time with the neighbours faded at the edges, newest first. Arrows, swipe, drag and arrow keys move it; a counter and progress line show the position. There is no list and no "Load more" button: older pages are fetched with the cursor as the guest nears the end.
+- Auto-play moves on after a time that fits the message (about 6 to 14 seconds), loops to the newest wish only when no older ones remain, and pauses while the guest hovers, drags or focuses, while the tab is hidden or the slider is off screen, while the pop-up is open, and whenever the guest presses Pause. With reduced motion it starts paused and changes wish without sliding.
+- "Leave a wish" opens a modal pop-up (`<dialog>`) with a required display name, a "Send privately" checkbox and a required message field. Escape, the close button or a click outside closes it. After sending, the pop-up thanks the guest; closing it returns the slider to the newest wish when the wish was published.
 - Publish valid named submissions immediately; show them newest first.
-- Anonymous submissions (blank name or box ticked) are saved to MongoDB and mirrored to the `Guestbook` worksheet but are never shown publicly. The confirmation text must say so.
+- Private submissions (box ticked) are saved to MongoDB with their name and mirrored to the `Guestbook` worksheet but are never shown publicly. The confirmation text must say so. A submission without a name is rejected.
 - Enforce maximum name and message lengths.
 - Apply rate limits and basic abuse protection (honeypot field).
 - Render messages as text; never interpret user content as HTML.
-- Provide loading, success and failure states.
+- Provide loading, empty, success and failure states. With one wish there are no arrows, counter or auto-play.
 - Paginate retrieval with a cursor so the whole collection is never returned.
 - The owner removes inappropriate entries manually (documented procedure); no moderation UI.
 

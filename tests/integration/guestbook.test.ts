@@ -36,13 +36,13 @@ describe("POST /api/guestbook: who is shown", () => {
   it.each([
     ["no name", { message: "Hello" }],
     ["a blank name", { displayName: "   ", message: "Hello" }],
-  ])("keeps a wish with %s private: saved and mirrored as anonymous, never returned", async (_name, body) => {
+    ["a blank name, sent privately", { displayName: "", anonymous: true, message: "Hello" }],
+  ])("requires a name: %s is rejected with 400 and nothing is stored or mirrored", async (_name, body) => {
     const res = await send(body);
-    expect((await json(res)).data).toEqual({ published: false });
-    expect(res.status).toBe(201);
-    expect((await entries())[0]).toMatchObject({ isPublic: false });
-    expect((await page(await list())).entries).toEqual([]);
-    expect(fakeSheets.rows("Guestbook")[0]?.slice(2, 5)).toEqual(["", "anonymous", "Hello"]);
+    expect(res.status).toBe(400);
+    expect(JSON.stringify(await json(res))).toContain("displayName");
+    expect(await entries()).toHaveLength(0);
+    expect(fakeSheets.rows("Guestbook")).toHaveLength(0);
   });
 
   it("keeps 'send anonymously' private but stores and mirrors the name for the couple", async () => {
@@ -55,8 +55,10 @@ describe("POST /api/guestbook: who is shown", () => {
   });
 
   it("ignores a client-sent isPublic or id", async () => {
-    await send({ message: "x", isPublic: true, _id: "abc", sheetStatus: "synced" });
-    expect((await entries())[0]).toMatchObject({ isPublic: false });
+    await send({ displayName: "Aisyah", anonymous: true, message: "x", isPublic: true, _id: "abc", sheetStatus: "synced" });
+    const stored = (await entries())[0];
+    expect(stored).toMatchObject({ isPublic: false });
+    expect(String(stored?._id)).not.toBe("abc");
     expect((await page(await list())).entries).toEqual([]);
   });
 });

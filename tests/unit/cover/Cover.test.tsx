@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { EVENT } from "../../../shared/config/event";
 import { App } from "../../../src/App";
 import { OPEN_MS, OPEN_REDUCED_MS } from "../../../src/features/cover/Cover";
 import { I18nProvider } from "../../../src/i18n/I18nProvider";
@@ -41,7 +42,7 @@ describe("Cover", () => {
   it("shows the plaque with the event, names, date and a focused Buka button", () => {
     renderApp();
     const cover = screen.getByRole("region", { name: "Muka depan jemputan" });
-    expect(cover.textContent).toContain("Walimatulurus");
+    expect(cover.textContent).toContain(EVENT.title);
     expect(cover.textContent).toContain("Izyan");
     expect(cover.textContent).toContain("Adam");
     expect(cover.textContent).toContain("28 Disember 2026");

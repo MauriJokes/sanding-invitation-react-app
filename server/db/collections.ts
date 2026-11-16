@@ -13,6 +13,7 @@ export interface RsvpDocument {
   _id?: ObjectId;
   familyGroupName: string;
   canonicalGroupKey: string;
+  phoneNumber: string;
   status: RsvpStatus;
   attendeeCount: number;
   guestType: GuestType;
@@ -23,10 +24,10 @@ export interface RsvpDocument {
 
 export interface GuestbookDocument {
   _id?: ObjectId;
-  /** Optional. May be kept for anonymous entries so the couple can see who wrote them (never shown publicly). */
+  /** Always given for new entries, so the couple know who wrote them. Only shown publicly when `isPublic`. Older entries may have none. */
   displayName?: string;
   message: string;
-  /** True only when a name was given and "send anonymously" was not chosen. The only entries the public API returns. */
+  /** False when the guest chose to send privately. The only entries the public API returns are the public ones. */
   isPublic: boolean;
   createdAt: Date;
   sheetStatus: SheetStatus;

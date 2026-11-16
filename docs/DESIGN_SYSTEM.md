@@ -118,7 +118,7 @@ Verified contrast ratios: ivory on navy 9.19; ivory on navy-deep 11.5; gold-brig
 
 ## 5a. Signature motion (approved)
 
-- **Cover and gate:** a navy plaque (monogram, "Walimatulurus", names, date, **Buka**) over two tile-pattern door panels. The panels carry the same rotating rosettes as the hero band (skip rosettes hidden under the navy wedge). Pressing Buka fades the plaque, then slides the panels apart onto the live page. The cover is then removed from rendering so its animations stop. The cover never gates essential information.
+- **Cover and gate:** a navy plaque (monogram, "Walimatul Urus", names, date, **Buka**) over two tile-pattern door panels. The panels carry the same rotating rosettes as the hero band (skip rosettes hidden under the navy wedge). Pressing Buka fades the plaque, then slides the panels apart onto the live page. The cover is then removed from rendering so its animations stop. The cover never gates essential information.
 - **Hero:** a full-width tile band (168 px) at the bottom whose rosettes rotate slowly in mixed directions and speeds; after the gate opens, heading, names, date and the scroll cue rise in sequence and the band rises with them. No pattern sits behind text.
 - **Corners:** a quarter tile-medallion in each top corner swaying about 1.5 degrees with a tassel swinging like a pendulum (gold thread on navy). Tassels are hidden below 360 px wide.
 - **Particles:** gold specks and small tile-derived rosettes drifting down behind content (14 on mobile, 24 on desktop).
@@ -137,8 +137,16 @@ Below 768 px: fixed bottom bar with four icon-and-label anchors (Butiran, RSVP, 
 - Inputs have a 1 px `slate` border and a transparent fill (the prototype's lighter field tint was not an approved token, so it was not carried over). An invalid field gets a 2 px `burgundy` border **and** a text message linked with `aria-describedby`; colour is never the only signal.
 - Choice buttons (attending / declined) are real radio inputs with a check mark on the selected one. The count is a stepper whose number is shown in lining, tabular numerals: Cormorant's default figures are old-style and make "1" look like a Roman "I".
 - Notices and errors use the 3 px `burgundy` left rule; one `role="alert"` region announces submit errors.
-- The guestbook uses the same fields on the ivory surface, plus a 24 px checkbox with a 48 px tap row, a text-only character counter (lining numerals) and a list of wishes: plain text, a gold hairline between entries, the name in small gold-ink capitals. Hidden spam-trap field: positioned off-screen, `aria-hidden`, `tabindex=-1`.
+- The guestbook uses the same fields on the ivory surface, plus a 24 px checkbox with a 48 px tap row and a text-only character counter (lining numerals), inside a pop-up (see §5e). The telephone field in the RSVP is a `tel` input with the same styling and a hint showing the international format. Hidden spam-trap field: positioned off-screen, `aria-hidden`, `tabindex=-1`.
 - All controls are at least 48 px tall. The submit button shows "Menghantar…" and is disabled while a request is pending.
+
+## 5e. Guestbook slider and pop-up (M6)
+
+- The section sits on `navy` (the RSVP above it is ivory). Heading, one intro line and a solid `gold-bright` button with `navy-deep` text open the pop-up.
+- A wish is an ivory card with a 1 px `gold-bright` border and a second inner `gold` hairline (square 2 px corners like the buttons), a gold quote mark, the message in Cormorant 1.25 rem, a hairline and the name in small gold-ink capitals. The card on screen is full strength; its neighbours are faded to half opacity and slightly smaller. Cards are 86% of the width on phones and 34 rem on desktop, running to the screen edges. The track is as tall as the wish on screen so a long wish does not leave a gap under short ones.
+- Controls under the slider: square 48 px gold-outlined arrows (disabled at the ends), a one-pixel progress line, a lining-numeral counter such as `01 / 20+` (the plus means older wishes are still to load) and a Pause/Play button with an icon and a text label.
+- Motion: sliding about 0.5 s; the fade, scale and progress changes respect `prefers-reduced-motion` (no sliding, no transitions, auto-play starts paused). Auto-play timing is in `src/features/guestbook/slideDelay.ts`.
+- The pop-up is an ivory `<dialog>` with a 1 px `gold-bright` border, a `navy-deep` backdrop at 80%, a 48 px close button, and scrolls on small screens. The page behind does not scroll while it is open.
 
 ## 5d. Cover plaque
 
