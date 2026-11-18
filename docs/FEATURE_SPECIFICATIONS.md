@@ -119,11 +119,19 @@ Allow visitors to share wedding wishes and read previously submitted messages
 ## F-06 — Location and directions
 
 ### Requirements
+- Venue, address, directions and copy-address actions live in the Details section. The former standalone location section is now the prayer section (owner decision, 2026-11-17).
 - Display approved venue name, address and relevant instructions.
 - Provide an external map/directions link or an approved map embed.
 - Do not expose private residential addresses unless explicitly approved.
 - Make the address copyable where useful.
 - Ensure the map is not the only way to access venue details.
+
+### Prayer for the newlyweds
+- Between RSVP and the guestbook, show a centred "Doa untuk Pengantin" section (`#prayer`), with "Doa" / "Prayer" in the navigation instead of "Lokasi" / "Location".
+- Follow the owner's supplied reference for the reading order: opening calligraphy, heading, prayer, closing calligraphy. Use the existing ivory, navy, gold and Cormorant/Allura theme, not the reference's flowers or colours.
+- Malay prayer wording is transcribed from the supplied reference with normal sentence casing; English is a draft translation for owner proofreading.
+- Bismillah and Aamiin are the owner's calligraphy images with the `prayerOpening` / `prayerClosing` strings as alt text. The Details greeting uses the owner's salam image the same way.
+- Keep the prayer static, readable on narrow screens, and independent of animation or audio.
 
 ## F-07 — Music
 

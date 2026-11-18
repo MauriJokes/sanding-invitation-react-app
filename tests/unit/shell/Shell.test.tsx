@@ -91,7 +91,7 @@ describe("Shell", () => {
     renderApp();
     const bar = screen.getByRole("navigation", { hidden: true });
     const hrefs = Array.from(bar.querySelectorAll("a")).map((a) => a.getAttribute("href"));
-    expect(hrefs).toEqual(["#details", "#rsvp", "#location", "#guestbook"]);
+    expect(hrefs).toEqual(["#details", "#rsvp", "#prayer", "#guestbook"]);
     for (const href of hrefs) expect(document.querySelector(href!)).not.toBeNull();
     // the page itself runs in the same order as the bar
     const order = hrefs.map((h) => document.querySelector(h!)!);

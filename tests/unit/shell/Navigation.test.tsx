@@ -24,7 +24,7 @@ class FakeObserver {
 const player = { playing: false, unavailable: false, play: vi.fn(), toggle: vi.fn() };
 
 function setup(ids: readonly string[] = ["rsvp", "guestbook"], lang: "ms" | "en" = "ms") {
-  for (const id of ["details", "rsvp", "location", "guestbook"]) {
+  for (const id of ["details", "rsvp", "prayer", "guestbook"]) {
     const el = document.createElement("section");
     el.id = id;
     document.body.appendChild(el);
@@ -60,19 +60,19 @@ describe("Navigation", () => {
   });
 
   it("keeps the approved order of all four sections once they exist", () => {
-    setup(["guestbook", "location", "rsvp", "details"]);
+    setup(["guestbook", "prayer", "rsvp", "details"]);
     const links = within(screen.getByRole("navigation")).getAllByRole("link");
-    expect(links.map((a) => a.getAttribute("href"))).toEqual(["#details", "#rsvp", "#location", "#guestbook"]);
-    expect(links.map((a) => a.textContent)).toEqual(["Butiran", "RSVP", "Lokasi", "Ucapan"]);
+    expect(links.map((a) => a.getAttribute("href"))).toEqual(["#details", "#rsvp", "#prayer", "#guestbook"]);
+    expect(links.map((a) => a.textContent)).toEqual(["Butiran", "RSVP", "Doa", "Ucapan"]);
   });
 
   it("follows the language", () => {
-    setup(["details", "rsvp", "location", "guestbook"], "en");
+    setup(["details", "rsvp", "prayer", "guestbook"], "en");
     expect(screen.getByRole("navigation", { name: "Main navigation" })).toBeTruthy();
     expect(within(screen.getByRole("navigation")).getAllByRole("link").map((a) => a.textContent)).toEqual([
       "Details",
       "RSVP",
-      "Location",
+      "Prayer",
       "Wishes",
     ]);
   });

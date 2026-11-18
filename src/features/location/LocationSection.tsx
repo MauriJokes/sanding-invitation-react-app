@@ -1,46 +1,49 @@
-import { EVENT } from "../../../shared/config/event";
+import aminUrl from "../../assets/words/amin-trimmed.png";
+import bismillahUrl from "../../assets/words/bismillah-trimmed.png";
 import { useI18n } from "../../i18n/I18nProvider";
-import { useCopy } from "../details/useCopy";
 
-const addressParts = EVENT.venueAddress.split(/(?<=,) /).map((part, i, all) => (i < all.length - 1 ? `${part} ` : part));
-
-const actionClass =
-  "inline-flex min-h-12 min-w-[14rem] items-center justify-center rounded-[2px] border border-gold-bright px-8 text-[0.95rem] font-semibold uppercase tracking-[0.22em] text-ivory no-underline hover:bg-gold-bright hover:text-navy-deep";
-
-/** Venue, address and directions. The address is plain text and can be copied; the map opens in the guest's own maps app. */
+/** The prayer replaces the standalone venue section; directions remain in Details. */
 export function LocationSection() {
   const { t } = useI18n();
-  const { state, copy } = useCopy(`${EVENT.venueName}, ${EVENT.venueAddress}`);
-  const message = state === "copied" ? t.locationCopied : state === "failed" ? t.locationCopyFailed : "";
 
   return (
-    <section id="location" aria-labelledby="location-heading" className="text-center">
-      <div className="mx-auto w-full max-w-[42rem] px-6 py-[4.5rem]">
-        <h2 id="location-heading" className="mb-6 mt-2 text-[clamp(1.9rem,6vw,2.6rem)] font-medium uppercase tracking-[0.12em]">
-          {t.locationHeading}
-        </h2>
-        <p className="text-[1.5rem] font-semibold">{EVENT.venueName}</p>
-        <p>{EVENT.venueRoom}</p>
-        {/* Each part stays on one line, so the address only ever wraps at a comma. */}
-        <address className="mx-auto mt-3 max-w-[28rem] not-italic">
-          {addressParts.map((part) => (
-            <span key={part} className="inline-block whitespace-pre-wrap">
-              {part}
-            </span>
-          ))}
-        </address>
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <a href={EVENT.directionsUrl} target="_blank" rel="noopener noreferrer" className={actionClass}>
-            <span>{t.locationMapOpen}</span>
-            <span className="sr-only">{t.locationNewTab}</span>
-          </a>
-          <button type="button" onClick={copy} className={`${actionClass} bg-transparent`}>
-            {t.locationCopy}
-          </button>
+    <section
+      id="prayer"
+      aria-labelledby="prayer-heading"
+      className="bg-ivory text-navy px-5 py-[4.5rem] text-center sm:px-8 sm:py-24"
+    >
+      <div className="border-gold/70 before:border-gold/40 relative mx-auto max-w-[42rem] border px-6 py-12 before:pointer-events-none before:absolute before:inset-2 before:border before:content-[''] sm:px-14 sm:py-16">
+        <img
+          src={bismillahUrl}
+          alt={t.prayerOpening}
+          width={700}
+          height={272}
+          className="mx-auto block h-auto w-[clamp(8rem,38vw,12rem)]"
+        />
+        <div
+          aria-hidden="true"
+          className="text-gold mx-auto my-7 flex max-w-[12rem] items-center gap-4 before:h-px before:flex-1 before:bg-current after:h-px after:flex-1 after:bg-current"
+        >
+          <span className="size-2 rotate-45 border border-current" />
         </div>
-        <p role="status" className="mt-3 min-h-[1.6rem] italic">
-          {message}
-        </p>
+        <h2
+          id="prayer-heading"
+          className="text-gold-ink text-[clamp(1.4rem,5.5vw,2rem)] font-medium tracking-[0.1em] text-balance uppercase"
+        >
+          {t.prayerHeading}
+        </h2>
+        <div className="mx-auto mt-7 grid max-w-[31rem] gap-5 text-[clamp(1.1rem,3.7vw,1.3rem)] leading-[1.75]">
+          <p>{t.prayerBlessing}</p>
+          <p>{t.prayerUnion}</p>
+          <p>{t.prayerGuidance}</p>
+        </div>
+        <img
+          src={aminUrl}
+          alt={t.prayerClosing}
+          width={700}
+          height={125}
+          className="mx-auto mt-9 block h-auto w-[clamp(11rem,52vw,16rem)]"
+        />
       </div>
     </section>
   );

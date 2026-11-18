@@ -1,4 +1,5 @@
 import { EVENT } from "../../../shared/config/event";
+import salamUrl from "../../assets/words/salam-trimmed.png";
 import { useI18n } from "../../i18n/I18nProvider";
 import {
   COUPLE,
@@ -61,7 +62,7 @@ export function DetailsSection() {
       {groups.map((group, i) => (
         <div key={i} className="grid gap-2 leading-[1.3]">
           {group.map((person) => (
-            <p key={person.name} className="text-[0.85rem]">
+            <p key={person.name} className="text-[0.9rem]">
               <span className="text-gold-ink block text-[0.65rem] font-semibold tracking-[0.2em] uppercase">
                 {HOST_TITLE}
               </span>
@@ -84,10 +85,14 @@ export function DetailsSection() {
         <h2 id="details-heading" className="sr-only">
           {t.navDetails}
         </h2>
-        <p className="text-gold-ink text-[0.9rem] font-semibold tracking-[0.28em] uppercase">
-          {t.detailsGreeting}
-        </p>
-        <p className={`mt-5 ${body}`}>Ya Qadi Al-Hajat</p>
+        <img
+          src={salamUrl}
+          alt={t.detailsGreeting}
+          width={900}
+          height={141}
+          className="mx-auto block h-auto w-[clamp(15rem,70vw,24rem)]"
+        />
+        <p className={`mt-5 ${body}`}>Ya Qadhi Al-Hajat</p>
         <Rule />
         <p className={body}>{t.detailsIntro}</p>
 
@@ -116,28 +121,6 @@ export function DetailsSection() {
             <dt className={eyebrow}>{t.factDate}</dt>
             <dd className={`mt-1 ${body} lining-nums`}>{t.normalDate}</dd>
             <dd className={`mt-1 ${body} lining-nums`}>{t.islamicDate}</dd>
-          </div>
-          <div>
-            <dt className={eyebrow}>{t.factItinerary}</dt>
-            <dd className="relative mx-auto max-w-sm md:max-w-md">
-              <div className="bg-gold absolute top-0 bottom-0 left-[72px] w-px" />
-              <ul className="mt-2 flex flex-col">
-                {(lang === "en" ? ITINERARY_EN : ITINERARY).map((entry, i) => (
-                  <li key={i} className="flex gap-6">
-                    <div className="w-16 flex-shrink-0 pt-[3px] text-right text-[0.75rem] leading-relaxed tracking-wide">
-                      {entry.time}
-                    </div>
-                    <div className="flex-1">
-                      <div
-                        className={`${body} flex items-start gap-2.5 text-left font-light`}
-                      >
-                        <span>{entry.item}</span>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </dd>
           </div>
           <div>
             <dt className={eyebrow}>{t.factVenue}</dt>
@@ -173,6 +156,45 @@ export function DetailsSection() {
         <p role="status" className="mt-3 min-h-[1.6rem] italic">
           {message}
         </p>
+
+        <Rule />
+
+        <dl className="mt-6">
+          <div>
+            <dt className={eyebrow}>{t.factItinerary}</dt>
+            <dd className="mx-auto max-w-sm md:max-w-md">
+              <ul className="mt-3 flex flex-col">
+                {(lang === "en" ? ITINERARY_EN : ITINERARY).map(
+                  (entry, i, all) => (
+                    <li
+                      key={i}
+                      className="flex flex-col items-center text-center"
+                    >
+                      {entry.time ? (
+                        <span className="text-gold-ink text-[0.8rem] font-semibold tracking-[0.14em]">
+                          {entry.time}
+                        </span>
+                      ) : null}
+                      <span
+                        className={`${body} leading-snug font-light text-balance`}
+                      >
+                        {entry.item}
+                      </span>
+                      {i < all.length - 1 ? (
+                        <div
+                          aria-hidden="true"
+                          className="text-gold my-1.5 flex flex-col items-center before:h-3 before:w-px before:bg-current after:h-3 after:w-px after:bg-current"
+                        >
+                          <i className="my-0.5 block size-[7px] rotate-45 border border-current" />
+                        </div>
+                      ) : null}
+                    </li>
+                  ),
+                )}
+              </ul>
+            </dd>
+          </div>
+        </dl>
       </div>
     </section>
   );

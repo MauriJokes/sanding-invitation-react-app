@@ -90,6 +90,7 @@ export interface Strings {
   navDetails: string;
   navRsvp: string;
   navLocation: string;
+  navPrayer: string;
   navWishes: string;
   musicPlay: string;
   musicPause: string;
@@ -112,6 +113,12 @@ export interface Strings {
   countdownAfter: string;
   heroScroll: string;
   locationHeading: string;
+  prayerHeading: string;
+  prayerOpening: string;
+  prayerBlessing: string;
+  prayerUnion: string;
+  prayerGuidance: string;
+  prayerClosing: string;
   locationMapOpen: string;
   locationNewTab: string;
   locationCopy: string;
@@ -220,6 +227,7 @@ export const strings: Record<Lang, Strings> = {
     navDetails: "Butiran",
     navRsvp: "RSVP",
     navLocation: "Lokasi",
+    navPrayer: "Doa",
     navWishes: "Ucapan",
     musicPlay: "Mainkan muzik",
     musicPause: "Jeda muzik",
@@ -228,7 +236,7 @@ export const strings: Record<Lang, Strings> = {
     detailsIntro: "Dengan izin Allah S.W.T dan rahmatnya, kami:",
     detailsInvite:
       "Dengan penuh hormat dan takzim sukacita menjunjung Pengiran berangkat / mempersilakan Pehin / Dato / Datin / Awang / Dayang / Tuan / Puan / Encik / Cik hadir ke Majlis Perkahwinan anakanda / kekanda abis peramba / kaola / kami:",
-    detailsAnd: "dengan penuh hatinya",
+    detailsAnd: "dengan pilihan hatinya",
     factDate: "Tarikh",
     factItinerary: "Aturcara Majlis",
     normalDate: "Isnin, 28 Disember 2026M",
@@ -243,6 +251,15 @@ export const strings: Record<Lang, Strings> = {
     countdownAfter: "Terima kasih kerana meraikan hari bahagia kami.",
     heroScroll: "Lihat butiran",
     locationHeading: "Lokasi",
+    prayerHeading: "Doa untuk Pengantin",
+    prayerOpening: "Bismillahirrahmanirrahim",
+    prayerBlessing:
+      "Ya Allah, Ya Rahim, dari setinggi dan seluas kasih sayang-Mu kepada pengantin suami isteri, berkatilah majlis yang diadakan dengan keberkatan dari permulaan hingga pengakhirannya.",
+    prayerUnion:
+      "Sesungguhnya pertemuan ini adalah dengan izin-Mu. Mudah-mudahan perkongsian hidup yang dibina berkekalan hingga ke akhir usia.",
+    prayerGuidance:
+      "Dengan taufik dan hidayah-Mu, beruntunglah keduanya dalam kehidupan di dunia lebih-lebih lagi di akhirat.",
+    prayerClosing: "Aamiin Ya Rabbal 'Alamin",
     locationMapOpen: "Buka di Peta",
     locationNewTab: "(dibuka di tab baharu)",
     locationCopy: "Salin alamat",
@@ -349,6 +366,7 @@ export const strings: Record<Lang, Strings> = {
     navDetails: "Details",
     navRsvp: "RSVP",
     navLocation: "Location",
+    navPrayer: "Prayer",
     navWishes: "Wishes",
     musicPlay: "Play music",
     musicPause: "Pause music",
@@ -357,7 +375,7 @@ export const strings: Record<Lang, Strings> = {
     detailsIntro: "By the grace and blessings of Allah S.W.T, we",
     detailsInvite:
       "With utmost respect and honor, we humbly invite Pehin / Dato / Datin / Awang / Dayang / Sir / Madam / Mr / Ms to attend the Wedding Ceremony of our beloved children:",
-    detailsAnd: "and",
+    detailsAnd: "and her love",
     factDate: "Date",
     factItinerary: "Itinerary",
     normalDate: "Monday, 28 December 2026",
@@ -372,6 +390,15 @@ export const strings: Record<Lang, Strings> = {
     countdownAfter: "Thank you for celebrating our special day with us.",
     heroScroll: "View details",
     locationHeading: "Location",
+    prayerHeading: "Prayer for the Newlyweds",
+    prayerOpening: "Bismillahirrahmanirrahim",
+    prayerBlessing:
+      "O Allah, the Most Merciful, in Your boundless love for this husband and wife, bless this celebration from its beginning to its end.",
+    prayerUnion:
+      "Truly, this union is by Your permission. May the life they build together endure to the end of their days.",
+    prayerGuidance:
+      "Through Your help and guidance, may they both prosper in this world and, above all, in the Hereafter.",
+    prayerClosing: "Aamiin Ya Rabbal 'Alamin",
     locationMapOpen: "Open in Maps",
     locationNewTab: "(opens in a new tab)",
     locationCopy: "Copy address",

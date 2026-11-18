@@ -3,12 +3,20 @@ import type { Strings } from "../../i18n/strings";
 
 export interface NavItem {
   id: string;
-  label: keyof Pick<Strings, "navDetails" | "navRsvp" | "navLocation" | "navWishes">;
+  label: keyof Pick<
+    Strings,
+    "navDetails" | "navRsvp" | "navPrayer" | "navWishes"
+  >;
   icon: ReactNode;
 }
 
 const Icon = ({ children }: { children: ReactNode }) => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" className="size-[22px] fill-none stroke-current stroke-[1.5] [stroke-linecap:round] [stroke-linejoin:round] max-md:block md:hidden">
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    focusable="false"
+    className="size-[22px] fill-none stroke-current stroke-[1.5] [stroke-linecap:round] [stroke-linejoin:round] max-md:block md:hidden"
+  >
     {children}
   </svg>
 );
@@ -36,12 +44,11 @@ export const NAV_ITEMS: readonly NavItem[] = [
     ),
   },
   {
-    id: "location",
-    label: "navLocation",
+    id: "prayer",
+    label: "navPrayer",
     icon: (
       <Icon>
-        <path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z" />
-        <circle cx="12" cy="10" r="2" />
+        <path d="M12 7c-2-2-5-3-9-3v15c4 0 7 1 9 3 2-2 5-3 9-3V4c-4 0-7 1-9 3zM12 7v15" />
       </Icon>
     ),
   },

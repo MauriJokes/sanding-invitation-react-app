@@ -133,6 +133,7 @@ Source of truth: `src/i18n/strings.ts` (TypeScript enforces that both languages 
 | `navDetails` | Butiran | Details | approved (M1, `nDetails`) |
 | `navRsvp` | RSVP | RSVP | approved (M1) |
 | `navLocation` | Lokasi | Location | approved (M1, `nLocation`) |
+| `navPrayer` | Doa | Prayer | replaces standalone location nav (2026-11-17) |
 | `navWishes` | Ucapan | Wishes | approved (M1, `nWishes`) |
 | `musicPlay` | Mainkan muzik | Play music | draft |
 | `musicPause` | Jeda muzik | Pause music | draft |
@@ -155,6 +156,12 @@ Source of truth: `src/i18n/strings.ts` (TypeScript enforces that both languages 
 | `countdownAfter` | Terima kasih kerana meraikan hari bahagia kami. | Thank you for celebrating our special day with us. | draft |
 | `heroScroll` | Lihat butiran | View details | approved (M1, `scroll`) |
 | `locationHeading` | Lokasi | Location | approved (M1, `locT`) |
+| `prayerHeading` | Doa untuk Pengantin | Prayer for the Newlyweds | supplied reference |
+| `prayerOpening` | Bismillahirrahmanirrahim | Bismillahirrahmanirrahim | text placeholder for owner asset |
+| `prayerBlessing` | Ya Allah, Ya Rahim, dari setinggi dan seluas kasih sayang-Mu kepada pengantin suami isteri, berkatilah majlis yang diadakan dengan keberkatan dari permulaan hingga pengakhirannya. | O Allah, the Most Merciful, in Your boundless love for this husband and wife, bless this celebration from its beginning to its end. | supplied reference; English draft |
+| `prayerUnion` | Sesungguhnya pertemuan ini adalah dengan izin-Mu. Mudah-mudahan perkongsian hidup yang dibina berkekalan hingga ke akhir usia. | Truly, this union is by Your permission. May the life they build together endure to the end of their days. | supplied reference; English draft |
+| `prayerGuidance` | Dengan taufik dan hidayah-Mu, beruntunglah keduanya dalam kehidupan di dunia lebih-lebih lagi di akhirat. | Through Your help and guidance, may they both prosper in this world and, above all, in the Hereafter. | supplied reference; English draft |
+| `prayerClosing` | Aamiin Ya Rabbal 'Alamin | Aamiin Ya Rabbal 'Alamin | text placeholder for owner asset |
 | `locationMapOpen` | Buka di Peta | Open in Maps | approved (M1, `map`) |
 | `locationNewTab` | (dibuka di tab baharu) | (opens in a new tab) | draft (screen-reader only) |
 | `locationCopy` | Salin alamat | Copy address | approved (M1, `copy`) |

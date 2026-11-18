@@ -59,7 +59,7 @@ Sampled = measured from `design-assets/moodboard/theme/`; derived = computed fro
 
 | Token | Hex | Origin | Use |
 |---|---|---|---|
-| `navy` | `#283368` | sampled | Primary field (hero, countdown, location) |
+| `navy` | `#283368` | sampled | Primary field (hero, countdown, guestbook) |
 | `navy-deep` | `#1b2352` | derived (navy ~30% darker) | Nav, gate panels, footer |
 | `periwinkle` | `#7e8fb8` | sampled | Tile detail |
 | `slate` | `#4b5378` | sampled | Input borders |
@@ -129,7 +129,7 @@ Verified contrast ratios: ivory on navy 9.19; ivory on navy-deep 11.5; gold-brig
 
 ## 5b. Navigation (approved)
 
-Below 768 px: fixed bottom bar with four icon-and-label anchors (Butiran, RSVP, Lokasi, Ucapan), a divider, then icon-only BM/EN and music controls. Safe-area padding, current section marked by a gold line as well as colour, hidden while a text field has focus. From 768 px: sticky top bar with the monogram left, anchors centred and controls right. The current section is also underlined on the top bar. A link appears only once its section exists on the page. The music control shows its state by a slash through the note (off) as well as colour.
+Below 768 px: fixed bottom bar with four icon-and-label anchors (Butiran, RSVP, Doa, Ucapan), a divider, then icon-only BM/EN and music controls. Safe-area padding, current section marked by a gold line as well as colour, hidden while a text field has focus. From 768 px: sticky top bar with the monogram left, anchors centred and controls right. The current section is also underlined on the top bar. A link appears only once its section exists on the page. The music control shows its state by a slash through the note (off) as well as colour.
 
 ## 5c. Forms (built in M4)
 
@@ -151,6 +151,12 @@ Below 768 px: fixed bottom bar with four icon-and-label anchors (Butiran, RSVP, 
 ## 5d. Cover plaque
 
 The cover follows §5a. The plaque is deep navy (`navy-deep`) with gold and ivory text and gold hairlines (D-31; contrast 6.9:1 and 11.5:1). A botanical variant using the owner's flower and leaf art is parked in `BACKLOG.md` (B-1) and is not part of the current design.
+
+## 5f. Prayer section (owner-approved reference, 2026-11-17)
+
+The former standalone location section is now `#prayer`, between RSVP and the guestbook. Venue actions remain in Details. The prayer uses an ivory reading surface, a restrained double gold hairline frame and diamond divider, gold-ink heading and navy Cormorant body text. Centred, sentence-case paragraphs replace the reference's dense uppercase block for easier reading. There are no flowers or added animations.
+
+The opening Bismillah and closing Aamiin are the owner's supplied calligraphy, trimmed to the artwork and imported from `src/assets/words/bismillah-trimmed.png` and `amin-trimmed.png` (the untrimmed originals stay alongside). The Bismillah is `w-[clamp(8rem,38vw,12rem)]` and the Aamiin `w-[clamp(11rem,52vw,16rem)]`, both with `h-auto` and explicit `width`/`height`, so it scales with the viewport and cannot shift layout. The alt text is the `prayerOpening` / `prayerClosing` string. The Details greeting uses `salam-trimmed.png` the same way (`w-[clamp(15rem,70vw,24rem)]`).
 
 ## 6. Accessibility
 

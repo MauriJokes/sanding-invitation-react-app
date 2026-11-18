@@ -10,7 +10,7 @@ export const HOST_GROUPS: readonly (readonly Person[])[] = [
       name: "Pengiran Haji Mohamad Jaludin",
       lineage: "bin Pengiran Haji Puteh",
     },
-    { name: "Dayang Masdiah", lineage: "binti Awang Haji Tuah" },
+    { name: "Dayang Masdiah binti Awang Haji Tuah", lineage: "" },
   ],
   [
     {
@@ -23,12 +23,12 @@ export const HOST_GROUPS: readonly (readonly Person[])[] = [
     },
   ],
   [
-    { name: "Haji Nik Joharris", lineage: "bin Nik Ahmad" },
-    { name: "Hajjah Nerisa", lineage: "binti Nawi" },
+    { name: "Haji Nik Joharris bin Nik Ahmad", lineage: "" },
+    { name: "Hajah Nerisa binti Nawi", lineage: "" },
   ],
   [
-    { name: "Nik Arman Danish", lineage: "bin Nik Joharris" },
-    { name: "Nik Azlan", lineage: "bin Nik Joharris" },
+    { name: "Nik Arman Danish bin Nik Joharris", lineage: "" },
+    { name: "Nik Azlan bin Nik Joharris", lineage: "" },
   ],
 ];
 

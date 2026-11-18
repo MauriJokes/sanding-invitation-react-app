@@ -70,20 +70,21 @@ describe("owner-supplied copy", () => {
 
   it("shows the invitation lines in the chosen language", () => {
     renderIt("ms");
-    expect(screen.getByText(strings.ms.detailsGreeting)).toBeTruthy();
+    expect(screen.getByAltText(strings.ms.detailsGreeting)).toBeTruthy();
     expect(screen.getByText(strings.ms.detailsIntro)).toBeTruthy();
     expect(screen.getByText(strings.ms.detailsInvite)).toBeTruthy();
     cleanup();
     renderIt("en");
-    expect(screen.getByText(strings.en.detailsGreeting)).toBeTruthy();
+    expect(screen.getByAltText(strings.en.detailsGreeting)).toBeTruthy();
     expect(screen.getByText(strings.en.detailsIntro)).toBeTruthy();
     expect(screen.getByText(strings.en.detailsInvite)).toBeTruthy();
   });
 
   it("keeps the opening prayer and the greeting once, without the duplicate Assalamu'alaikum line", () => {
     const { container } = renderIt();
-    expect(screen.getAllByText("Ya Qadi Al-Hajat")).toHaveLength(1);
-    expect(screen.getAllByText(strings.ms.detailsGreeting)).toHaveLength(1);
+    expect(screen.getAllByText("Ya Qadhi Al-Hajat")).toHaveLength(1);
+    expect(screen.getAllByAltText(strings.ms.detailsGreeting)).toHaveLength(1);
+    expect(container.textContent).not.toContain(strings.ms.detailsGreeting);
     expect(container.textContent).not.toMatch(/ASSALAMU'ALAIKUM WR\. WB\./i);
   });
 
@@ -119,16 +120,17 @@ describe("DetailsSection", () => {
     );
     expect(terms).toEqual([
       strings.ms.factDate,
-      strings.ms.factItinerary,
       strings.ms.factVenue,
+      strings.ms.factItinerary,
     ]);
     const defs = Array.from(container.querySelectorAll("dd"));
     expect(defs).toHaveLength(4);
     expect(defs[0]?.textContent).toBe(strings.ms.normalDate);
     expect(defs[1]?.textContent).toBe(strings.ms.islamicDate);
     expect(defs[0]?.textContent).toMatch(/28 Disember 2026/);
-    expect(defs[3]?.textContent).toContain(EVENT.venueName);
-    expect(defs[3]?.textContent).toContain(EVENT.venueRoom);
+    expect(defs[2]?.textContent).toContain(EVENT.venueName);
+    expect(defs[2]?.textContent).toContain(EVENT.venueRoom);
+    expect(defs[3]?.querySelectorAll("li")).toHaveLength(ITINERARY.length);
     expect(container.querySelector("address")?.textContent).toBe(
       EVENT.venueAddress,
     );
@@ -166,8 +168,8 @@ describe("DetailsSection", () => {
       Array.from(container.querySelectorAll("dt")).map((e) => e.textContent),
     ).toEqual([
       strings.en.factDate,
-      strings.en.factItinerary,
       strings.en.factVenue,
+      strings.en.factItinerary,
     ]);
     expect(Array.from(container.querySelectorAll("dd"))[0]?.textContent).toBe(
       strings.en.normalDate,
@@ -177,12 +179,53 @@ describe("DetailsSection", () => {
     ).toBeTruthy();
   });
 
-  it("has decoration hidden from assistive technology and no images, frames or inputs", () => {
+  it("has decoration hidden from assistive technology and only the greeting image, no frames or inputs", () => {
     const { container } = renderIt();
     expect(
-      container.querySelectorAll("img, iframe, object, embed, input").length,
+      container.querySelectorAll("iframe, object, embed, input").length,
     ).toBe(0);
-    expect(container.querySelectorAll("div[aria-hidden=true]")).toHaveLength(2);
+    expect(container.querySelectorAll("img")).toHaveLength(1);
+    // three ornamental rules plus one separator between each pair of itinerary entries
+    expect(container.querySelectorAll("div[aria-hidden=true]")).toHaveLength(
+      3 + ITINERARY.length - 1,
+    );
+  });
+
+  it("shows the greeting as the owner's calligraphy, sized to the screen without shifting the layout", () => {
+    renderIt();
+    const img = screen.getByAltText(strings.ms.detailsGreeting);
+    expect(img.getAttribute("src")).toMatch(/salam-trimmed.*\.png$/);
+    expect(img.getAttribute("width")).toBeTruthy();
+    expect(img.getAttribute("height")).toBeTruthy();
+    expect(img.className).toMatch(/w-\[clamp\(/);
+    expect(img.className).toContain("h-auto");
+  });
+
+  it("ends with the itinerary, after the venue and its two actions", () => {
+    const { container } = renderIt();
+    const follows = (a: Element, b: Element) =>
+      Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+    const venue = container.querySelector("address")!;
+    const link = screen.getByRole("link", {
+      name: new RegExp(strings.ms.locationMapOpen),
+    });
+    const copy = screen.getByRole("button", { name: strings.ms.locationCopy });
+    const firstEntry = container.querySelector("li")!;
+    expect(follows(venue, link)).toBe(true);
+    expect(follows(copy, firstEntry)).toBe(true);
+  });
+
+  it("shows a time label only for the entries that have one, and separates entries with hidden decoration", () => {
+    const { container } = renderIt();
+    const items = Array.from(container.querySelectorAll("li"));
+    items.forEach((li, index) => {
+      const entry = ITINERARY[index]!;
+      const label = li.querySelector("span:first-child");
+      expect(label?.textContent).toBe(entry.time || entry.item);
+      expect(li.querySelectorAll("[aria-hidden=true]")).toHaveLength(
+        index < items.length - 1 ? 1 : 0,
+      );
+    });
   });
 
   it("makes the couple the focus: their names are larger than the body text and the families' are smaller", () => {

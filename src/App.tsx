@@ -16,7 +16,7 @@ import { useI18n } from "./i18n/I18nProvider";
 import { usePageHidden } from "./lib/usePageHidden";
 
 /** Sections on the page; the bar links to these only. */
-const SECTIONS = ["details", "rsvp", "location", "guestbook"] as const;
+const SECTIONS = ["details", "rsvp", "prayer", "guestbook"] as const;
 
 export function App({ invite }: { invite?: string }) {
   const { t, locale } = useI18n();

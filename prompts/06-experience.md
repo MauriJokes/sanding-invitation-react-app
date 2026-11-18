@@ -57,6 +57,8 @@ Changes made in these rounds (all approved by the owner):
 - Guestbook slider with auto-play and a pop-up form, replacing the list (D-37, `DESIGN_SYSTEM.md` §5e).
 - Tests were brought up to date: copy-dependent tests now read the strings from `strings.ts` instead of repeating them, so later copy edits do not break the build.
 
+2026-11-17 owner review: replace the standalone location section with "Doa untuk Pengantin", following the supplied prayer reference without flowers and using the existing ivory/navy/gold theme. The navigation now links to `#prayer` as Doa / Prayer; venue directions remain in Details. 2026-11-18: Bismillah, Aamiin and the Details salam are now the owner's trimmed calligraphy images, sized with `clamp()` widths. Test changes for this round are explicitly deferred by the owner; existing location/navigation assertions still describe the previous section.
+
 ## Owner inputs still needed
 
 - Feedback after each step's review pack.

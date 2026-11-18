@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { EVENT } from "../../../shared/config/event";
+import { cleanup, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it } from "vitest";
 import { LocationSection } from "../../../src/features/location/LocationSection";
 import { I18nProvider } from "../../../src/i18n/I18nProvider";
+import { strings } from "../../../src/i18n/strings";
 
 const renderIt = (lang: "ms" | "en" = "ms") =>
   render(
@@ -11,86 +11,83 @@ const renderIt = (lang: "ms" | "en" = "ms") =>
       <LocationSection />
     </I18nProvider>,
   );
-const setClipboard = (value: unknown) => Object.defineProperty(navigator, "clipboard", { configurable: true, value });
-const press = (el: Element) =>
-  act(async () => {
-    fireEvent.click(el);
-    await Promise.resolve();
-  });
 
-beforeEach(() => vi.useFakeTimers());
 afterEach(() => {
   cleanup();
-  vi.useRealTimers();
-  setClipboard(undefined);
   document.documentElement.lang = "";
 });
 
-describe("LocationSection", () => {
+// LocationSection now renders the prayer for the couple; directions live in Details.
+describe("LocationSection (prayer for the couple)", () => {
   it("is a labelled section with the id the navigation links to", () => {
     renderIt();
-    expect(screen.getByRole("region", { name: "Lokasi" }).id).toBe("location");
-    expect(screen.getByRole("heading", { level: 2, name: "Lokasi" })).toBeTruthy();
+    const heading = strings.ms.prayerHeading;
+    expect(screen.getByRole("region", { name: heading }).id).toBe("prayer");
+    expect(screen.getByRole("heading", { level: 2, name: heading })).toBeTruthy();
   });
 
-  it("shows the venue, room and the full address as plain text (the map is never the only source)", () => {
+  it("shows the three prayer paragraphs in order, below the heading", () => {
     const { container } = renderIt();
-    expect(screen.getByText(EVENT.venueName)).toBeTruthy();
-    expect(screen.getByText(EVENT.venueRoom)).toBeTruthy();
-    expect(container.querySelector("address")?.textContent).toBe(EVENT.venueAddress);
-    expect(EVENT.venueAddress).toBe("Abdul Razak Complex, Jln Gadong, Bandar Seri Begawan BE3519, Brunei Darussalam");
+    const { prayerBlessing, prayerUnion, prayerGuidance } = strings.ms;
+    const paragraphs = Array.from(container.querySelectorAll("p")).map((p) => p.textContent);
+    expect(paragraphs).toEqual([prayerBlessing, prayerUnion, prayerGuidance]);
+    const heading = screen.getByRole("heading", { level: 2 });
+    for (const p of container.querySelectorAll("p")) {
+      expect(heading.compareDocumentPosition(p) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    }
   });
 
-  it("offers a directions link that opens the owner's map URL in a new tab, safely", () => {
+  it("opens and closes with the owner's calligraphy, using the prayer words as alt text", () => {
+    const { container } = renderIt();
+    const images = Array.from(container.querySelectorAll("img"));
+    expect(images).toHaveLength(2);
+    const opening = screen.getByAltText(strings.ms.prayerOpening);
+    const closing = screen.getByAltText(strings.ms.prayerClosing);
+    expect(opening.getAttribute("src")).toMatch(/bismillah-trimmed.*\.png$/);
+    expect(closing.getAttribute("src")).toMatch(/amin-trimmed.*\.png$/);
+    const heading = screen.getByRole("heading", { level: 2 });
+    const lastParagraph = container.querySelectorAll("p")[2]!;
+    expect(opening.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(lastParagraph.compareDocumentPosition(closing) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(container.querySelector("[data-asset-placeholder]")).toBeNull();
+  });
+
+  it("sizes each image to the screen without shifting the layout, with the Bismillah smaller than the Aamiin", () => {
     renderIt();
-    const link = screen.getByRole("link", { name: /Buka di Peta/ });
-    expect(link.getAttribute("href")).toBe("https://share.google/1Q23UIJpJpyXhl9l9");
-    expect(link.getAttribute("target")).toBe("_blank");
-    expect(link.getAttribute("rel")).toBe("noopener noreferrer");
-    expect(link.textContent).toContain("(dibuka di tab baharu)");
+    const opening = screen.getByAltText(strings.ms.prayerOpening);
+    const closing = screen.getByAltText(strings.ms.prayerClosing);
+    for (const img of [opening, closing]) {
+      expect(img.getAttribute("width")).toBeTruthy();
+      expect(img.getAttribute("height")).toBeTruthy();
+      expect(img.className).toMatch(/w-\[clamp\(/);
+      expect(img.className).toContain("h-auto");
+    }
+    const maxRem = (img: Element) => Number(/clamp\([\d.]+rem,[\d.]+vw,([\d.]+)rem\)/.exec(img.className)?.[1]);
+    expect(maxRem(opening)).toBeLessThan(maxRem(closing));
   });
 
-  it("has no embedded map, frame or image", () => {
+  it("does not repeat the venue actions: no map link, copy button, status or embedded map", () => {
     const { container } = renderIt();
-    expect(container.querySelectorAll("iframe, img, object, embed")).toHaveLength(0);
+    expect(screen.queryAllByRole("link")).toHaveLength(0);
+    expect(screen.queryAllByRole("button")).toHaveLength(0);
+    expect(screen.queryAllByRole("status")).toHaveLength(0);
+    expect(container.querySelectorAll("iframe, object, embed, address")).toHaveLength(0);
   });
 
-  it("copies the venue and address and announces it politely", async () => {
-    const writeText = vi.fn().mockResolvedValue(undefined);
-    setClipboard({ writeText });
-    renderIt();
-    const status = screen.getByRole("status");
-    expect(status.textContent).toBe("");
-    await press(screen.getByRole("button", { name: "Salin alamat" }));
-    expect(writeText).toHaveBeenCalledExactlyOnceWith(`${EVENT.venueName}, ${EVENT.venueAddress}`);
-    expect(status.textContent).toBe("Alamat disalin.");
-    act(() => void vi.advanceTimersByTime(2500));
-    expect(status.textContent).toBe("");
-  });
-
-  it("tells the guest to copy by hand when the clipboard is unavailable, and keeps the address selectable", async () => {
-    setClipboard(undefined);
-    const { container } = renderIt();
-    await press(screen.getByRole("button", { name: "Salin alamat" }));
-    expect(screen.getByRole("status").textContent).toBe("Alamat tidak dapat disalin. Sila salin secara manual.");
-    expect(container.querySelector("address")?.textContent).toBe(EVENT.venueAddress);
-  });
-
-  it("follows the language, including the messages", async () => {
-    setClipboard({ writeText: vi.fn().mockResolvedValue(undefined) });
+  it("follows the language", () => {
     renderIt("en");
-    expect(screen.getByRole("heading", { level: 2, name: "Location" })).toBeTruthy();
-    expect(screen.getByRole("link", { name: /Open in Maps/ }).textContent).toContain("(opens in a new tab)");
-    await press(screen.getByRole("button", { name: "Copy address" }));
-    expect(screen.getByRole("status").textContent).toBe("Address copied.");
+    expect(screen.getByRole("region", { name: strings.en.prayerHeading }).id).toBe("prayer");
+    expect(screen.getByText(strings.en.prayerBlessing)).toBeTruthy();
+    expect(screen.getByAltText(strings.en.prayerOpening)).toBeTruthy();
+    expect(screen.getByAltText(strings.en.prayerClosing)).toBeTruthy();
+    expect(screen.queryByText(strings.ms.prayerBlessing)).toBeNull();
   });
 
-  it("keeps text in its own elements so machine translation cannot break it, and the status always exists", () => {
+  it("keeps text in its own elements so machine translation cannot break it", () => {
     const { container } = renderIt();
-    for (const el of container.querySelectorAll("p, address, h2, a, button")) {
+    for (const el of container.querySelectorAll("p, h2")) {
       const bare = Array.from(el.childNodes).some((n) => n.nodeType === Node.TEXT_NODE && n.textContent?.trim());
       expect(bare && el.children.length > 0, `${el.tagName}: ${el.textContent}`).toBe(false);
     }
-    expect(container.querySelector("[role=status]")).not.toBeNull();
   });
 });
