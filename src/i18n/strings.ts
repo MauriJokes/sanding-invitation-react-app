@@ -272,7 +272,7 @@ export const strings: Record<Lang, Strings> = {
   en: {
     rsvpHeading: "RSVP",
     rsvpLead: "Please fill out the RSVP form below.",
-    familyLabel: "Your name / partner's name",
+    familyLabel: "Your name / couple name",
     familyHint: 'e.g. "Izyan Jaludin" or "Izyan and Adam"',
     phoneLabel: "Phone number",
     phoneCountryLabel: "Country code",

@@ -56,7 +56,7 @@ Source of truth: `src/i18n/strings.ts` (TypeScript enforces that both languages 
 |---|---|---|---|
 | `rsvpHeading` | RSVP | RSVP | approved (M1) |
 | `rsvpLead` | Sila isi borang RSVP di bawah. | Please fill out the RSVP form below. | owner-edited (M6) |
-| `familyLabel` | Nama Anda / Pasangan | Your name / partner's name | owner-edited (M6) |
+| `familyLabel` | Nama Anda / Pasangan | Your name / couple name | owner-edited (M6) |
 | `familyHint` | e.g. "Izyan Jaludin" atau "Izyan & Adam" | e.g. "Izyan Jaludin" or "Izyan and Adam" | owner-edited (M6) |
 | `phoneLabel` | Nombor telefon | Phone number | draft |
 | `phoneCountryLabel` | Kod negara | Country code | draft |
