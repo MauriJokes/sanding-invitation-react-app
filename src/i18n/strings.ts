@@ -12,7 +12,8 @@ export interface Strings {
   familyLabel: string;
   familyHint: string;
   phoneLabel: string;
-  phoneHint: string;
+  phoneCountryLabel: string;
+  phoneHint: (example: string) => string;
   statusLabel: string;
   statusAttending: string;
   statusDeclined: string;
@@ -132,9 +133,10 @@ export const strings: Record<Lang, Strings> = {
     rsvpHeading: "RSVP",
     rsvpLead: "Sila isi borang RSVP di bawah.",
     familyLabel: "Nama Anda / Pasangan",
-    familyHint: 'e.g. "Izyan Jaludin" atau "Izyan & Adam"',
+    familyHint: 'Contoh "Izyan Jaludin" atau "Izyan & Adam"',
     phoneLabel: "Nombor telefon",
-    phoneHint: "e.g. +673 812 3456.",
+    phoneCountryLabel: "Kod negara",
+    phoneHint: (example) => `Contoh ${example}.`,
     statusLabel: "Kehadiran",
     statusAttending: "Akan hadir",
     statusDeclined: "Tidak hadir",
@@ -158,7 +160,7 @@ export const strings: Record<Lang, Strings> = {
     phoneTooLong: (max) =>
       `Nombor telefon terlalu panjang (maksimum ${max} aksara).`,
     phoneInvalid:
-      "Sila masukkan nombor telefon yang sah dengan kod negara, contohnya +673 812 3456.",
+      "Sila masukkan nombor telefon yang sah bagi kod negara yang dipilih.",
     errorDuplicate: "Satu RSVP untuk anda telah diterima.",
     errorDuplicateAfterRetry:
       "Penghantaran anda sebelum ini mungkin telah berjaya. Satu RSVP untuk anda telah diterima.",
@@ -254,11 +256,11 @@ export const strings: Record<Lang, Strings> = {
     prayerHeading: "Doa untuk Pengantin",
     prayerOpening: "Bismillahirrahmanirrahim",
     prayerBlessing:
-      "Ya Allah, Ya Rahim, dari setinggi dan seluas kasih sayang-Mu kepada pengantin suami isteri, berkatilah majlis yang diadakan dengan keberkatan dari permulaan hingga pengakhirannya.",
+      '"Ya Allah, Ya Rahim, dari setinggi dan seluas kasih sayang-Mu kepada pengantin suami isteri, berkatilah majlis yang diadakan dengan keberkatan dari permulaan hingga pengakhirannya.',
     prayerUnion:
       "Sesungguhnya pertemuan ini adalah dengan izin-Mu. Mudah-mudahan perkongsian hidup yang dibina berkekalan hingga ke akhir usia.",
     prayerGuidance:
-      "Dengan taufik dan hidayah-Mu, beruntunglah keduanya dalam kehidupan di dunia lebih-lebih lagi di akhirat.",
+      'Dengan taufik dan hidayah-Mu, beruntunglah keduanya dalam kehidupan di dunia lebih-lebih lagi di akhirat."',
     prayerClosing: "Aamiin Ya Rabbal 'Alamin",
     locationMapOpen: "Buka di Peta",
     locationNewTab: "(dibuka di tab baharu)",
@@ -273,7 +275,8 @@ export const strings: Record<Lang, Strings> = {
     familyLabel: "Your name / partner's name",
     familyHint: 'e.g. "Izyan Jaludin" or "Izyan and Adam"',
     phoneLabel: "Phone number",
-    phoneHint: "e.g. +673 812 3456.",
+    phoneCountryLabel: "Country code",
+    phoneHint: (example) => `e.g. ${example}.`,
     statusLabel: "Attendance",
     statusAttending: "Attending",
     statusDeclined: "Not attending",
@@ -297,7 +300,7 @@ export const strings: Record<Lang, Strings> = {
     phoneTooLong: (max) =>
       `The phone number is too long (maximum ${max} characters).`,
     phoneInvalid:
-      "Please enter a valid phone number with the country code, e.g. +673 812 3456.",
+      "Please enter a valid phone number for the selected country code.",
     errorDuplicate: "An RSVP for this name has already been received.",
     errorDuplicateAfterRetry:
       "Your earlier submission may have gone through. An RSVP for this name has already been received.",

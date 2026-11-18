@@ -1,13 +1,16 @@
 import { useEffect, useId, useRef, useState, type SubmitEvent } from "react";
 import { RSVP_DEADLINE, VENUE_TIMEZONE } from "../../../shared/config/event";
 import {
+  DEFAULT_PHONE_COUNTRY,
   FAMILY_NAME_MAX,
   FAMILY_NAME_MIN,
+  PHONE_COUNTRIES,
   PHONE_NUMBER_MAX,
   nameHasDisallowedCharacters,
   phoneNumberHasDisallowedCharacters,
   normalizeFamilyName,
   normalizePhoneNumber,
+  type PhoneCountryCode,
   type RsvpStatus,
 } from "../../../shared/rsvp/constants";
 import {
@@ -19,6 +22,7 @@ import {
 import { useI18n } from "../../i18n/I18nProvider";
 import type { Strings } from "../../i18n/strings";
 import { submitRsvp, type RsvpPayload } from "./api";
+import { PhoneCountrySelect } from "./PhoneCountrySelect";
 import { useRsvpConfig } from "./useRsvpConfig";
 
 type PhoneNumberError = "required" | "tooLong" | "invalid";
@@ -45,11 +49,17 @@ function validateName(normalized: string): NameError | undefined {
   return undefined;
 }
 
-function validatePhoneNumber(raw: string): PhoneNumberError | undefined {
+function validatePhoneNumber(
+  raw: string,
+  country: PhoneCountryCode,
+): PhoneNumberError | undefined {
   const value = raw.trim();
   if (value === "") return "required";
   if (value.length > PHONE_NUMBER_MAX) return "tooLong";
-  if (phoneNumberHasDisallowedCharacters(value) || !normalizePhoneNumber(value))
+  if (
+    phoneNumberHasDisallowedCharacters(value) ||
+    !normalizePhoneNumber(value, country)
+  )
     return "invalid";
   return undefined;
 }
@@ -97,6 +107,9 @@ export function RsvpSection({ invite }: { invite?: string }) {
   const { state: config, reload } = useRsvpConfig(invite);
 
   const [name, setName] = useState("");
+  const [phoneCountry, setPhoneCountry] = useState<PhoneCountryCode>(
+    DEFAULT_PHONE_COUNTRY,
+  );
   const [phoneNumber, setPhoneNumber] = useState("");
   const [status, setStatus] = useState<RsvpStatus>("attending");
   const [count, setCount] = useState(1);
@@ -158,14 +171,14 @@ export function RsvpSection({ invite }: { invite?: string }) {
       return;
     }
 
-    const invalidPhone = validatePhoneNumber(phoneNumber);
+    const invalidPhone = validatePhoneNumber(phoneNumber, phoneCountry);
     setPhoneNumberError(invalidPhone);
     if (invalidPhone) {
       setFormError(undefined);
       phoneNumberRef.current?.focus();
       return;
     }
-    const normalizedPhone = normalizePhoneNumber(phoneNumber)!; // validated above
+    const normalizedPhone = normalizePhoneNumber(phoneNumber, phoneCountry)!; // validated above
 
     const payload: RsvpPayload = {
       familyGroupName: normalizedName,
@@ -344,9 +357,6 @@ export function RsvpSection({ invite }: { invite?: string }) {
                   nameError ? "border-burgundy border-2" : "border-slate"
                 }`}
               />
-              {/* <span id={nameHintId} className={hintClass}>
-                {t.familyHint}
-              </span> */}
               <p id={nameErrorId} className="text-burgundy mt-2 font-semibold">
                 {nameError ? nameErrorText(t, nameError) : null}
               </p>
@@ -356,31 +366,45 @@ export function RsvpSection({ invite }: { invite?: string }) {
               <label htmlFor={phoneNumberId} className={labelClass}>
                 {t.phoneLabel}
               </label>
-              <input
-                ref={phoneNumberRef}
-                id={phoneNumberId}
-                type="tel"
-                placeholder={t.phoneHint}
-                value={phoneNumber}
-                maxLength={PHONE_NUMBER_MAX}
-                autoComplete="tel"
-                aria-invalid={phoneNumberError ? true : undefined}
-                aria-describedby={
-                  phoneNumberError
-                    ? `${phoneNumberHintId} ${phoneNumberErrorId}`
-                    : phoneNumberHintId
-                }
-                onChange={(event) => {
-                  setPhoneNumber(event.target.value);
-                  if (phoneNumberError) setPhoneNumberError(undefined);
-                }}
-                className={`text-navy mt-2 min-h-12 w-full rounded-[2px] border bg-transparent px-3 py-2 text-[1.15rem] ${
-                  phoneNumberError ? "border-burgundy border-2" : "border-slate"
-                }`}
-              />
-              {/* <span id={phoneNumberHintId} className={hintClass}>
-                {t.phoneHint}
-              </span> */}
+              <div className="mt-2 flex gap-2">
+                <PhoneCountrySelect
+                  value={phoneCountry}
+                  onChange={(code) => {
+                    setPhoneCountry(code);
+                    if (phoneNumberError) setPhoneNumberError(undefined);
+                  }}
+                  label={t.phoneCountryLabel}
+                />
+                <input
+                  ref={phoneNumberRef}
+                  id={phoneNumberId}
+                  type="tel"
+                  inputMode="numeric"
+                  placeholder={t.phoneHint(
+                    PHONE_COUNTRIES.find((c) => c.code === phoneCountry)!
+                      .example,
+                  )}
+                  value={phoneNumber}
+                  maxLength={PHONE_NUMBER_MAX}
+                  autoComplete="tel-national"
+                  aria-invalid={phoneNumberError ? true : undefined}
+                  aria-describedby={
+                    phoneNumberError
+                      ? `${phoneNumberHintId} ${phoneNumberErrorId}`
+                      : phoneNumberHintId
+                  }
+                  onChange={(event) => {
+                    // Digits only: the country code comes from the dropdown, so no "+" or symbols.
+                    setPhoneNumber(event.target.value.replace(/\D/g, ""));
+                    if (phoneNumberError) setPhoneNumberError(undefined);
+                  }}
+                  className={`text-navy min-h-12 min-w-0 flex-1 rounded-[2px] border bg-transparent px-3 py-2 text-[1.15rem] ${
+                    phoneNumberError
+                      ? "border-burgundy border-2"
+                      : "border-slate"
+                  }`}
+                />
+              </div>
               <p
                 id={phoneNumberErrorId}
                 className="text-burgundy mt-2 font-semibold"

@@ -25,20 +25,44 @@ export const PHONE_NUMBER_MAX = 20;
 export function normalizeFamilyName(raw: string): string {
   return raw.normalize("NFC").replace(/\s+/gu, " ").trim();
 }
+
+/** The only countries the couple's guests are expected to call from; the owner chose Brunei and Malaysia. */
+export const PHONE_COUNTRIES = [
+  { code: "BN", dialCode: "673", name: "Brunei", example: "812 3456" },
+  { code: "MY", dialCode: "60", name: "Malaysia", example: "12 345 6789" },
+] as const;
+export type PhoneCountryCode = (typeof PHONE_COUNTRIES)[number]["code"];
+export const DEFAULT_PHONE_COUNTRY: PhoneCountryCode = "BN";
+
+const isAllowedPhoneCountry = (
+  code: string | undefined,
+): code is PhoneCountryCode =>
+  PHONE_COUNTRIES.some((country) => country.code === code);
+
 /**
- * Normalize a phone number into E.164 format (e.g. +6738123456).
- * Returns null if it is invalid. The country code (leading "+") is required.
+ * Normalize a phone number into E.164 format (e.g. +6738123456), or return null.
+ * With `country` (the browser form), the value is a national number of that country, so a "+" is
+ * rejected and a leading trunk "0" is accepted. Without it (the API), the leading "+" and country
+ * code are required. Either way the number must be valid and belong to Brunei or Malaysia.
  */
-export function normalizePhoneNumber(raw: string): string | null {
+export function normalizePhoneNumber(
+  raw: string,
+  country?: PhoneCountryCode,
+): string | null {
   const value = raw.normalize("NFC").trim();
+  if (!value) return null;
 
-  if (!value || !value.startsWith("+")) return null;
+  let parsed;
+  if (country) {
+    if (value.includes("+")) return null;
+    parsed = parsePhoneNumberFromString(value, country);
+  } else {
+    if (!value.startsWith("+")) return null;
+    parsed = parsePhoneNumberFromString(value);
+  }
 
-  const phoneNumber = parsePhoneNumberFromString(value);
-
-  if (!phoneNumber?.isValid()) return null;
-
-  return phoneNumber.number;
+  if (!parsed?.isValid() || !isAllowedPhoneCountry(parsed.country)) return null;
+  return parsed.number;
 }
 
 /** Control, format (zero-width, bidi) and similar characters would defeat duplicate detection. */

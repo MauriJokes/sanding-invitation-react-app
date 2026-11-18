@@ -28,7 +28,7 @@ This is the single source of truth for the Sanding invitation page and its RSVP 
 
 - RSVP scope: **One RSVP for the Sanding celebration only**
 - Submission model: **One representative submits once for the whole family/group**
-- Contact phone number: **required**, international format with country code (e.g. `+673 812 3456`), stored in E.164 and visible only to the couple (D-36)
+- Contact phone number: **required**, a Brunei (+673, default) or Malaysian (+60) number picked with a flag dropdown, stored in E.164 and visible only to the couple (D-36)
 - Attendee count: **One total number for the family/group**, not separate counts per event
 - RSVP deadline date: 2026-12-20 (**placeholder; owner to confirm with family**)
 - RSVP deadline time: 23:59 venue local time, open through 23:59:59 (**placeholder**)

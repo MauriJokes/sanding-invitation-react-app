@@ -27,8 +27,8 @@
 - [ ] The invite is saved in `localStorage` for internal guests, removed from the address bar, and reused on later visits.
 - [ ] The derived `guestType` is stored with the RSVP and appears in the Google Sheet; the invite code never does.
 
-- [ ] A phone number with a country code is required, stored in E.164 form, appears in the `Family RSVP` sheet and is never returned by any API.
-- [ ] A missing, country-code-less, lettered or impossible phone number is rejected in the browser and by the server.
+- [ ] A Brunei (+673, the default) or Malaysian (+60) phone number is required, chosen with a flag dropdown, stored in E.164 form, appears in the `Family RSVP` sheet and is never returned by any API.
+- [ ] A missing, lettered, impossible or non-Brunei/non-Malaysian phone number is rejected in the browser and by the server.
 - [ ] `attending` requires 1 to the maximum for the verified guest type; `declined` requires 0.
 - [ ] Declined responses are stored explicitly.
 - [ ] A duplicate canonical family/group is rejected with a neutral message and the original is unchanged.

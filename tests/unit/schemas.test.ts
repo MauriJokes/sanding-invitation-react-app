@@ -60,6 +60,8 @@ describe("rsvpRequestSchema", () => {
     ["non-string phone number", { phoneNumber: 6738123456 }],
     ["over-long phone number", { phoneNumber: `+673${"1".repeat(PHONE_NUMBER_MAX)}` }],
     ["impossible phone number", { phoneNumber: "+673 1" }],
+    ["Singapore phone number", { phoneNumber: "+65 6123 4567" }],
+    ["US phone number", { phoneNumber: "+1 202 555 0100" }],
     ["over-long invite", { invite: "x".repeat(129) }],
   ])("rejects %s", (_name, patch) => {
     expect(rsvpRequestSchema.safeParse({ ...valid, ...patch }).success).toBe(false);
@@ -98,8 +100,35 @@ describe("normalizePhoneNumber", () => {
     expect(normalizePhoneNumber("+673 812 3456")).toBe("+6738123456");
   });
 
-  it.each(["", "   ", "8123456", "0812345678", "+", "+673", "abc"])("returns null for %j", (raw) => {
-    expect(normalizePhoneNumber(raw)).toBeNull();
+  it("accepts a Malaysian number", () => {
+    expect(normalizePhoneNumber("+60 12-345 6789")).toBe("+60123456789");
+  });
+
+  it.each(["", "   ", "8123456", "0812345678", "+", "+673", "abc", "+65 6123 4567", "+1 202 555 0100"])(
+    "returns null for %j without a country",
+    (raw) => {
+      expect(normalizePhoneNumber(raw)).toBeNull();
+    },
+  );
+
+  describe("with the country chosen in the form", () => {
+    it.each([
+      ["8123456", "BN", "+6738123456"],
+      ["812 3456", "BN", "+6738123456"],
+      ["12 345 6789", "MY", "+60123456789"],
+      ["012-345 6789", "MY", "+60123456789"],
+    ] as const)("reads %j as a %s national number", (raw, country, expected) => {
+      expect(normalizePhoneNumber(raw, country)).toBe(expected);
+    });
+
+    it.each([
+      ["a plus sign", "+6738123456", "BN"],
+      ["a Brunei number under Malaysia", "8123456", "MY"],
+      ["a Malaysian number under Brunei", "12 345 6789", "BN"],
+      ["nothing", "", "BN"],
+    ] as const)("rejects %s", (_name, raw, country) => {
+      expect(normalizePhoneNumber(raw, country)).toBeNull();
+    });
   });
 });
 

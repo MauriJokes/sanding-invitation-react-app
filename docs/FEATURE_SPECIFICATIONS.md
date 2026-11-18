@@ -30,7 +30,7 @@ Allow one representative to submit an RSVP for the entire family/group through t
 - The client reads `invite` from the URL, saves it to `localStorage` (internal guests only), removes it from the address bar with `history.replaceState`, and reuses the stored value on later visits. If the server rejects a stored value, the client clears it and falls back to external.
 - `POST /api/rsvp/config` (see API contract) returns the maximum for the supplied invite so the form can show the correct limit. A wrong or missing invite silently yields the external limit.
 - `POST /api/rsvp` receives the invite; the server verifies it, derives `guestType`, and never accepts a client-supplied `guestType` or limit.
-- Collect the family/group name, a contact phone number (international format with country code, e.g. `+673 812 3456`; owner decision D-36) and the total number of attendees.
+- Collect the family/group name, a contact phone number (a Brunei +673 or Malaysia +60 number chosen with a flag dropdown, Brunei by default, followed by the national number, e.g. `812 3456`; owner decision D-36) and the total number of attendees.
 - Configure a maximum attendee count per guest type (`internal` = 10, `external` = 2) and enforce it in both the UI and server-side validation, derived from the server-verified invite.
 - The form shows the applicable maximum and does not reveal the other guest type's limit.
 - Store the derived `guestType` on the RSVP; never store the invite code.
@@ -46,7 +46,7 @@ A public anonymous form cannot reliably identify a household if the submitter ch
 
 ### Edge cases
 - Missing or malformed family/group name.
-- Missing phone number, or one without a country code, with letters, with control or zero-width characters, longer than 20 characters or not a possible number (all rejected in the browser and again on the server).
+- Missing phone number, one that is not a valid Brunei or Malaysian number (including any other country code), with letters, with control or zero-width characters, longer than 20 characters or not a possible number (all rejected in the browser and again on the server).
 - Attendee count below one, above the maximum for the guest type, or not an integer.
 - Missing, malformed, wrong or rotated invite: treat as external; never fail open to the internal limit.
 - Invite removed, altered or cleared from `localStorage` between page load and submit; the server limit for what it verifies still applies.

@@ -23,7 +23,7 @@ import {
 
 const ms = strings.ms;
 const en = strings.en;
-const PHONE = "+673 812 3456";
+const PHONE = "8123456";
 const PHONE_E164 = "+6738123456";
 
 const wrap = (node: ReactNode, lang: Lang = "ms") => <I18nProvider initialLang={lang}>{node}</I18nProvider>;
@@ -44,6 +44,11 @@ const typePhone = (value: string) => fireEvent.change(phoneInput(), { target: { 
 const fill = (name: string, phone = PHONE) => {
   typeName(name);
   typePhone(phone);
+};
+const countryButton = () => screen.getByRole("button", { name: (name) => name.startsWith(`${ms.phoneCountryLabel}:`) });
+const chooseMalaysia = () => {
+  fireEvent.click(countryButton());
+  fireEvent.click(screen.getByRole("option", { name: "Malaysia +60" }));
 };
 const submit = () => fireEvent.click(sendButton());
 const formReady = () => screen.findByLabelText(ms.familyLabel);
@@ -239,7 +244,67 @@ describe("phone number", () => {
     show();
     await formReady();
     expect(phoneInput().type).toBe("tel");
-    expect(phoneInput().autocomplete).toBe("tel");
+    expect(phoneInput().autocomplete).toBe("tel-national");
+    expect(phoneInput().inputMode).toBe("numeric");
+  });
+
+  it("offers only Brunei and Malaysia, Brunei first and selected, each with a flag and its code", async () => {
+    server(createdReply("attending", 1));
+    show();
+    await formReady();
+    const trigger = countryButton();
+    expect(trigger.getAttribute("aria-label")).toBe(`${ms.phoneCountryLabel}: Brunei +673`);
+    expect(trigger.textContent).toContain("+673");
+    expect(trigger.querySelector("img")).toBeTruthy();
+    expect(phoneInput().placeholder).toBe(ms.phoneHint("812 3456"));
+
+    fireEvent.click(trigger);
+    const options = within(screen.getByRole("listbox")).getAllByRole("option");
+    expect(options.map((option) => option.getAttribute("aria-label"))).toEqual(["Brunei +673", "Malaysia +60"]);
+    expect(options.map((option) => option.getAttribute("aria-selected"))).toEqual(["true", "false"]);
+    expect(options.every((option) => option.querySelector("img[alt='']"))).toBe(true);
+  });
+
+  it("changes the example number and clears the error when another country is chosen", async () => {
+    server(createdReply("attending", 1));
+    show();
+    await formReady();
+    typeName("The Ahmad Family");
+    submit();
+    expect(phoneInput().getAttribute("aria-invalid")).toBe("true");
+    chooseMalaysia();
+    expect(countryButton().getAttribute("aria-label")).toBe(`${ms.phoneCountryLabel}: Malaysia +60`);
+    expect(phoneInput().placeholder).toBe(ms.phoneHint("12 345 6789"));
+    expect(phoneInput().getAttribute("aria-invalid")).toBeNull();
+    expect(screen.queryByRole("listbox")).toBeNull();
+  });
+
+  it("selects a country with the keyboard and closes with Escape", async () => {
+    server(createdReply("attending", 1));
+    show();
+    await formReady();
+    fireEvent.click(countryButton());
+    const list = screen.getByRole("listbox");
+    fireEvent.keyDown(list, { key: "ArrowDown" });
+    fireEvent.keyDown(list, { key: "Enter" });
+    expect(countryButton().getAttribute("aria-label")).toContain("Malaysia");
+
+    fireEvent.click(countryButton());
+    fireEvent.keyDown(screen.getByRole("listbox"), { key: "Escape" });
+    expect(screen.queryByRole("listbox")).toBeNull();
+    expect(countryButton().getAttribute("aria-label")).toContain("Malaysia");
+  });
+
+  it.each([
+    ["a plus sign", "+673 812 3456", "6738123456"],
+    ["symbols and letters", "(812)-34.56abc", "8123456"],
+    ["spaces", " 812 3456 ", "8123456"],
+  ])("accepts only digits: %s are dropped as they are typed", async (_name, typed, kept) => {
+    server(createdReply("attending", 1));
+    show();
+    await formReady();
+    typePhone(typed);
+    expect(phoneInput().value).toBe(kept);
   });
 
   it("checks the name before the phone number", async () => {
@@ -264,12 +329,10 @@ describe("phone number", () => {
   });
 
   it.each([
-    ["no country code", "8123456", ms.phoneInvalid],
+    ["a number that is too short", "812", ms.phoneInvalid],
     ["a local number with a leading zero", "0812345678", ms.phoneInvalid],
-    ["letters", "+673 abc 3456", ms.phoneInvalid],
-    ["a number that cannot exist", "+673 1", ms.phoneInvalid],
-    ["a zero-width character", "+673\u200b8123456", ms.phoneInvalid],
-    ["too many characters", "+" + "1".repeat(20), ms.phoneTooLong(20)],
+    ["a number that cannot exist", "1", ms.phoneInvalid],
+    ["a Malaysian number under Brunei", "12 345 6789", ms.phoneInvalid],
   ])("rejects %s without calling the server", async (_name, value, message) => {
     const calls = server(createdReply("attending", 1));
     show();
@@ -281,7 +344,28 @@ describe("phone number", () => {
     expect(rsvpCalls(calls)).toHaveLength(0);
   });
 
-  it.each(["+673 812 3456", "+673-812-3456", "+673 (812) 3456", "  +6738123456  "])(
+  it("rejects a number longer than the limit without calling the server", async () => {
+    const calls = server(createdReply("attending", 1));
+    show();
+    await formReady();
+    fill("The Ahmad Family", "1".repeat(21));
+    submit();
+    expect(screen.getByText(ms.phoneTooLong(20))).toBeTruthy();
+    expect(rsvpCalls(calls)).toHaveLength(0);
+  });
+
+  it("rejects a pasted number whose country code does not match the dropdown", async () => {
+    const calls = server(createdReply("attending", 1));
+    show();
+    await formReady();
+    chooseMalaysia();
+    fill("The Ahmad Family", "+673 812 3456");
+    submit();
+    expect(screen.getByText(ms.phoneInvalid)).toBeTruthy();
+    expect(rsvpCalls(calls)).toHaveLength(0);
+  });
+
+  it.each(["812 3456", "812-3456", "(812) 3456", "  8123456  "])(
     "sends %j in E.164 form",
     async (typed) => {
       const calls = server(createdReply("attending", 1));
@@ -294,11 +378,12 @@ describe("phone number", () => {
     },
   );
 
-  it("accepts a number from another country", async () => {
+  it("sends a Malaysian number with +60 and drops the leading zero", async () => {
     const calls = server(createdReply("attending", 1));
     show();
     await formReady();
-    fill("The Ahmad Family", "+60 12-345 6789");
+    chooseMalaysia();
+    fill("The Ahmad Family", "012-345 6789");
     submit();
     await screen.findByText(ms.successTitle);
     expect(rsvpCalls(calls)[0]?.body.phoneNumber).toBe("+60123456789");

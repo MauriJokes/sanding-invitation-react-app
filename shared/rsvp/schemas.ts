@@ -26,12 +26,13 @@ const familyGroupName = z
       .refine((value) => !nameHasDisallowedCharacters(value)),
   );
 
-/** Stored and returned only in E.164 form; the client's formatting is never trusted. */
+/** Stored only in E.164 form for a Brunei (+673) or Malaysian (+60) number; the client's formatting is never trusted. */
 const phoneNumber = z
   .string()
   .max(PHONE_NUMBER_MAX)
   .refine((value) => !phoneNumberHasDisallowedCharacters(value))
-  .transform(normalizePhoneNumber)
+  // Wrapped so zod's refinement context is not passed as the country argument.
+  .transform((value) => normalizePhoneNumber(value))
   .pipe(z.string());
 
 /**

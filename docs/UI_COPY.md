@@ -59,7 +59,8 @@ Source of truth: `src/i18n/strings.ts` (TypeScript enforces that both languages 
 | `familyLabel` | Nama Anda / Pasangan | Your name / partner's name | owner-edited (M6) |
 | `familyHint` | e.g. "Izyan Jaludin" atau "Izyan & Adam" | e.g. "Izyan Jaludin" or "Izyan and Adam" | owner-edited (M6) |
 | `phoneLabel` | Nombor telefon | Phone number | draft |
-| `phoneHint` | e.g. +673 812 3456. | e.g. +673 812 3456. | draft |
+| `phoneCountryLabel` | Kod negara | Country code | draft |
+| `phoneHint` | Contoh {example}. | e.g. {example}. | draft |
 | `statusLabel` | Kehadiran | Attendance | approved (M1) |
 | `statusAttending` | Akan hadir | Attending | approved (M1) |
 | `statusDeclined` | Tidak hadir | Not attending | owner-edited (M6) |
@@ -78,7 +79,7 @@ Source of truth: `src/i18n/strings.ts` (TypeScript enforces that both languages 
 | `nameInvalid` | Nama mengandungi aksara yang tidak dibenarkan. | The name contains characters that are not allowed. | draft |
 | `phoneRequired` | Sila masukkan nombor telefon anda. | Please enter your phone number. | draft |
 | `phoneTooLong` | Nombor telefon terlalu panjang (maksimum {n} aksara). | The phone number is too long (maximum {n} characters). | draft |
-| `phoneInvalid` | Sila masukkan nombor telefon yang sah dengan kod negara, contohnya +673 812 3456. | Please enter a valid phone number with the country code, e.g. +673 812 3456. | draft |
+| `phoneInvalid` | Sila masukkan nombor telefon yang sah bagi kod negara yang dipilih. | Please enter a valid phone number for the selected country code. | draft |
 | `errorDuplicate` | Satu RSVP untuk anda telah diterima. | An RSVP for this name has already been received. | owner-edited (M6) |
 | `errorDuplicateAfterRetry` | Penghantaran anda sebelum ini mungkin telah berjaya. Satu RSVP untuk anda telah diterima. | Your earlier submission may have gone through. An RSVP for this name has already been received. | owner-edited (M6) |
 | `errorLimitChanged` | Had telah dikemas kini kepada {n} orang. Sila semak jumlah anda. | The limit has been updated to {n} people. Please check your total. | draft |

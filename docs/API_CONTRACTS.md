@@ -46,15 +46,15 @@ Public, rate-limited, insert-only endpoint. No per-guest token, login, or group 
 Example requests (overall RSVP for the Sanding celebration):
 
 ```json
-{ "familyGroupName": "The Ahmad Family", "phoneNumber": "+673 812 3456", "attendeeCount": 5, "status": "attending", "invite": "<optional shared code>" }
-{ "familyGroupName": "The Lim Family", "phoneNumber": "+673 712 3456", "attendeeCount": 0, "status": "declined" }
+{ "familyGroupName": "The Ahmad Family", "phoneNumber": "+6738123456", "attendeeCount": 5, "status": "attending", "invite": "<optional shared code>" }
+{ "familyGroupName": "The Lim Family", "phoneNumber": "+6737123456", "attendeeCount": 0, "status": "declined" }
 ```
 
 `invite` is optional and is omitted for external guests. A wrong value is treated as external and gets the same response as a missing one, so validity is never revealed.
 
 Server validation:
 - Validate the family/group name: whitespace trimmed and collapsed, Unicode NFC, 2 to 100 characters, no control, format (zero-width, bidi) or similar characters.
-- Validate `phoneNumber`: at most 20 characters of digits, `+`, spaces, dashes and brackets; it must parse as a valid international number (country code required) and is stored in E.164. An invalid or missing value returns `400 VALIDATION_ERROR`.
+- Validate `phoneNumber`: at most 20 characters of digits, `+`, spaces, dashes and brackets; it must parse as a valid international number (country code required) belonging to Brunei (+673) or Malaysia (+60), and is stored in E.164. Any other country is rejected. The browser's number field accepts digits only (anything else typed or pasted is dropped, and a `+` is never accepted there); it composes the number from the country dropdown and those digits (a leading trunk `0` is dropped) and sends the E.164 form; the server re-validates it and never reads a separate country field. An invalid or missing value returns `400 VALIDATION_ERROR`.
 - Generate the canonical group key on the server; never trust a client-supplied key.
 - Validate `invite` with Zod (optional string, bounded length). Compare it to `INTERNAL_INVITE_CODE` in constant time and derive `guestType` (`internal` | `external`).
 - Validate status and attendee count: `attending` is 1 to the maximum for the derived `guestType` (internal 10, external 2); `declined` must be 0. Exceeding the limit returns `400` with code `ATTENDEE_LIMIT_EXCEEDED` and a message stating only the applicable maximum; attending with 0, or declining with a non-zero count, returns `400 VALIDATION_ERROR`.

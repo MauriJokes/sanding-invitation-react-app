@@ -66,7 +66,7 @@ Collect only data necessary for invitation and attendance management. Do not add
 
 **Phone number (owner decision, 2026-11-16, D-36):** the RSVP collects one contact phone number per family/group so the couple can reach the guest. Controls:
 - It is stored only on the RSVP document and mirrored to the `Family RSVP` sheet; it is never returned by any API (the RSVP confirmation echoes back only what the same guest just typed, in their own browser).
-- It is validated and normalised to E.164 on the server; the client's formatting is never trusted.
+- It is validated and normalised to E.164 on the server, and only Brunei (+673) and Malaysian (+60) numbers are accepted; the client's formatting is never trusted.
 - It is never logged, never part of the duplicate key, and never sent to the Sheets mirror in any worksheet other than `Family RSVP`.
 - The spreadsheet is shared only with the service account and the couple.
 - Retention: the owner keeps the numbers for as long as they wish (D-36); there is no automatic deletion. The couple can remove a family's RSVP, phone number included, as described in `OPERATIONS.md`.
