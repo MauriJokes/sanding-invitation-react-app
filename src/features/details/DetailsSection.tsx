@@ -8,13 +8,14 @@ import {
   ITINERARY,
   ITINERARY_EN,
 } from "./content";
+import { DetailsBotanicals } from "./DetailsBotanicals";
 import { useCopy } from "./useCopy";
 
 const eyebrow =
   "text-[0.85rem] font-semibold uppercase tracking-[0.24em] text-gold-ink";
 const body = "text-[1.0rem]";
 const coupleName =
-  "text-[clamp(1.5rem,6vw,2rem)] font-semibold uppercase leading-[1.3] tracking-[0.06em] text-balance";
+  "text-[clamp(1.60rem,6vw,5rem)] font-couple leading-[1.3] tracking-[0.06em] text-balance";
 const actionClass =
   "inline-flex min-h-12 min-w-0 flex-1 items-center justify-center rounded-[2px] border border-navy-deep px-3 text-center text-[0.8rem] font-semibold uppercase leading-tight tracking-[0.14em] no-underline sm:px-6 sm:text-[0.9rem] sm:tracking-[0.2em]";
 const primaryAction = `${actionClass} bg-navy-deep text-gold-bright hover:bg-gold-bright hover:text-navy-deep`;
@@ -79,9 +80,10 @@ export function DetailsSection() {
     <section
       id="details"
       aria-labelledby="details-heading"
-      className="bg-ivory text-navy [&_:focus-visible]:outline-navy"
+      className="details-section bg-ivory text-navy [&_:focus-visible]:outline-navy"
     >
-      <div className="mx-auto w-full max-w-[42rem] px-6 py-[4.5rem] text-center md:max-w-[56rem]">
+      <DetailsBotanicals />
+      <div className="details-content py-[4.5rem] text-center">
         <h2 id="details-heading" className="sr-only">
           {t.navDetails}
         </h2>
@@ -90,7 +92,7 @@ export function DetailsSection() {
           alt={t.detailsGreeting}
           width={900}
           height={141}
-          className="mx-auto block h-auto w-[clamp(15rem,70vw,24rem)]"
+          className="mx-auto block h-auto w-[clamp(15rem,70vw,24rem)] max-w-full"
         />
         <p className={`mt-5 ${body}`}>Ya Qadhi Al-Hajat</p>
         <Rule />
@@ -106,7 +108,7 @@ export function DetailsSection() {
           {t.detailsInvite}
         </p>
 
-        <div className="mt-6 grid gap-3">
+        <div className="mt-6 grid gap-6">
           <p className={coupleName}>{COUPLE[0]}</p>
           <p className={"font-script text-gold-ink text-[1.0rem] leading-none"}>
             {t.detailsAnd}

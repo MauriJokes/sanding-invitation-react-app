@@ -1,5 +1,11 @@
 // @vitest-environment jsdom
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+} from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { EVENT } from "../../../shared/config/event";
 import { App } from "../../../src/App";
@@ -14,7 +20,8 @@ const renderApp = () =>
     </I18nProvider>,
   );
 
-const pageWrapper = () => screen.getByRole("main", { hidden: true }).parentElement!;
+const pageWrapper = () =>
+  screen.getByRole("main", { hidden: true }).parentElement!;
 
 function stubReducedMotion(reduced: boolean) {
   vi.stubGlobal("matchMedia", (query: string) => ({
@@ -27,7 +34,12 @@ function stubReducedMotion(reduced: boolean) {
 beforeEach(() => {
   vi.useFakeTimers();
   mockFetch((call) =>
-    call.path === "/api/guestbook" ? { status: 200, json: { data: { entries: [], nextCursor: null }, error: null } } : configReply(2),
+    call.path === "/api/guestbook"
+      ? {
+          status: 200,
+          json: { data: { entries: [], nextCursor: null }, error: null },
+        }
+      : configReply(2),
   );
 });
 afterEach(() => {
@@ -54,7 +66,9 @@ describe("Cover", () => {
   it("keeps the page inert and the scroll locked until the gate has opened", () => {
     renderApp();
     expect(pageWrapper().hasAttribute("inert")).toBe(true);
-    expect(document.documentElement.classList.contains("cover-open")).toBe(true);
+    expect(document.documentElement.classList.contains("cover-open")).toBe(
+      true,
+    );
   });
 
   it("opens the gate, then removes the cover, unlocks the page and focuses the heading", () => {
@@ -65,21 +79,33 @@ describe("Cover", () => {
     expect(pageWrapper().hasAttribute("inert")).toBe(true);
 
     act(() => void vi.advanceTimersByTime(OPEN_MS - 1));
-    expect(screen.queryByRole("region", { name: "Muka depan jemputan" })).not.toBeNull();
+    expect(
+      screen.queryByRole("region", { name: "Muka depan jemputan" }),
+    ).not.toBeNull();
     act(() => void vi.advanceTimersByTime(1));
 
-    expect(screen.queryByRole("region", { name: "Muka depan jemputan" })).toBeNull();
+    expect(
+      screen.queryByRole("region", { name: "Muka depan jemputan" }),
+    ).toBeNull();
     expect(pageWrapper().hasAttribute("inert")).toBe(false);
-    expect(document.documentElement.classList.contains("cover-open")).toBe(false);
-    expect(document.activeElement).toBe(screen.getByRole("heading", { level: 1 }));
+    expect(document.documentElement.classList.contains("cover-open")).toBe(
+      false,
+    );
+    expect(document.activeElement).toBe(
+      screen.getByRole("heading", { level: 1 }),
+    );
   });
 
   it("moves focus to the heading only once the page is no longer inert", () => {
     const states: boolean[] = [];
     // eslint-disable-next-line @typescript-eslint/unbound-method -- called back with the right `this` below
     const focus = HTMLElement.prototype.focus;
-    vi.spyOn(HTMLElement.prototype, "focus").mockImplementation(function (this: HTMLElement, options) {
-      if (this.tagName === "H1") states.push(pageWrapper().hasAttribute("inert"));
+    vi.spyOn(HTMLElement.prototype, "focus").mockImplementation(function (
+      this: HTMLElement,
+      options,
+    ) {
+      if (this.tagName === "H1")
+        states.push(pageWrapper().hasAttribute("inert"));
       focus.call(this, options);
     });
     renderApp();
@@ -94,7 +120,9 @@ describe("Cover", () => {
     renderApp();
     fireEvent.click(screen.getByRole("button", { name: "Buka" }));
     act(() => void vi.advanceTimersByTime(OPEN_REDUCED_MS));
-    expect(screen.queryByRole("region", { name: "Muka depan jemputan" })).toBeNull();
+    expect(
+      screen.queryByRole("region", { name: "Muka depan jemputan" }),
+    ).toBeNull();
     expect(pageWrapper().hasAttribute("inert")).toBe(false);
   });
 
@@ -105,12 +133,16 @@ describe("Cover", () => {
     expect((open as HTMLButtonElement).disabled).toBe(true);
     fireEvent.click(open);
     act(() => void vi.advanceTimersByTime(OPEN_MS));
-    expect(screen.queryByRole("region", { name: "Muka depan jemputan" })).toBeNull();
+    expect(
+      screen.queryByRole("region", { name: "Muka depan jemputan" }),
+    ).toBeNull();
   });
 
-  it("pauses the decoration while the tab is hidden", () => {
+  it("renders tile rosettes on both doors and pauses them when the page is hidden", () => {
     renderApp();
     const cover = screen.getByRole("region", { name: "Muka depan jemputan" });
+    expect(cover.querySelectorAll(".cover-door-left .ros").length).toBeGreaterThan(0);
+    expect(cover.querySelectorAll(".cover-door-right .ros").length).toBeGreaterThan(0);
     expect(cover.getAttribute("data-paused")).toBeNull();
     Object.defineProperty(document, "hidden", { configurable: true, get: () => true });
     act(() => void document.dispatchEvent(new Event("visibilitychange")));
@@ -131,11 +163,15 @@ describe("Cover", () => {
     expect(screen.getByRole("button", { name: "Open" })).toBeTruthy();
   });
 
-  it("is decorative only apart from the button: rosettes and the monogram are not announced", () => {
+  it("keeps the botanical artwork and monogram decorative, with Buka as the only control", () => {
     renderApp();
     const cover = screen.getByRole("region", { name: "Muka depan jemputan" });
-    expect(cover.querySelectorAll(".ros").length).toBeGreaterThan(0);
-    expect(cover.querySelector("[aria-hidden=true]")!.textContent).toBe("IA");
+    const artwork = cover.querySelectorAll("img");
+    expect(artwork.length).toBeGreaterThan(2);
+    artwork.forEach((image) => expect(image.getAttribute("alt")).toBe(""));
+    expect(
+      cover.querySelector(".cover-monogram")?.getAttribute("aria-hidden"),
+    ).toBe("true");
     expect(cover.querySelectorAll("button, a, input").length).toBe(1);
   });
 });

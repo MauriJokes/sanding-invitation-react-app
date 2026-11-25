@@ -1,4 +1,3 @@
-/* Gate cover (docs/DESIGN_SYSTEM.md 5a). Animates transform and opacity only. */
 html.cover-open {
   overflow: hidden;
 }
@@ -7,18 +6,23 @@ html.cover-open {
   position: fixed;
   inset: 0;
   z-index: 50;
+  overflow: auto;
+  color: var(--color-ivory);
+}
+
+.cover-stage {
+  position: relative;
+  height: max(100svh, 540px);
   overflow: hidden;
+  isolation: isolate;
 }
 
 .cover-door {
   position: absolute;
-  top: 0;
-  bottom: 0;
+  inset-block: 0;
   width: 50%;
   overflow: hidden;
-  background: url("../../assets/motif/tile.svg") 0 0 / 84px 84px;
   transition: transform 0.9s var(--ease-gate) 0.25s;
-  will-change: transform;
 }
 .cover-door-left {
   left: 0;
@@ -26,28 +30,35 @@ html.cover-open {
 .cover-door-right {
   right: 0;
 }
-
-/* Navy wedge behind the plaque; the two halves meet at the seam to form one hexagon. */
-.cover-door::after {
-  content: "";
+.cover-door-background {
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  width: 200%;
+  background: url("../../assets/motif/tile.svg") 0 0 / 84px 84px;
+}
+.cover-door-left .cover-door-background {
+  left: 0;
+}
+.cover-door-right .cover-door-background {
+  right: 0;
+}
+.cover-diamond {
+  position: absolute;
   z-index: 1;
+  left: 50%;
+  top: 50%;
+  width: min(100%, calc(max(100svh, 540px) * 0.5623), 520px);
+  aspect-ratio: 397 / 706;
+  transform: translate(-50%, -50%);
   background: var(--color-navy-deep);
+  clip-path: polygon(50% 8.5%, 100% 34%, 100% 66%, 50% 92%, 0 66%, 0 34%);
 }
-.cover-door-left::after {
-  clip-path: polygon(0 34%, 100% 8.8%, 100% 91.2%, 0 66%);
-}
-.cover-door-right::after {
-  clip-path: polygon(0 8.8%, 100% 34%, 100% 66%, 0 91.2%);
-}
-
 .cover-edge {
   position: absolute;
   top: 0;
   bottom: 0;
-  z-index: 2;
-  width: 2px;
+  width: 1.5px;
   background: var(--color-gold);
 }
 .cover-door-left .cover-edge {
@@ -56,43 +67,75 @@ html.cover-open {
 .cover-door-right .cover-edge {
   left: 0;
 }
-
-.cover[data-paused="true"] .ros {
+.cover[data-paused="true"] .ros,
+.cover[data-paused="true"] .cover-stem,
+.cover[data-paused="true"] .cover-flower {
   animation-play-state: paused;
 }
 
-.cover-plaque {
+.cover-scene {
   position: absolute;
-  inset: 0;
-  z-index: 3;
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  padding: 1.5rem;
-  text-align: center;
-  color: var(--color-ivory);
+  z-index: 2;
+  left: 50%;
+  top: 50%;
+  width: min(100%, calc(max(100svh, 540px) * 0.5623), 520px);
+  aspect-ratio: 397 / 706;
+  transform: translate(-50%, -50%);
   transition: opacity 0.35s ease;
 }
-.cover-card {
-  max-width: 20rem;
-  padding: 2rem 2.2rem 2.4rem;
-  background: var(--color-navy-deep);
-  border: 1px solid var(--color-gold);
-  outline: 1px solid var(--color-gold);
-  outline-offset: 5px;
+.cover-stem {
+  position: absolute;
+  z-index: 1;
+  width: var(--w);
+  left: var(--x);
+  top: var(--y);
+  pointer-events: none;
+  transform-origin: 0 0;
+  animation: cover-leaf-breeze 6.5s ease-in-out infinite alternate;
 }
-
+.cover-stem:nth-child(3n + 2) {
+  animation-duration: 8s;
+  animation-delay: -3s;
+}
+.cover-stem:nth-child(3n) {
+  animation-duration: 5.5s;
+  animation-delay: -5s;
+}
+.cover-stem img {
+  display: block;
+  width: 100%;
+  transform-origin: 0 0;
+  transform: rotate(var(--r)) scaleX(var(--flip)) translate(var(--root-x), -98%);
+}
+.cover-card {
+  position: absolute;
+  z-index: 2;
+  left: 20%;
+  top: 22.5%;
+  width: 60%;
+  height: 54.5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--color-slate);
+  border: 1px solid var(--color-gold);
+}
+.cover-monogram {
+  font-size: clamp(29px, 10vw, 42px);
+}
 .cover-title {
-  margin: 1rem 0 0.4rem;
-  font-size: 0.85rem;
+  margin: 18px 0 8px;
+  color: var(--color-ivory);
+  font-size: clamp(8px, 2.4vw, 11px);
   font-weight: 600;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--color-gold-bright);
 }
 .cover-names {
   margin: 0;
-  font-size: clamp(2.8rem, 14vw, 3.5rem);
+  font-size: clamp(42px, 13.2vw, 56px);
   line-height: 1.05;
 }
 .cover-name-first {
@@ -101,27 +144,24 @@ html.cover-open {
 .cover-name-second {
   display: block;
 }
-.cover-amp {
-  font-size: 0.6em;
-}
 .cover-date {
-  margin: 0.6rem 0 1.6rem;
-  font-size: 0.95rem;
-  letter-spacing: 0.2em;
+  margin: 17px 0 25px;
+  font-size: clamp(10px, 2.65vw, 13px);
+  letter-spacing: 0.18em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 .cover-button {
   min-height: 48px;
-  padding: 0.75rem 2rem;
+  padding: 0.75rem 1.875rem;
   font: inherit;
-  font-size: 0.95rem;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--color-ivory);
   background: transparent;
   border: 1px solid var(--color-gold-bright);
-  border-radius: 2px;
   cursor: pointer;
   transition:
     background-color 0.25s,
@@ -131,8 +171,47 @@ html.cover-open {
   background: var(--color-gold-bright);
   color: var(--color-navy-deep);
 }
+.cover-flower {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  transform: rotate(var(--flower-angle)) scaleX(-1);
+  transform-origin: 50% 70%;
+  animation: cover-flower-breeze 7s ease-in-out infinite alternate;
+}
+.cover-flower-top {
+  width: 45%;
+  left: 2%;
+  top: 2%;
+  --flower-angle: 175deg;
+}
+.cover-flower-bottom {
+  width: 44%;
+  left: 52%;
+  top: 64%;
+  --flower-angle: 6deg;
+  animation-duration: 8.5s;
+  animation-delay: -4s;
+}
 
-.cover[data-state="opening"] .cover-plaque {
+@keyframes cover-leaf-breeze {
+  from {
+    transform: rotate(-5deg);
+  }
+  to {
+    transform: rotate(5deg);
+  }
+}
+@keyframes cover-flower-breeze {
+  from {
+    transform: rotate(calc(var(--flower-angle) - 3deg)) scaleX(-1);
+  }
+  to {
+    transform: rotate(calc(var(--flower-angle) + 3deg)) scaleX(-1);
+  }
+}
+
+.cover[data-state="opening"] .cover-scene {
   opacity: 0;
   pointer-events: none;
 }
@@ -143,12 +222,72 @@ html.cover-open {
   transform: translateX(101%);
 }
 
+@media (min-width: 700px) {
+  .cover-diamond {
+    inset: auto;
+    left: 50%;
+    top: 50%;
+    width: min(calc(max(100svh, 540px) * 1.2), 96vw);
+    height: auto;
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  }
+  .cover-scene {
+    width: min(72vw, 740px);
+    height: min(90%, 720px);
+    aspect-ratio: auto;
+  }
+  .cover-card {
+    left: 27%;
+    width: 46%;
+    top: 21%;
+    height: 58%;
+  }
+  .cover-monogram {
+    font-size: 48px;
+  }
+  .cover-title {
+    font-size: 12px;
+  }
+  .cover-names {
+    font-size: clamp(50px, 5vw, 64px);
+  }
+  .cover-date {
+    font-size: 13px;
+  }
+  .cover-stem {
+    left: calc(27% + (var(--x) - 20%) * 0.77);
+    top: calc(21% + (var(--y) - 22.5%) * 1.064);
+    width: calc(var(--w) * 0.77);
+  }
+  .cover-flower-top {
+    left: calc(23% + (2% - 20%) * 0.77);
+    width: calc(45% * 0.77);
+  }
+  .cover-flower-bottom {
+    left: calc(27% + (52% - 20%) * 0.77);
+    width: calc(44% * 0.77);
+  }
+}
+@media (max-height: 650px) {
+  .cover-title {
+    margin: 10px 0 5px;
+  }
+  .cover-date {
+    margin: 8px 0 12px;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
+  .cover-stem,
+  .cover-flower {
+    animation: none;
+  }
   .cover-door {
     transition: opacity 0.4s ease;
   }
-  .cover-plaque {
-    transition: opacity 0.2s;
+  .cover-scene {
+    transition: opacity 0.2s ease;
   }
   .cover[data-state="opening"] .cover-door-left,
   .cover[data-state="opening"] .cover-door-right {

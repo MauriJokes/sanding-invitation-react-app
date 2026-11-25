@@ -95,6 +95,21 @@ describe("owner-supplied copy", () => {
 });
 
 describe("DetailsSection", () => {
+  it("keeps the botanical artwork decorative and outside the reading content", () => {
+    const { container } = renderIt();
+    const layer = container.querySelector(".details-botanicals");
+    const content = container.querySelector(".details-content");
+    expect(layer?.getAttribute("aria-hidden")).toBe("true");
+    expect(layer?.querySelectorAll(".details-stem").length).toBeGreaterThan(30);
+    expect(layer?.querySelectorAll(".details-flower")).toHaveLength(3);
+    expect(
+      Array.from(layer?.querySelectorAll("img") ?? []).every(
+        (image) => image.alt === "",
+      ),
+    ).toBe(true);
+    expect(content?.contains(layer ?? null)).toBe(false);
+  });
+
   it("is a labelled section with the id the navigation links to", () => {
     renderIt();
     const section = screen.getByRole("region", { name: "Butiran" });
@@ -179,15 +194,15 @@ describe("DetailsSection", () => {
     ).toBeTruthy();
   });
 
-  it("has decoration hidden from assistive technology and only the greeting image, no frames or inputs", () => {
+  it("has decoration hidden from assistive technology, with no frames or inputs", () => {
     const { container } = renderIt();
     expect(
       container.querySelectorAll("iframe, object, embed, input").length,
     ).toBe(0);
-    expect(container.querySelectorAll("img")).toHaveLength(1);
-    // three ornamental rules plus one separator between each pair of itinerary entries
+    expect(container.querySelectorAll(".details-content img")).toHaveLength(1);
+    // Botanical layer, three rules, and one separator between itinerary entries.
     expect(container.querySelectorAll("div[aria-hidden=true]")).toHaveLength(
-      3 + ITINERARY.length - 1,
+      1 + 3 + ITINERARY.length - 1,
     );
   });
 

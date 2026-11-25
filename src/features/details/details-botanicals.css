@@ -1,0 +1,121 @@
+.details-section {
+  --details-gutter: clamp(52px, 17vw, 100px);
+  position: relative;
+}
+
+.details-content {
+  position: relative;
+  width: min(56rem, calc(100% - 2 * var(--details-gutter)));
+  margin-inline: auto;
+}
+
+.details-botanicals {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 0,
+    #000 calc(var(--details-gutter) - 16px),
+    transparent var(--details-gutter),
+    transparent calc(100% - var(--details-gutter)),
+    #000 calc(100% - var(--details-gutter) + 16px),
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 0,
+    #000 calc(var(--details-gutter) - 16px),
+    transparent var(--details-gutter),
+    transparent calc(100% - var(--details-gutter)),
+    #000 calc(100% - var(--details-gutter) + 16px),
+    #000 100%
+  );
+}
+
+.details-stem,
+.details-flower {
+  position: absolute;
+  animation: details-breeze 7s ease-in-out infinite alternate;
+}
+
+.details-stem:nth-child(even),
+.details-flower:nth-child(even) {
+  animation-duration: 8.5s;
+  animation-delay: -3s;
+}
+
+.details-stem {
+  top: var(--top);
+  width: var(--size);
+  height: 0;
+  transform-origin: 0 0;
+}
+
+.details-stem--left {
+  left: -8px;
+}
+
+.details-stem--right {
+  right: calc(-8px - var(--size));
+}
+
+.details-stem img {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  transform-origin: var(--root) 100%;
+  transform: translateX(calc(-1 * var(--root))) rotate(var(--angle));
+}
+
+.details-stem--left img {
+  transform: translateX(calc(-1 * var(--root))) scaleX(-1)
+    rotate(calc(-1 * var(--angle)));
+}
+
+.details-flower {
+  width: 190px;
+}
+
+.details-flower--left {
+  left: -117px;
+  transform-origin: left center;
+}
+
+.details-flower--right {
+  right: -117px;
+  transform-origin: right center;
+}
+
+.details-flower img {
+  display: block;
+  width: 100%;
+}
+
+.details-flower--right img {
+  transform: scaleX(-1);
+}
+
+@keyframes details-breeze {
+  from {
+    transform: rotate(-5deg);
+  }
+  to {
+    transform: rotate(5deg);
+  }
+}
+
+.page-hidden .details-stem,
+.page-hidden .details-flower {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .details-stem,
+  .details-flower {
+    animation: none;
+  }
+}

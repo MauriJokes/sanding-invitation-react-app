@@ -1,12 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { makeParticles, PARTICLES_DESKTOP, PARTICLES_PHONE, particleCount } from "../../../src/features/shell/particleLayout";
+import {
+  makeParticles,
+  PARTICLES_DESKTOP,
+  PARTICLES_PHONE,
+  particleCount,
+} from "../../../src/features/shell/particleLayout";
 
 describe("particles", () => {
-  it("uses fewer on phones than on desktop (14 and 24)", () => {
+  it("uses 50 particles on phones and 80 on desktop", () => {
     expect(particleCount(375)).toBe(PARTICLES_PHONE);
     expect(particleCount(639)).toBe(PARTICLES_PHONE);
     expect(particleCount(640)).toBe(PARTICLES_DESKTOP);
-    expect([PARTICLES_PHONE, PARTICLES_DESKTOP]).toEqual([14, 24]);
+    expect([PARTICLES_PHONE, PARTICLES_DESKTOP]).toEqual([50, 80]);
   });
 
   it("is deterministic and keeps every value inside the approved ranges", () => {

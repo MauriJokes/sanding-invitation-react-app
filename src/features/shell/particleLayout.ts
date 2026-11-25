@@ -24,8 +24,8 @@ function random(seed: number): () => number {
   };
 }
 
-export const PARTICLES_PHONE = 14;
-export const PARTICLES_DESKTOP = 24;
+export const PARTICLES_PHONE = 50;
+export const PARTICLES_DESKTOP = 80;
 
 export function particleCount(viewportWidth: number): number {
   return viewportWidth < 640 ? PARTICLES_PHONE : PARTICLES_DESKTOP;

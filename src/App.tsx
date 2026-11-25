@@ -47,24 +47,31 @@ export function App({ invite }: { invite?: string }) {
     <>
       {!opened && <Cover onOpening={handleOpening} onOpened={handleOpened} />}
       {opened && <Particles />}
-      <div inert={!opened} className="relative z-[1] pb-[calc(60px+env(safe-area-inset-bottom))] md:pb-0">
+      <div
+        inert={!opened}
+        className="relative z-[1] pb-[calc(60px+env(safe-area-inset-bottom))] md:pb-0"
+      >
         <ShellDefs />
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-30 focus:bg-ivory focus:px-4 focus:py-2 focus:text-navy"
+          className="focus:bg-ivory focus:text-navy sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-30 focus:px-4 focus:py-2"
         >
           {t.skipToContent}
         </a>
         <Navigation sectionIds={SECTIONS} player={player} />
         <main id="main">
-          <Hero intro={intro} headingRef={heading} date={formatEventDate(locale)} />
+          <Hero
+            intro={intro}
+            headingRef={heading}
+            date={formatEventDate(locale)}
+          />
           <TileDivider />
           <DetailsSection />
-          <TileDivider />
+          <TileDivider offset={1} />
           <Countdown />
-          <TileDivider />
+          <TileDivider offset={2} />
           <RsvpSection invite={invite} />
-          <TileDivider />
+          <TileDivider offset={3} />
           <LocationSection />
           <TileDivider />
           <GuestbookSection />
