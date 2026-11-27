@@ -32,20 +32,20 @@ function Chevron({ direction }: { direction: "left" | "right" }) {
   );
 }
 
-function PlayPauseIcon({ playing }: { playing: boolean }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className="size-4"
-      fill="currentColor"
-    >
-      <path
-        d={playing ? "M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" : "M8 5l11 7-11 7z"}
-      />
-    </svg>
-  );
-}
+// function PlayPauseIcon({ playing }: { playing: boolean }) {
+//   return (
+//     <svg
+//       aria-hidden="true"
+//       viewBox="0 0 24 24"
+//       className="size-4"
+//       fill="currentColor"
+//     >
+//       <path
+//         d={playing ? "M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" : "M8 5l11 7-11 7z"}
+//       />
+//     </svg>
+//   );
+// }
 
 interface WishSliderProps {
   entries: readonly PublicGuestbookEntry[];
@@ -86,7 +86,7 @@ export function WishSlider({
   const [selected, setSelected] = useState(0);
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
-  const [playing, setPlaying] = useState(!reduced);
+  // const [playing, setPlaying] = useState(!reduced);
   const [hovered, setHovered] = useState(false);
   const [held, setHeld] = useState(false);
 
@@ -155,7 +155,8 @@ export function WishSlider({
   }, [hasMore, loadingMore, moreFailed, selected, total, onLoadMore]);
 
   const running =
-    playing && many && inView && !pageHidden && !hovered && !held && !suspended;
+    // playing &&
+    many && inView && !pageHidden && !hovered && !held && !suspended;
   useEffect(() => {
     if (!api || !running) return;
     const id = setTimeout(
@@ -186,7 +187,7 @@ export function WishSlider({
         <div
           className={`flex touch-pan-y touch-pinch-zoom items-start ${settled ? "transition-[height] duration-500 motion-reduce:transition-none" : ""}`}
           style={{ height }}
-          aria-live={playing ? "off" : "polite"}
+          // aria-live={playing ? "off" : "polite"}
         >
           {entries.map((entry, index) => (
             <div

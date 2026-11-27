@@ -1,5 +1,5 @@
 import { LanguageToggle } from "../../components/LanguageToggle";
-import { Monogram } from "../../components/Monogram";
+// import { Monogram } from "../../components/Monogram";
 import { useI18n } from "../../i18n/I18nProvider";
 import { useActiveSection } from "../../lib/useActiveSection";
 import { useTextFieldFocus } from "../../lib/useTextFieldFocus";
