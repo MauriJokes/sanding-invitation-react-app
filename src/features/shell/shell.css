@@ -38,7 +38,7 @@
 }
 .hero-names {
   margin: 0;
-  font-size: clamp(4.6rem, 22vw, 8.5rem);
+  font-size: clamp(4rem, 18vw, 8rem);
   font-weight: 400;
   line-height: 1.05;
 }
@@ -54,7 +54,7 @@
 }
 @media (min-width: 768px) {
   .hero-names {
-    font-size: clamp(4.5rem, min(10vw, 17vh), 9rem);
+    font-size: clamp(4.5rem, min(8vw, 15vh), 8rem);
     white-space: nowrap;
   }
   .hero-amp {

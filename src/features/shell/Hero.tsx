@@ -47,21 +47,36 @@ interface HeroProps {
 export function Hero({ intro, headingRef, date }: HeroProps) {
   const { t } = useI18n();
   return (
-    <section className="hero" data-intro={intro ? "play" : undefined} aria-labelledby="hero-title">
+    <section
+      className="hero"
+      data-intro={intro ? "play" : undefined}
+      aria-labelledby="hero-title"
+    >
       <Corner side="left" />
       <Corner side="right" />
       <div className="hero-content">
         <p className="hero-rise hero-eyebrow" style={{ "--i": 0 } as RiseStyle}>
           {EVENT.title}
         </p>
-        <h1 id="hero-title" ref={headingRef} tabIndex={-1} className="hero-rise hero-names font-script" style={{ "--i": 1 } as RiseStyle}>
-          <span>Izyan</span> <span className="hero-amp">&amp;</span> <span>Adam</span>
+        <h1
+          id="hero-title"
+          ref={headingRef}
+          tabIndex={-1}
+          className="hero-rise hero-names font-couple flex flex-col gap-6 md:gap-10"
+          style={{ "--i": 1 } as RiseStyle}
+        >
+          <span>Izyan</span> <span className="hero-amp">&amp;</span>
+          <span>Adam</span>
         </h1>
         <p className="hero-rise hero-meta" style={{ "--i": 2 } as RiseStyle}>
           <span>{date}</span>
           <span>{EVENT.venueName}</span>
         </p>
-        <a href="#details" className="hero-rise hero-cue" style={{ "--i": 3 } as RiseStyle}>
+        <a
+          href="#details"
+          className="hero-rise hero-cue"
+          style={{ "--i": 3 } as RiseStyle}
+        >
           {t.heroScroll}
         </a>
       </div>

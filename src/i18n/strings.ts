@@ -78,6 +78,9 @@ export interface Strings {
   guestbookPause: string;
   guestbookPlay: string;
   guestbookSlideLabel: (position: number, total: number) => string;
+  guestbookPostcard: string;
+  guestbookTo: string;
+  guestbookFrom: string;
   // Shell
   crashTitle: string;
   crashBody: string;
@@ -172,14 +175,14 @@ export const strings: Record<Lang, Strings> = {
       "RSVP anda belum dihantar. Sila semak sambungan anda dan cuba lagi. Maklumat anda masih ada.",
     closedTitle: "RSVP telah ditutup.",
     closedBody:
-      "Jika anda perlu membuat perubahan, sila hubungi Izyan dan Adam secara terus.",
+      "Jika anda perlu membuat perubahan, sila hubungi Izyan atau Adam.",
     successTitle: "Terima kasih",
     successAttending:
-      "RSVP anda untuk Majlis Perkahwinan Izyan dan Adam telah diterima.",
+      "Di atas keberangkatan Pengiran / kehadiran Pehin / Dato / Datin / Awang / Dayang ke Majlis tersebut, terlebih dahulu abis peramba / kaola / kami sekeluarga menjunjung kasih dan mengucapkan setinggi-tinggi penghargaan dan ribuan terima kasih.",
     successDeclined:
       "Terima kasih kerana memaklumkan kami. RSVP anda untuk Majlis Perkahwinan Izyan dan Adam telah diterima.",
     successFinal:
-      "RSVP ini muktamad. Jika anda perlu membuat pembetulan, sila hubungi Izyan dan Adam secara terus.",
+      "RSVP anda untuk Majlis Perkahwinan Izyan dan Adam telah diterima. RSVP ini muktamad, jika anda perlu membuat pembetulan, sila hubungi Izyan atau Adam.",
     summaryFamily: "Nama Anda / Pasangan",
     summaryPhone: "Nombor telefon",
     summaryAttendance: "Kehadiran",
@@ -191,11 +194,11 @@ export const strings: Record<Lang, Strings> = {
     guestbookAnonymous: "Hantar secara rahsia",
     guestbookMessageLabel: "Ucapan anda",
     guestbookAnonymousHint:
-      "Ucapan tersebut hanya diterima oleh pasangan dan tidak akan dipaparkan di sini",
+      "Ucapan tersebut hanya diterima oleh pengantin dan tidak akan dipaparkan di sini",
     guestbookSend: "Hantar Ucapan",
     guestbookPublished: "Terima kasih! Ucapan anda telah dipaparkan.",
     guestbookPrivate:
-      "Terima kasih! Ucapan anda telah diterima dan hanya dilihat oleh pasangan.",
+      "Terima kasih! Ucapan anda telah diterima dan hanya dilihat oleh pengantin.",
     guestbookMessageRequired: "Sila tulis ucapan anda.",
     guestbookMessageTooLong: (max) =>
       `Ucapan terlalu panjang (maksimum ${max} aksara).`,
@@ -217,6 +220,9 @@ export const strings: Record<Lang, Strings> = {
     guestbookPlay: "Main slaid",
     guestbookSlideLabel: (position, total) =>
       `Ucapan ${position} daripada ${total}`,
+    guestbookPostcard: "Ucapan Tetamu",
+    guestbookTo: "Kepada",
+    guestbookFrom: "Daripada",
     crashTitle: "Maaf, sesuatu tidak kena.",
     crashBody: "Halaman ini tidak dapat dipaparkan. Sila muat semula halaman.",
     crashReload: "Muat semula",
@@ -256,7 +262,7 @@ export const strings: Record<Lang, Strings> = {
     prayerHeading: "Doa untuk Pengantin",
     prayerOpening: "Bismillahirrahmanirrahim",
     prayerBlessing:
-      '"Ya Allah, Ya Rahim, dari setinggi dan seluas kasih sayang-Mu kepada pengantin suami isteri, berkatilah majlis yang diadakan dengan keberkatan dari permulaan hingga pengakhirannya.',
+      '"Ya Allah, Ya Rahim, dari setinggi dan seluas kasih sayang-Mu kepada pengantin suami isteri, berkatilah Majlis yang diadakan dengan keberkatan dari permulaan hingga pengakhirannya.',
     prayerUnion:
       "Sesungguhnya pertemuan ini adalah dengan izin-Mu. Mudah-mudahan perkongsian hidup yang dibina berkekalan hingga ke akhir usia.",
     prayerGuidance:
@@ -311,15 +317,14 @@ export const strings: Record<Lang, Strings> = {
     errorFailed:
       "Your RSVP has not been sent. Please check your connection and try again. Your details are still here.",
     closedTitle: "RSVP is now closed.",
-    closedBody:
-      "If you need to make a change, please contact Izyan and Adam directly.",
+    closedBody: "If you need to make a change, please contact Izyan or Adam.",
     successTitle: "Thank you",
     successAttending:
       "Your RSVP for Izyan and Adam's Wedding Ceremony has been received.",
     successDeclined:
       "Thank you for letting us know. Your RSVP for Izyan and Adam's Wedding Ceremony has been received.",
     successFinal:
-      "This RSVP is final. If you need to make a correction, please contact Izyan and Adam directly.",
+      "This RSVP is final. If you need to make a correction, please contact Izyan or Adam.",
     summaryFamily: "Your name / partner's name",
     summaryPhone: "Phone number",
     summaryAttendance: "Attendance",
@@ -357,6 +362,9 @@ export const strings: Record<Lang, Strings> = {
     guestbookPause: "Pause slides",
     guestbookPlay: "Play slides",
     guestbookSlideLabel: (position, total) => `Wish ${position} of ${total}`,
+    guestbookPostcard: "Guest Wishes",
+    guestbookTo: "To",
+    guestbookFrom: "From",
     crashTitle: "Sorry, something went wrong.",
     crashBody: "This page could not be shown. Please reload the page.",
     crashReload: "Reload",
@@ -377,12 +385,12 @@ export const strings: Record<Lang, Strings> = {
     detailsGreeting: "Assalamualaikum WBT & Salam Sejahtera",
     detailsIntro: "By the grace and blessings of Allah S.W.T, we",
     detailsInvite:
-      "With utmost respect and honor, we humbly invite Pehin / Dato / Datin / Awang / Dayang / Sir / Madam / Mr / Ms to attend the Wedding Ceremony of our beloved children:",
-    detailsAnd: "and her love",
+      "With utmost respect and honor, we humbly beseech the presence of Pengiran / cordially invite Pehin / Dato / Datin / Awang / Dayang / Mr. / Mrs. / Ms. to grace the Wedding Ceremony of our beloved son/daughter / brother/sister",
+    detailsAnd: "and",
     factDate: "Date",
     factItinerary: "Itinerary",
     normalDate: "Monday, 28 December 2026",
-    islamicDate: "18 Rejab 1448H",
+    islamicDate: "18 Rajab 1448",
     factVenue: "Venue",
     countdownHeading: "Counting Down",
     countdownDays: "Days",

@@ -6,6 +6,7 @@ import {
   render,
   screen,
   waitFor,
+  within,
 } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GuestbookSection } from "../../../src/features/guestbook/GuestbookSection";
@@ -126,9 +127,11 @@ describe("the slider", () => {
     expect(screen.getByText(ms.guestbookLoading)).toBeTruthy();
     await screen.findByRole("region", { name: ms.guestbookListLabel });
     expect(slideText()).toEqual(["Wish 2", "Wish 1"]);
-    expect(
-      slides().map((slide) => slide.querySelector("figcaption")?.textContent),
-    ).toEqual(["Guest 2", "Guest 1"]);
+    for (const [index, name] of ["Guest 2", "Guest 1"].entries()) {
+      expect(
+        within(slides()[index] as HTMLElement).getByText(name),
+      ).toBeTruthy();
+    }
     expect(slides().map((slide) => slide.getAttribute("aria-label"))).toEqual([
       ms.guestbookSlideLabel(1, 2),
       ms.guestbookSlideLabel(2, 2),
@@ -173,10 +176,11 @@ describe("the slider", () => {
         }),
       ]),
     );
-    const { container } = show();
+    show();
     await screen.findByRole("region", { name: ms.guestbookListLabel });
-    expect(container.querySelector("img, b, script")).toBeNull();
     const slide = slides()[0] as HTMLElement;
+    expect(slide.querySelector("blockquote")?.children).toHaveLength(0);
+    expect(within(slide).getByText("<b>Bold</b>").children).toHaveLength(0);
     expect(slide.textContent).toContain(
       "<img src=x onerror=alert(1)>\nline two",
     );

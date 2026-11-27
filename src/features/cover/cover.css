@@ -54,6 +54,16 @@ html.cover-open {
   background: var(--color-navy-deep);
   clip-path: polygon(50% 8.5%, 100% 34%, 100% 66%, 50% 92%, 0 66%, 0 34%);
 }
+.cover-diamond::after {
+  content: "";
+  position: absolute;
+  top: 8.5%;
+  bottom: 8%;
+  left: 50%;
+  width: 1.5px;
+  background: var(--color-gold);
+  transform: translateX(-50%);
+}
 .cover-edge {
   position: absolute;
   top: 0;
@@ -126,27 +136,32 @@ html.cover-open {
   font-size: clamp(29px, 10vw, 42px);
 }
 .cover-title {
-  margin: 18px 0 8px;
+  margin: 20px 0 15px;
   color: var(--color-ivory);
-  font-size: clamp(8px, 2.4vw, 11px);
+  font-size: clamp(11px, 3.2vw, 14px);
   font-weight: 600;
   letter-spacing: 0.24em;
   text-transform: uppercase;
 }
 .cover-names {
   margin: 0;
-  font-size: clamp(42px, 13.2vw, 56px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  font-size: clamp(26px, 7.2vw, 34px);
   line-height: 1.05;
 }
 .cover-name-first {
+  display: block;
   white-space: nowrap;
 }
 .cover-name-second {
   display: block;
 }
 .cover-date {
-  margin: 17px 0 25px;
-  font-size: clamp(10px, 2.65vw, 13px);
+  margin: 20px 0 25px;
+  font-size: clamp(11px, 3.2vw, 14px);
+  font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -181,8 +196,8 @@ html.cover-open {
 }
 .cover-flower-top {
   width: 45%;
-  left: 2%;
-  top: 2%;
+  /* left: 1%; */
+  /* top: 1%; */
   --flower-angle: 175deg;
 }
 .cover-flower-bottom {
@@ -233,41 +248,51 @@ html.cover-open {
     transform: translate(-50%, -50%);
     clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
   }
+  .cover-diamond::after {
+    top: 0;
+    bottom: 0;
+  }
   .cover-scene {
-    width: min(72vw, 740px);
-    height: min(90%, 720px);
+    width: min(80vw, calc(max(100svh, 540px) * 1.2), 1200px);
+    height: min(90%, 900px);
     aspect-ratio: auto;
   }
   .cover-card {
-    left: 27%;
-    width: 46%;
-    top: 21%;
-    height: 58%;
+    left: 25%;
+    width: 50%;
+    top: 19%;
+    height: 62%;
   }
   .cover-monogram {
-    font-size: 48px;
+    font-size: clamp(48px, min(3.4vw, 5.8svh), 64px);
   }
   .cover-title {
-    font-size: 12px;
+    font-size: clamp(12px, min(0.8vw, 1.45svh), 16px);
   }
   .cover-names {
-    font-size: clamp(50px, 5vw, 64px);
+    font-size: clamp(40px, min(3.6vw, 6svh), 64px);
   }
   .cover-date {
-    font-size: 13px;
+    font-size: clamp(13px, min(0.8vw, 1.45svh), 16px);
+  }
+  .cover-button {
+    padding: 0.85rem 2rem;
+    font-size: clamp(13px, min(0.85vw, 1.5svh), 16px);
   }
   .cover-stem {
-    left: calc(27% + (var(--x) - 20%) * 0.77);
-    top: calc(21% + (var(--y) - 22.5%) * 1.064);
-    width: calc(var(--w) * 0.77);
+    left: calc(25% + (var(--x) - 20%) * 0.833);
+    top: calc(19% + (var(--y) - 22.5%) * 1.138);
+    width: calc(var(--w) * 0.833);
   }
   .cover-flower-top {
-    left: calc(23% + (2% - 20%) * 0.77);
-    width: calc(45% * 0.77);
+    left: calc(25% + (2% - 20%) * 0.833 - 6%);
+    /* Keep the flower beside the enlarged plaque without covering names on tall viewports. */
+    top: calc(min(2%, calc(500px - 50svh + 2%)) - 14.5%);
+    width: calc(45% * 0.75);
   }
   .cover-flower-bottom {
-    left: calc(27% + (52% - 20%) * 0.77);
-    width: calc(44% * 0.77);
+    left: calc(25% + (52% - 20%) * 0.833);
+    width: calc(44% * 0.833);
   }
 }
 @media (max-height: 650px) {

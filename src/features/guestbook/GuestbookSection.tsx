@@ -55,7 +55,7 @@ export function GuestbookSection() {
           <h2 id={headingId} className={`${headingClass} mb-4`}>
             {t.guestbookHeading}
           </h2>
-          <p className="text-balance">{t.guestbookLead}</p>
+          {/* <p className="text-balance">{t.guestbookLead}</p> */}
           <button
             type="button"
             onClick={() => setDialogOpen(true)}

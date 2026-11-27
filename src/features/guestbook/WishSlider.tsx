@@ -7,6 +7,7 @@ import { usePageHidden } from "../../lib/usePageHidden";
 import { useInView } from "../../lib/useInView";
 import { useReducedMotion } from "../../lib/useReducedMotion";
 import { slideDelay } from "./slideDelay";
+import stampUrl from "../../assets/stamp/stamp.png";
 
 /** Fetch the next page when this few wishes are left ahead of the one on screen. */
 const PRELOAD_AHEAD = 3;
@@ -197,20 +198,43 @@ export function WishSlider({
             >
               <figure
                 data-active={index === selected}
-                className="bg-ivory text-navy border-gold-bright before:border-gold/60 relative flex flex-col rounded-[2px] border p-6 text-left opacity-50 shadow-[0_22px_40px_-26px_rgba(0,0,0,0.7)] transition duration-500 not-data-[active=true]:scale-[0.94] before:pointer-events-none before:absolute before:inset-1.5 before:border before:content-[''] data-[active=true]:opacity-100 motion-reduce:transition-none sm:p-8"
+                className="bg-ivory text-navy border-gold-bright before:border-gold/60 relative flex min-h-64 flex-col rounded-[2px] border p-6 text-left opacity-50 shadow-[0_22px_40px_-26px_rgba(0,0,0,0.7)] transition duration-500 not-data-[active=true]:scale-[0.94] before:pointer-events-none before:absolute before:inset-1.5 before:border before:content-[''] data-[active=true]:opacity-100 motion-reduce:transition-none sm:min-h-72 sm:p-8"
               >
-                <span
-                  aria-hidden="true"
-                  className="text-gold font-serif text-[3.5rem] leading-[0.6]"
-                >
-                  &ldquo;
-                </span>
-                <blockquote className="mt-3 flex-1 text-[1.25rem] leading-[1.5] break-words whitespace-pre-wrap">
-                  {entry.message}
-                </blockquote>
-                <figcaption className="border-gold text-gold-ink mt-6 border-t pt-4 text-[0.85rem] font-semibold tracking-[0.14em] break-words uppercase">
-                  {entry.displayName}
-                </figcaption>
+                <div className="flex items-start justify-between gap-4">
+                  <span className="text-gold-ink pt-1 text-[0.85rem] font-semibold tracking-[0.18em] uppercase">
+                    {t.guestbookPostcard}
+                  </span>
+                  <img
+                    src={stampUrl}
+                    alt=""
+                    width={1000}
+                    height={1000}
+                    className="h-auto w-14 max-w-[25%] sm:w-16"
+                  />
+                </div>
+                <div className="mt-3 grid flex-1 grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+                  <blockquote className="min-w-0 pr-3 text-[1.1rem] leading-[1.5] break-words whitespace-pre-wrap sm:pr-6 sm:text-[1.25rem]">
+                    {entry.message}
+                  </blockquote>
+                  <figcaption className="border-gold/70 flex min-w-0 flex-col justify-end gap-4 border-l pl-3 sm:pl-6">
+                    <div className="border-gold/70 border-b pb-2">
+                      <span className="text-gold-ink block text-[0.75rem] font-semibold tracking-[0.1em] uppercase">
+                        {t.guestbookTo}
+                      </span>
+                      <span className="block text-[1rem] leading-tight break-words">
+                        Izyan &amp; Adam
+                      </span>
+                    </div>
+                    <div className="border-gold/70 border-b pb-2">
+                      <span className="text-gold-ink block text-[0.75rem] font-semibold tracking-[0.1em] uppercase">
+                        {t.guestbookFrom}
+                      </span>
+                      <span className="block text-[1rem] leading-tight break-words">
+                        {entry.displayName}
+                      </span>
+                    </div>
+                  </figcaption>
+                </div>
               </figure>
             </div>
           ))}
@@ -249,7 +273,7 @@ export function WishSlider({
               className="bg-gold/30 h-px w-full max-w-[14rem]"
             >
               <div
-                className="bg-gold-bright h-full origin-left transition-transform duration-500 motion-reduce:transition-none"
+                className="bg-gold-bright h-full origin-left transition-transform duration-50 motion-reduce:transition-none"
                 style={{ transform: `scaleX(${(selected + 1) / total})` }}
               />
             </div>
@@ -257,14 +281,14 @@ export function WishSlider({
               <p className="text-[0.85rem] font-semibold tracking-[0.2em] lining-nums tabular-nums">
                 {position}
               </p>
-              <button
+              {/* <button
                 type="button"
                 onClick={() => setPlaying((value) => !value)}
                 className="text-gold-bright hover:text-ivory inline-flex min-h-12 items-center gap-2 px-1 text-[0.8rem] font-semibold tracking-[0.18em] uppercase"
               >
                 <PlayPauseIcon playing={playing} />
                 <span>{playing ? t.guestbookPause : t.guestbookPlay}</span>
-              </button>
+              </button> */}
             </div>
           </div>
           <button

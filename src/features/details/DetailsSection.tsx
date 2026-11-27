@@ -92,7 +92,7 @@ export function DetailsSection() {
           alt={t.detailsGreeting}
           width={900}
           height={141}
-          className="mx-auto block h-auto w-[clamp(15rem,70vw,24rem)] max-w-full"
+          className="mx-auto block h-auto w-[clamp(11rem,45vw,20rem)] max-w-full"
         />
         <p className={`mt-5 ${body}`}>Ya Qadhi Al-Hajat</p>
         <Rule />
@@ -110,7 +110,9 @@ export function DetailsSection() {
 
         <div className="mt-6 grid gap-6">
           <p className={coupleName}>{COUPLE[0]}</p>
-          <p className={"font-script text-gold-ink text-[1.0rem] leading-none"}>
+          <p
+            className={"font-script text-gold-ink text-[1.25rem] leading-none"}
+          >
             {t.detailsAnd}
           </p>
           <p className={coupleName}>{COUPLE[1]}</p>

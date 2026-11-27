@@ -173,10 +173,9 @@ export function Cover({ onOpening, onOpened }: CoverProps) {
           <div className="cover-card">
             <Monogram className="cover-monogram" />
             <p className="cover-title">{EVENT.title}</p>
-            <p className="cover-names font-script">
-              <span className="cover-name-first">
-                <span>Izyan</span> <span>&amp;</span>
-              </span>
+            <p className="cover-names font-couple">
+              <span className="cover-name-first">Izyan</span>
+              <span>&amp;</span>
               <span className="cover-name-second">Adam</span>
             </p>
             <p className="cover-date">{date}</p>

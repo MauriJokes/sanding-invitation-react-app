@@ -19,7 +19,7 @@ export const EVENT = {
   venueRoom: "Songket Ballroom",
   venueAddress:
     "Abdul Razak Complex, Jln Gadong, Bandar Seri Begawan BE3519, Brunei Darussalam",
-  directionsUrl: "https://share.google/1Q23UIJpJpyXhl9l9",
+  directionsUrl: "https://maps.app.goo.gl/xA2V6PwWV2YyQbWy5?g_st=ic",
 } as const satisfies WeddingEvent;
 
 // TODO(owner): placeholder until the family confirms the RSVP deadline.

@@ -5,6 +5,7 @@ import {
   fireEvent,
   render,
   screen,
+  within,
 } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { PublicGuestbookEntry } from "../../../shared/guestbook/constants";
@@ -70,6 +71,44 @@ afterEach(() => {
 });
 
 describe("controls", () => {
+  it.each([
+    ["ms", strings.ms],
+    ["en", strings.en],
+  ] as const)(
+    "shows the message, recipient and sender in the %s postcard",
+    (lang, copy) => {
+      const message = "<script>alert('hello')</script>" + "x".repeat(400);
+      const displayName = "A".repeat(60);
+      render(
+        <I18nProvider initialLang={lang}>
+          <WishSlider
+            {...props({ entries: [{ ...entry(1, message), displayName }] })}
+          />
+        </I18nProvider>,
+      );
+      const card = screen.getByRole("group", {
+        name: copy.guestbookSlideLabel(1, 1),
+      });
+      expect(within(card).getByText(copy.guestbookPostcard)).toBeTruthy();
+      expect(within(card).getByText(copy.guestbookTo)).toBeTruthy();
+      expect(within(card).getByText("Izyan & Adam")).toBeTruthy();
+      expect(within(card).getByText(copy.guestbookFrom)).toBeTruthy();
+      expect(within(card).getByText(displayName)).toBeTruthy();
+      expect(within(card).getByText(message).tagName).toBe("BLOCKQUOTE");
+      expect(card.querySelector("script")).toBeNull();
+    },
+  );
+
+  it("renders a decorative square stamp on each wish", () => {
+    show();
+    const stamps = region().querySelectorAll('img[alt=""]');
+    expect(stamps).toHaveLength(three.length);
+    for (const stamp of stamps) {
+      expect(stamp.getAttribute("width")).toBe("1000");
+      expect(stamp.getAttribute("height")).toBe("1000");
+    }
+  });
+
   it("is a labelled carousel with a counter, a progress bar and arrows", () => {
     show();
     expect(region().getAttribute("aria-roledescription")).toBe("carousel");
